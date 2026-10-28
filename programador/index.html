@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programador de vídeos</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #ffffff; --texto: #1d1d1f; --suave: #6b6b70; --linea: #e4e4e0;
+    --acento: #2f5bea; --acento-texto: #ffffff; --peligro: #c62f2f;
+    --yt: #e62117; --tt: #0e9fae; --ig: #c13584;
+    --e-borrador: #8a8a8f; --e-programado: #2f5bea; --e-curso: #c98a00; --e-publicado: #1f8a4c;
+    --e-bandeja: #7a4bd6; --e-error: #c62f2f; --e-externo: #5b7083;
+    --sombra: 0 1px 2px rgb(0 0 0 / .05), 0 4px 16px rgb(0 0 0 / .05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
+      --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
+    --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--texto); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: var(--acento); }
+  .oculto { display: none !important; }
+
+  header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--linea); }
+  .barra { max-width: 1200px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .marca { font-weight: 700; letter-spacing: -.01em; }
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav button { background: none; border: 0; padding: 6px 12px; border-radius: 8px; cursor: pointer; color: var(--suave); }
+  nav button[aria-current="true"] { background: var(--bg); color: var(--texto); font-weight: 600; }
+  .usuario { margin-left: auto; color: var(--suave); font-size: 13px; display: flex; gap: 8px; align-items: center; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
+  h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -.01em; }
+  h3 { font-size: 15px; margin: 0 0 8px; }
+  .sub { color: var(--suave); margin: 0 0 16px; }
+  .panel { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 16px; box-shadow: var(--sombra); }
+  .rejilla { display: grid; gap: 16px; }
+  @media (min-width: 900px) { .dos { grid-template-columns: 1fr 1fr; } .tres { grid-template-columns: repeat(3, 1fr); } }
+
+  .btn { border: 1px solid var(--linea); background: var(--panel); padding: 7px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+  .btn:hover { border-color: var(--suave); }
+  .btn.primario { background: var(--acento); border-color: var(--acento); color: var(--acento-texto); font-weight: 600; }
+  .btn.peligro { color: var(--peligro); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .acciones { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+  label { display: block; font-size: 13px; color: var(--suave); margin: 12px 0 4px; }
+  input[type=text], input[type=email], input[type=password], input[type=datetime-local], input[type=date], input[type=time], textarea, select {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--linea); border-radius: 8px; background: var(--bg);
+  }
+  textarea { min-height: 84px; resize: vertical; }
+  .contador { float: right; font-variant-numeric: tabular-nums; }
+  .contador.mal { color: var(--peligro); }
+  .check { display: flex; gap: 8px; align-items: center; color: var(--texto); font-size: 15px; margin: 8px 0; }
+
+  /* Calendario */
+  .cabecera-cal { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .cabecera-cal h2 { margin-right: auto; }
+  .semana { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+  .dia { background: var(--panel); border: 1px solid var(--linea); border-radius: 10px; min-height: 180px; padding: 8px; }
+  .dia.hoy { border-color: var(--acento); }
+  .dia h4 { margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--suave); text-transform: capitalize; }
+  .dia.hoy h4 { color: var(--acento); }
+  @media (max-width: 899px) { .semana { grid-template-columns: 1fr; } .dia { min-height: 0; } .dia:not(:has(.pub)) { display: none; } }
+  .pub { display: block; width: 100%; text-align: left; border: 1px solid var(--linea); border-left: 4px solid var(--c); background: var(--bg);
+         border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; cursor: pointer; font-size: 13px; }
+  .pub:hover { border-color: var(--suave); border-left-color: var(--c); }
+  .pub .hora { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pub .tit { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pub[data-p=youtube] { --c: var(--yt); } .pub[data-p=tiktok] { --c: var(--tt); } .pub[data-p=instagram] { --c: var(--ig); }
+  .red { font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+  .estado { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; color: #fff; background: var(--e); }
+  .estado[data-e=borrador] { --e: var(--e-borrador); } .estado[data-e=programado] { --e: var(--e-programado); }
+  .estado[data-e=subiendo], .estado[data-e=procesando] { --e: var(--e-curso); } .estado[data-e=publicado] { --e: var(--e-publicado); }
+  .estado[data-e=bandeja] { --e: var(--e-bandeja); } .estado[data-e=error] { --e: var(--e-error); } .estado[data-e=externo] { --e: var(--e-externo); }
+  .resumen { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; color: var(--suave); font-size: 13px; }
+  .resumen b { color: var(--texto); }
+
+  /* Nuevo */
+  .soltar { border: 2px dashed var(--linea); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; color: var(--suave); }
+  .soltar.encima { border-color: var(--acento); color: var(--acento); }
+  video.previa { width: 100%; max-height: 360px; border-radius: 10px; background: #000; margin-top: 8px; }
+  .red-bloque { border-top: 1px solid var(--linea); padding-top: 8px; margin-top: 12px; }
+  .franja-elegida { padding: 10px 12px; border-radius: 8px; background: var(--bg); margin-top: 8px; font-size: 14px; }
+  progress { width: 100%; height: 8px; margin-top: 8px; }
+
+  /* Cuentas */
+  .cuenta .nombre { font-weight: 600; }
+  code.copiar { display: block; font-size: 12px; padding: 6px 8px; background: var(--bg); border-radius: 6px; word-break: break-all; cursor: copy; margin-top: 4px; }
+
+  /* Diálogo y avisos */
+  dialog { border: 1px solid var(--linea); border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--panel); color: var(--texto); }
+  dialog::backdrop { background: rgb(0 0 0 / .4); }
+  .dlg { padding: 18px; }
+  .dlg pre { white-space: pre-wrap; background: var(--bg); padding: 8px 10px; border-radius: 8px; font: 13px/1.4 system-ui, sans-serif; max-height: 200px; overflow: auto; }
+  #aviso { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--texto); color: var(--bg); padding: 10px 16px;
+           border-radius: 10px; max-width: calc(100vw - 32px); z-index: 20; }
+  .registro li { margin-bottom: 6px; font-size: 13px; }
+  .registro .error { color: var(--peligro); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--linea); }
+  .login { max-width: 380px; margin: 10vh auto; }
+  .version { font-weight: 400; color: var(--suave); font-size: 12px; }
+  [data-p=youtube] { --c: var(--yt); } [data-p=tiktok] { --c: var(--tt); } [data-p=instagram] { --c: var(--ig); }
+  .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+
+  /* Estadísticas */
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .filtros select { width: auto; }
+  .est-contenido { transition: opacity .2s; }
+  .avisos { margin-bottom: 16px; } .avisos p { margin: 4px 0; font-size: 14px; color: var(--suave); }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .kpi { display: flex; flex-direction: column; gap: 2px; }
+  .kpis .kpi { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; }
+  .kpi-l { font-size: 13px; color: var(--suave); }
+  .kpi-v { font-size: 28px; font-weight: 600; letter-spacing: -.01em; }
+  .cuenta-est h3 { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px 0 0; }
+  .mini dt { font-size: 12px; color: var(--suave); } .mini dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .periodo-red { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--linea); font-size: 13px; color: var(--suave); }
+  .periodo-red b { color: var(--texto); font-weight: 600; }
+  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 150px 80px 80px 80px; gap: 12px; align-items: center;
+                     padding: 10px 0; border-top: 1px solid var(--linea); }
+  .tabla-est .cab { border-top: 0; font-size: 12px; color: var(--suave); padding-top: 0; }
+  .tabla-est .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pub-est { display: flex; gap: 10px; align-items: center; min-width: 0; }
+  .pub-est img, .sin-img { width: 40px; height: 56px; object-fit: cover; border-radius: 6px; background: var(--bg); flex: none; }
+  .pub-est .txt { display: flex; flex-direction: column; min-width: 0; }
+  .pub-est a { color: var(--texto); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pub-est a:hover { text-decoration: underline; }
+  .vistas { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .barra-pista { width: 100%; height: 6px; display: flex; border-radius: 3px; background: color-mix(in srgb, var(--acento) 14%, transparent); }
+  .barra-dato { height: 6px; background: var(--acento); border-radius: 0 3px 3px 0; }
+  @media (max-width: 699px) {
+    .tabla-est .cab { display: none; }
+    .tabla-est .fila { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tabla-est .pub-est { grid-column: 1 / -1; }
+    .tabla-est .num { text-align: left; align-items: flex-start; }
+    .tabla-est .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
+  }
+</style>
+</head>
+<body>
+
+<section id="vista-login" class="login panel oculto">
+  <h2>Programador de vídeos</h2>
+  <p class="sub">Entra con tu cuenta.</p>
+  <form id="form-login">
+    <label for="l-email">Email</label>
+    <input id="l-email" type="email" required autocomplete="email">
+    <label for="l-pass">Contraseña</label>
+    <input id="l-pass" type="password" required minlength="8" autocomplete="current-password">
+    <div class="acciones" style="margin-top:16px">
+      <button class="btn primario" type="submit">Entrar</button>
+    </div>
+  </form>
+</section>
+
+<div id="app" class="oculto">
+<header>
+  <div class="barra">
+    <span class="marca">📅 Programador <small class="version">v7</small></span>
+    <nav>
+      <button data-vista="calendario" aria-current="true">Calendario</button>
+      <button data-vista="estadisticas">Estadísticas</button>
+      <button data-vista="nuevo">Nuevo vídeo</button>
+      <button data-vista="cuentas">Cuentas</button>
+      <button data-vista="ajustes">Ajustes</button>
+    </nav>
+    <span class="usuario"><span id="u-email"></span><button class="btn" id="btn-salir">Salir</button></span>
+  </div>
+</header>
+
+<main>
+  <p id="no-dueno" class="panel oculto">⚠️ Tu email no está en la lista de dueños, así que no verás nada. Añádelo a la tabla <code>duenos</code> en Supabase.</p>
+
+  <!-- CALENDARIO -->
+  <section id="v-calendario">
+    <div class="cabecera-cal">
+      <h2 id="cal-titulo">Semana</h2>
+      <button class="btn" id="cal-ant" aria-label="Semana anterior">←</button>
+      <button class="btn" id="cal-hoy">Hoy</button>
+      <button class="btn" id="cal-sig" aria-label="Semana siguiente">→</button>
+      <button class="btn primario" id="btn-ejecutar" title="Sube ya lo que tenga la hora pasada">Subir pendientes ahora</button>
+    </div>
+    <div class="resumen" id="resumen"></div>
+    <div class="semana" id="semana"></div>
+  </section>
+
+  <!-- ESTADÍSTICAS -->
+  <section id="v-estadisticas" class="oculto">
+    <div class="cabecera-cal">
+      <h2 style="margin-right:0">Estadísticas</h2>
+      <span class="sub" id="est-hora" style="margin:0 auto 0 4px"></span>
+    </div>
+    <div class="filtros">
+      <select id="est-periodo" aria-label="Periodo">
+        <option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option>
+        <option value="90">Últimos 90 días</option><option value="0">Todo</option>
+      </select>
+      <select id="est-red" aria-label="Red">
+        <option value="">Todas las redes</option><option value="youtube">YouTube</option>
+        <option value="tiktok">TikTok</option><option value="instagram">Instagram</option>
+      </select>
+      <select id="est-orden" aria-label="Ordenar">
+        <option value="fecha">Más recientes</option><option value="vistas">Más vistas</option>
+        <option value="likes">Más likes</option><option value="comentarios">Más comentarios</option>
+      </select>
+      <button class="btn" id="est-actualizar">Actualizar</button>
+    </div>
+    <div class="est-contenido">
+      <div id="est-avisos"></div>
+      <div class="kpis" id="est-kpis"></div>
+      <div class="rejilla tres" id="est-cuentas"></div>
+      <div class="panel" style="margin-top:16px"><h3>Publicaciones</h3><div id="est-tabla"><p class="sub">Cargando…</p></div></div>
+    </div>
+  </section>
+
+  <!-- NUEVO / EDITAR -->
+  <section id="v-nuevo" class="oculto">
+    <h2 id="n-titulo-vista">Nuevo vídeo</h2>
+    <p class="sub">Sube el vídeo, pon los textos de cada red y elige cuándo sale.</p>
+    <p class="panel oculto" id="nota-borrador" style="margin:0 0 16px"></p>
+    <form id="form-video" class="rejilla dos">
+      <div class="panel">
+        <h3>Vídeo</h3>
+        <div class="soltar" id="soltar" tabindex="0">Arrastra aquí el .mp4 o haz clic (máx. 50 MB)</div>
+        <input type="file" id="f-video" accept="video/mp4,video/quicktime,video/webm" hidden>
+        <video class="previa oculto" id="previa" controls muted playsinline></video>
+        <div class="acciones" style="margin-top:12px">
+          <button class="btn" type="button" id="btn-textos">Rellenar desde textos.json</button>
+          <input type="file" id="f-textos" accept="application/json,.json" hidden>
+        </div>
+        <div class="rejilla dos" style="gap:8px">
+          <div><label for="n-codigo">Número</label><input id="n-codigo" type="text" placeholder="019"></div>
+          <div><label for="n-slug">Nombre corto</label><input id="n-slug" type="text" placeholder="gota-bala"></div>
+        </div>
+        <label for="n-titulo">Título interno</label>
+        <input id="n-titulo" type="text" required placeholder="¿Una gota puede parar una bala?">
+        <label class="check"><input type="checkbox" id="n-ia" checked> Hecho con IA (lo marca en YouTube y TikTok)</label>
+
+        <h3 style="margin-top:20px">Cuándo sale</h3>
+        <label class="check"><input type="radio" name="modo" value="franja" checked> Siguiente franja libre</label>
+        <label class="check"><input type="radio" name="modo" value="elegir"> Elegir día y franja</label>
+        <label class="check"><input type="radio" name="modo" value="horas"> Hora exacta en cada red</label>
+        <label class="check"><input type="radio" name="modo" value="borrador"> Guardar como borrador</label>
+        <div id="m-elegir" class="rejilla dos oculto" style="gap:8px">
+          <div><label for="n-dia">Día</label><input id="n-dia" type="date"></div>
+          <div><label for="n-franja">Franja</label><select id="n-franja"></select></div>
+        </div>
+        <div class="franja-elegida" id="franja-elegida">Calculando…</div>
+        <p class="sub" id="nota-edicion" style="margin-top:8px"></p>
+      </div>
+
+      <div class="panel">
+        <div class="red-bloque" style="border:0;margin:0;padding:0">
+          <label class="check"><input type="checkbox" class="n-red" value="youtube" checked> <b><span class="punto" data-p="youtube"></span>YouTube Shorts</b></label>
+          <div class="campos" data-red="youtube">
+            <label for="n-yt-titulo">Título <span class="contador" data-para="n-yt-titulo" data-max="100"></span></label>
+            <input id="n-yt-titulo" type="text">
+            <label for="n-yt-desc">Descripción <span class="contador" data-para="n-yt-desc" data-max="5000"></span></label>
+            <textarea id="n-yt-desc"></textarea>
+            <label for="n-yt-hora" class="solo-horas oculto">Hora</label>
+            <input id="n-yt-hora" type="datetime-local" class="solo-horas oculto">
+          </div>
+        </div>
+        <div class="red-bloque">
+          <label class="check"><input type="checkbox" class="n-red" value="tiktok" checked> <b><span class="punto" data-p="tiktok"></span>TikTok</b></label>
+          <div class="campos" data-red="tiktok">
+            <label for="n-tt">Descripción <span class="contador" data-para="n-tt" data-max="2200"></span></label>
+            <textarea id="n-tt"></textarea>
+            <label for="n-tt-hora" class="solo-horas oculto">Hora</label>
+            <input id="n-tt-hora" type="datetime-local" class="solo-horas oculto">
+          </div>
+        </div>
+        <div class="red-bloque">
+          <label class="check"><input type="checkbox" class="n-red" value="instagram" checked> <b><span class="punto" data-p="instagram"></span>Instagram Reels</b></label>
+          <div class="campos" data-red="instagram">
+            <label for="n-ig">Texto <span class="contador" data-para="n-ig" data-max="2200"></span></label>
+            <textarea id="n-ig"></textarea>
+            <label for="n-ig-hora" class="solo-horas oculto">Hora</label>
+            <input id="n-ig-hora" type="datetime-local" class="solo-horas oculto">
+          </div>
+        </div>
+        <div class="acciones" style="margin-top:20px">
+          <button class="btn primario" type="submit" id="btn-guardar">Subir y programar</button>
+          <button class="btn oculto" type="button" id="btn-cancelar-edicion">Cancelar</button>
+        </div>
+        <progress id="progreso" class="oculto" max="100" value="0"></progress>
+      </div>
+    </form>
+  </section>
+
+  <!-- CUENTAS -->
+  <section id="v-cuentas" class="oculto">
+    <h2>Cuentas</h2>
+    <p class="sub">Antes de conectar, pon las claves de cada app en Ajustes. Cada app de desarrollador debe tener como "redirect URI" la dirección de su tarjeta.</p>
+    <div class="rejilla tres" id="lista-cuentas"></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section id="v-ajustes" class="oculto">
+    <h2>Ajustes</h2>
+    <p class="sub">Claves de tus apps de desarrollador. Solo se guardan en tu Supabase.</p>
+    <div class="rejilla dos">
+      <form class="panel" id="form-credenciales">
+        <h3><span class="punto" data-p="youtube"></span>YouTube (Google Cloud)</h3>
+        <label for="c-GOOGLE_CLIENT_ID">Client ID</label><input type="text" id="c-GOOGLE_CLIENT_ID" autocomplete="off">
+        <label for="c-GOOGLE_CLIENT_SECRET">Client secret</label><input type="password" id="c-GOOGLE_CLIENT_SECRET" autocomplete="off">
+        <label for="c-YOUTUBE_PRIVACIDAD">Visibilidad</label>
+        <select id="c-YOUTUBE_PRIVACIDAD"><option value="public">Público</option><option value="unlisted">Oculto</option><option value="private">Privado</option></select>
+
+        <h3 style="margin-top:20px"><span class="punto" data-p="tiktok"></span>TikTok</h3>
+        <label for="c-TIKTOK_CLIENT_KEY">Client key</label><input type="text" id="c-TIKTOK_CLIENT_KEY" autocomplete="off">
+        <label for="c-TIKTOK_CLIENT_SECRET">Client secret</label><input type="password" id="c-TIKTOK_CLIENT_SECRET" autocomplete="off">
+        <label for="c-TIKTOK_MODO">Modo</label>
+        <select id="c-TIKTOK_MODO">
+          <option value="borrador">A tu bandeja de TikTok (tú le das a publicar en el móvil)</option>
+          <option value="directo">Publicar directamente (necesita la app auditada por TikTok)</option>
+        </select>
+        <label for="c-TIKTOK_PRIVACIDAD">Visibilidad en modo directo</label>
+        <select id="c-TIKTOK_PRIVACIDAD">
+          <option value="PUBLIC_TO_EVERYONE">Público</option><option value="SELF_ONLY">Solo yo</option>
+          <option value="MUTUAL_FOLLOW_FRIENDS">Amigos</option><option value="FOLLOWER_OF_CREATOR">Seguidores</option>
+        </select>
+        <label for="c-TIKTOK_USUARIO">Usuario (para los enlaces)</label><input type="text" id="c-TIKTOK_USUARIO" placeholder="1001.dudas">
+        <label class="check"><input type="checkbox" id="c-TIKTOK_ESTADISTICAS"> Leer estadísticas (seguidores, vistas, likes)</label>
+        <p class="sub" style="margin:0">Antes añade los scopes <code>user.info.stats</code> y <code>video.list</code> en tu app de TikTok; luego pulsa Reconectar en Cuentas.</p>
+
+        <h3 style="margin-top:20px"><span class="punto" data-p="instagram"></span>Instagram (Meta)</h3>
+        <label for="c-INSTAGRAM_APP_ID">Instagram app ID</label><input type="text" id="c-INSTAGRAM_APP_ID" autocomplete="off">
+        <label for="c-INSTAGRAM_APP_SECRET">Instagram app secret</label><input type="password" id="c-INSTAGRAM_APP_SECRET" autocomplete="off">
+        <label class="check"><input type="checkbox" id="c-INSTAGRAM_ESTADISTICAS"> Leer reproducciones y alcance</label>
+        <p class="sub" style="margin:0">Funciona con la conexión que ya tienes.</p>
+
+        <div class="acciones" style="margin-top:20px"><button class="btn primario" type="submit">Guardar claves</button></div>
+      </form>
+
+      <div class="rejilla">
+        <div class="panel">
+          <h3>Franjas (hora de Madrid)</h3>
+          <table><thead><tr><th>Franja</th><th>YouTube</th><th>TikTok</th><th>Instagram</th></tr></thead><tbody id="tabla-franjas"></tbody></table>
+          <div class="acciones" style="margin-top:12px"><button class="btn" id="btn-franjas">Guardar franjas</button></div>
+        </div>
+        <div class="panel">
+          <h3>Actividad</h3>
+          <ul class="registro" id="registro"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</div>
+
+<dialog id="dlg"><div class="dlg" id="dlg-cuerpo"></div></dialog>
+<div id="aviso" class="oculto" role="status"></div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
+
+const SUPABASE_URL = "https://drolrbbkkfyzgjssqltg.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyb2xyYmJra2Z5emdqc3NxbHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxNjgwMzIsImV4cCI6MjEwODc0NDAzMn0.Py047DXFI7F6aj1Q63bS9dGZ5jxJ9yF0TNLO3vT6NRI";
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+const ZONA = "Europe/Madrid";
+const REDES = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram" };
+const ESTADOS = {
+  borrador: "Borrador", programado: "Programado", subiendo: "Subiendo", procesando: "Procesando",
+  publicado: "Publicado", bandeja: "En bandeja TikTok", error: "Error", externo: "Programado a mano",
+};
+const CLAVES = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "YOUTUBE_PRIVACIDAD", "TIKTOK_CLIENT_KEY", "TIKTOK_CLIENT_SECRET",
+  "TIKTOK_MODO", "TIKTOK_PRIVACIDAD", "TIKTOK_USUARIO", "INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET"];
+const CASILLAS = ["TIKTOK_ESTADISTICAS", "INSTAGRAM_ESTADISTICAS"];
+const VISTAS = ["calendario", "estadisticas", "nuevo", "cuentas", "ajustes"];
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+function avisar(t, ms = 3500) {
+  const a = $("#aviso"); a.textContent = t; a.classList.remove("oculto");
+  clearTimeout(avisar.t); avisar.t = setTimeout(() => a.classList.add("oculto"), ms);
+}
+function fallo(e) { console.error(e); avisar("❌ " + (e?.message || e), 7000); }
+
+// ---------- Fechas en hora de Madrid ----------
+const fmt = (opts) => new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, ...opts });
+const diaClave = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: ZONA }).format(d); // AAAA-MM-DD
+const horaTxt = (d) => fmt({ hour: "2-digit", minute: "2-digit" }).format(d);
+const fechaTxt = (d) => fmt({ weekday: "short", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" }).format(d);
+function desfaseMadrid(fecha) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: ZONA, hourCycle: "h23", year: "numeric", month: "2-digit",
+    day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }).formatToParts(fecha).map((x) => [x.type, x.value]));
+  return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second) - fecha.getTime();
+}
+function madridADate(local) { // "AAAA-MM-DDTHH:MM" en hora de Madrid -> Date
+  const [d, h] = local.split("T"); const [a, m, di] = d.split("-").map(Number); const [ho, mi] = (h || "00:00").split(":").map(Number);
+  const guess = Date.UTC(a, m - 1, di, ho, mi);
+  let t = guess - desfaseMadrid(new Date(guess));
+  t = guess - desfaseMadrid(new Date(t));
+  return new Date(t);
+}
+function dateAMadrid(d) { // Date -> "AAAA-MM-DDTHH:MM"
+  return `${diaClave(d)}T${new Intl.DateTimeFormat("en-GB", { timeZone: ZONA, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(d)}`;
+}
+
+// ---------- Sesión ----------
+let sesion = null;
+async function arrancar() {
+  const { data } = await sb.auth.getSession();
+  sesion = data.session;
+  $("#vista-login").classList.toggle("oculto", !!sesion);
+  $("#app").classList.toggle("oculto", !sesion);
+  if (!sesion) return;
+  $("#u-email").textContent = sesion.user.email;
+  const { data: d } = await sb.from("duenos").select("email").limit(1);
+  $("#no-dueno").classList.toggle("oculto", !!d?.length);
+  await cargarFranjas();
+  let ultima = "calendario";
+  try { ultima = localStorage.getItem("vista") || ultima; } catch {}
+  mostrar(VISTAS.includes(ultima) ? ultima : "calendario");
+}
+// Al volver a la pestaña, Supabase repite "SIGNED_IN": solo arrancamos si de verdad cambia quién ha entrado.
+sb.auth.onAuthStateChange((ev, s) => {
+  if ((ev === "SIGNED_IN" && s?.user?.id !== sesion?.user?.id) || ev === "SIGNED_OUT") arrancar();
+  else if (s) sesion = s;
+});
+
+$("#form-login").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { error } = await sb.auth.signInWithPassword({ email: $("#l-email").value, password: $("#l-pass").value });
+  if (error) fallo(error);
+});
+$("#btn-salir").addEventListener("click", () => sb.auth.signOut());
+
+// ---------- Navegación ----------
+let vista = "calendario", refresco = null;
+function mostrar(v) {
+  vista = v;
+  try { localStorage.setItem("vista", v); } catch {}
+  $$("nav button").forEach((b) => b.setAttribute("aria-current", String(b.dataset.vista === v)));
+  for (const s of VISTAS) $("#v-" + s).classList.toggle("oculto", s !== v);
+  clearInterval(refresco);
+  if (v === "calendario") { pintarCalendario(); refresco = setInterval(pintarCalendario, 30000); }
+  if (v === "nuevo") { if (!editando) restaurarBorrador(); actualizarFranjaElegida(); }
+  if (v === "estadisticas") cargarEstadisticas();
+  if (v === "cuentas") pintarCuentas();
+  if (v === "ajustes") pintarAjustes();
+}
+$$("nav button").forEach((b) => b.addEventListener("click", () => { if (b.dataset.vista === "nuevo") limpiarFormulario(); mostrar(b.dataset.vista); }));
+
+// ---------- Calendario ----------
+let lunes = inicioSemana(new Date());
+// Fechas "de calendario" en Madrid: se opera con AAAA-MM-DD para no liarse con el cambio de hora.
+function sumarDias(clave, n) { const [a, m, d] = clave.split("-").map(Number); return new Date(Date.UTC(a, m - 1, d + n)).toISOString().slice(0, 10); }
+function inicioSemana(d) {
+  const k = diaClave(d); const [a, m, di] = k.split("-").map(Number);
+  const dow = (new Date(Date.UTC(a, m - 1, di)).getUTCDay() + 6) % 7;
+  return madridADate(sumarDias(k, -dow) + "T00:00");
+}
+const masDias = (d, n) => madridADate(sumarDias(diaClave(d), n) + "T00:00");
+$("#cal-ant").addEventListener("click", () => { lunes = masDias(lunes, -7); pintarCalendario(); });
+$("#cal-sig").addEventListener("click", () => { lunes = masDias(lunes, 7); pintarCalendario(); });
+$("#cal-hoy").addEventListener("click", () => { lunes = inicioSemana(new Date()); pintarCalendario(); });
+
+let publicaciones = [];
+async function pintarCalendario() {
+  const fin = masDias(lunes, 7);
+  const { data, error } = await sb.from("publicaciones")
+    .select("*, videos(id, codigo, slug, titulo, archivo, media_url, yt_titulo, yt_descripcion, tiktok_texto, ig_texto, ia)")
+    .gte("programado_para", lunes.toISOString()).lt("programado_para", fin.toISOString()).order("programado_para");
+  if (error) return fallo(error);
+  publicaciones = data;
+  $("#cal-titulo").textContent = `Semana del ${fmt({ day: "numeric", month: "long" }).format(lunes)}`;
+  const hoy = diaClave(new Date());
+  let html = "";
+  for (let i = 0; i < 7; i++) {
+    const d = masDias(lunes, i); const k = diaClave(d);
+    const delDia = data.filter((p) => diaClave(new Date(p.programado_para)) === k);
+    html += `<div class="dia ${k === hoy ? "hoy" : ""}"><h4>${esc(fmt({ weekday: "long", day: "numeric", month: "numeric" }).format(d))}</h4>`;
+    for (const p of delDia) {
+      const v = p.videos;
+      html += `<button class="pub" data-p="${p.plataforma}" data-id="${p.id}">
+        <span class="hora">${horaTxt(new Date(p.programado_para))}</span> <span class="red">${REDES[p.plataforma]}</span>
+        <span class="tit">${esc((v.codigo ? v.codigo + " · " : "") + v.titulo)}</span>
+        <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></button>`;
+    }
+    html += "</div>";
+  }
+  $("#semana").innerHTML = html;
+  $$("#semana .pub").forEach((b) => b.addEventListener("click", () => abrirPublicacion(b.dataset.id)));
+
+  const { count: pendientes } = await sb.from("publicaciones").select("id", { count: "exact", head: true }).eq("estado", "programado");
+  const { count: errores } = await sb.from("publicaciones").select("id", { count: "exact", head: true }).eq("estado", "error");
+  const { data: sig } = await sb.from("publicaciones").select("programado_para, plataforma, videos(titulo)")
+    .eq("estado", "programado").order("programado_para").limit(1);
+  $("#resumen").innerHTML = `<span><b>${pendientes ?? 0}</b> en cola</span>` +
+    (errores ? `<span style="color:var(--peligro)"><b>${errores}</b> con error</span>` : "") +
+    (sig?.[0] ? `<span>Próximo: <b>${esc(sig[0].videos.titulo)}</b> en ${REDES[sig[0].plataforma]}, ${fechaTxt(new Date(sig[0].programado_para))}</span>` : "");
+}
+
+function abrirPublicacion(id) {
+  const p = publicaciones.find((x) => x.id === id); if (!p) return;
+  const v = p.videos;
+  const texto = p.plataforma === "youtube" ? `${v.yt_titulo ?? ""}\n\n${v.yt_descripcion ?? ""}` : p.plataforma === "tiktok" ? v.tiktok_texto : v.ig_texto;
+  const editable = ["programado", "borrador", "error"].includes(p.estado);
+  $("#dlg-cuerpo").innerHTML = `
+    <h3>${esc((v.codigo ? v.codigo + " · " : "") + v.titulo)}</h3>
+    <p><span class="red">${REDES[p.plataforma]}</span> · ${fechaTxt(new Date(p.programado_para))} · <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></p>
+    ${p.estado === "externo" ? `<p class="sub">Lo programaste directamente en ${REDES[p.plataforma]}: el programador no lo vuelve a subir.</p>` : ""}
+    ${p.estado === "bandeja" ? `<p class="sub">Está en tu bandeja de TikTok: abre la notificación en la app, pega el texto (botón «Copiar texto») y publícalo.</p>` : ""}
+    ${p.error ? `<p style="color:var(--peligro)"><b>Error:</b> ${esc(p.error)}</p>` : ""}
+    ${p.url ? `<p><a href="${esc(p.url)}" target="_blank" rel="noopener">Ver publicación ↗</a></p>` : ""}
+    <pre>${esc(texto || "(sin texto)")}</pre>
+    ${editable ? `<label for="d-hora">Hora (Madrid)</label><input type="datetime-local" id="d-hora" value="${dateAMadrid(new Date(p.programado_para))}">` : ""}
+    <div class="acciones" style="margin-top:16px">
+      ${editable ? `<button class="btn primario" data-a="guardar">Guardar hora</button>` : ""}
+      ${editable ? `<button class="btn" data-a="ahora">Publicar ahora</button>` : ""}
+      ${p.estado === "programado" ? `<button class="btn" data-a="borrador">Pasar a borrador</button>` : ""}
+      ${["borrador", "error"].includes(p.estado) ? `<button class="btn" data-a="programar">Programar</button>` : ""}
+      ${p.estado !== "externo" ? `<button class="btn" data-a="editar">Editar textos</button>` : ""}
+      <button class="btn peligro" data-a="borrar">Quitar de ${REDES[p.plataforma]}</button>
+      <button class="btn" data-a="copiar">Copiar texto</button>
+      <button class="btn" data-a="cerrar" style="margin-left:auto">Cerrar</button>
+    </div>`;
+  $("#dlg").showModal();
+  $$("#dlg-cuerpo [data-a]").forEach((b) => b.addEventListener("click", () => accionPublicacion(p, b.dataset.a)));
+}
+
+async function accionPublicacion(p, a) {
+  const dlg = $("#dlg");
+  try {
+    if (a === "cerrar") return dlg.close();
+    if (a === "copiar") return navigator.clipboard.writeText($("#dlg-cuerpo pre").textContent).then(() => avisar("Texto copiado"));
+    if (a === "editar") { dlg.close(); return editarVideo(p.videos.id); }
+    if (a === "borrar") {
+      if (!confirm(`¿Quitar esta publicación de ${REDES[p.plataforma]}? (si ya salió, no la borra de la red)`)) return;
+      await sb.from("publicaciones").delete().eq("id", p.id).throwOnError();
+    }
+    if (a === "guardar" || a === "programar") {
+      const hora = madridADate($("#d-hora").value);
+      await sb.from("publicaciones").update({ programado_para: hora.toISOString(), estado: "programado", intentos: 0, error: null, siguiente_intento: null }).eq("id", p.id).throwOnError();
+    }
+    if (a === "borrador") await sb.from("publicaciones").update({ estado: "borrador" }).eq("id", p.id).throwOnError();
+    if (a === "ahora") {
+      await sb.from("publicaciones").update({ programado_para: new Date().toISOString(), estado: "programado", intentos: 0, error: null, siguiente_intento: null }).eq("id", p.id).throwOnError();
+      dlg.close(); await ejecutar(); return;
+    }
+    dlg.close(); pintarCalendario();
+  } catch (e) { fallo(e); }
+}
+
+async function ejecutar() {
+  avisar("Subiendo… puede tardar un minuto.", 60000);
+  $("#btn-ejecutar").disabled = true;
+  try {
+    const { data, error } = await sb.functions.invoke("programador/ejecutar", { method: "POST", body: {} });
+    if (error) throw new Error((await error.context?.json?.().catch(() => null))?.error || error.message);
+    const r = data.resultados;
+    avisar(r.length ? r.map((x) => `${REDES[x.plataforma]}: ${x.estado}${x.detalle && x.estado !== "publicado" ? " — " + x.detalle : ""}`).join(" · ") : "No había nada pendiente.", 9000);
+  } catch (e) { fallo(e); }
+  $("#btn-ejecutar").disabled = false;
+  pintarCalendario();
+}
+$("#btn-ejecutar").addEventListener("click", ejecutar);
+
+// ---------- Nuevo / editar vídeo ----------
+let archivo = null, editando = null, franjasMapa = {};
+const soltar = $("#soltar");
+soltar.addEventListener("click", () => $("#f-video").click());
+soltar.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") $("#f-video").click(); });
+soltar.addEventListener("dragover", (e) => { e.preventDefault(); soltar.classList.add("encima"); });
+soltar.addEventListener("dragleave", () => soltar.classList.remove("encima"));
+soltar.addEventListener("drop", (e) => {
+  e.preventDefault(); soltar.classList.remove("encima");
+  for (const f of e.dataTransfer.files) { if (f.name.endsWith(".json")) leerTextos(f); else elegirVideo(f); }
+});
+$("#f-video").addEventListener("change", (e) => e.target.files[0] && elegirVideo(e.target.files[0]));
+$("#btn-textos").addEventListener("click", () => $("#f-textos").click());
+$("#f-textos").addEventListener("change", (e) => e.target.files[0] && leerTextos(e.target.files[0]));
+
+function elegirVideo(f) {
+  if (f.size > 50 * 1024 * 1024) return avisar("Ese vídeo pasa de 50 MB (el límite del plan gratis). Usa la versión -web.mp4.");
+  archivo = f;
+  soltar.textContent = `${f.name} · ${(f.size / 1048576).toFixed(1)} MB`;
+  const pv = $("#previa"); pv.src = URL.createObjectURL(f); pv.classList.remove("oculto");
+  const m = f.name.match(/^(\d{3})-(.+?)(-web)?\.\w+$/);
+  if (m) { if (!$("#n-codigo").value) $("#n-codigo").value = m[1]; if (!$("#n-slug").value) $("#n-slug").value = m[2]; }
+}
+
+const unir = (x) => Array.isArray(x) ? x.filter(Boolean).join("\n") : (x ?? "");
+async function leerTextos(f) {
+  try {
+    const t = JSON.parse(await f.text());
+    if (t.titulo) $("#n-titulo").value = t.titulo;
+    if (t.youtube_titulo) $("#n-yt-titulo").value = t.youtube_titulo;
+    if (t.youtube_descripcion) $("#n-yt-desc").value = unir(t.youtube_descripcion);
+    if (t.tiktok) $("#n-tt").value = unir(t.tiktok);
+    if (t.instagram) $("#n-ig").value = unir(t.instagram);
+    contar(); avisar("Textos cargados de " + f.name);
+  } catch (e) { fallo("No pude leer ese textos.json: " + e.message); }
+}
+
+function contar() {
+  $$(".contador").forEach((c) => {
+    const n = $("#" + c.dataset.para).value.length; c.textContent = `${n}/${c.dataset.max}`;
+    c.classList.toggle("mal", n > Number(c.dataset.max));
+  });
+}
+$$("#form-video input, #form-video textarea").forEach((x) => x.addEventListener("input", contar));
+
+const redesElegidas = () => $$(".n-red").filter((c) => c.checked).map((c) => c.value);
+const modo = () => $$("input[name=modo]").find((r) => r.checked).value;
+$$(".n-red").forEach((c) => c.addEventListener("change", () => {
+  $(`.campos[data-red=${c.value}]`).classList.toggle("oculto", !c.checked); actualizarFranjaElegida();
+}));
+$$("input[name=modo]").forEach((r) => r.addEventListener("change", actualizarFranjaElegida));
+$("#n-dia").addEventListener("change", actualizarFranjaElegida);
+$("#n-franja").addEventListener("change", actualizarFranjaElegida);
+
+async function cargarFranjas() {
+  const { data } = await sb.from("franjas").select("*").order("franja");
+  franjasMapa = {};
+  for (const f of data ?? []) (franjasMapa[f.franja] ??= {})[f.plataforma] = f.hora.slice(0, 5);
+  $("#n-franja").innerHTML = Object.keys(franjasMapa).map((f) => `<option value="${f}">Franja ${f}</option>`).join("");
+}
+const describirFranja = (f, redes) => redes.map((r) => `${REDES[r]} ${franjasMapa[f]?.[r] ?? "?"}`).join(" · ");
+
+let franjaCalculada = null;
+async function actualizarFranjaElegida() {
+  const m = modo(), redes = redesElegidas(), caja = $("#franja-elegida");
+  $("#m-elegir").classList.toggle("oculto", m !== "elegir");
+  $$(".solo-horas").forEach((x) => x.classList.toggle("oculto", m !== "horas"));
+  caja.classList.toggle("oculto", m === "horas" || m === "borrador");
+  if (editando) { caja.classList.add("oculto"); return; }
+  if (m === "franja") {
+    caja.textContent = "Calculando…";
+    const { data, error } = await sb.rpc("siguiente_franja", { plataformas: redes });
+    if (error) return caja.textContent = "❌ " + error.message;
+    franjaCalculada = data?.[0];
+    caja.textContent = franjaCalculada
+      ? `${fmt({ weekday: "long", day: "numeric", month: "long" }).format(madridADate(franjaCalculada.dia + "T12:00"))}, franja ${franjaCalculada.franja}: ${describirFranja(franjaCalculada.franja, redes)}`
+      : "No hay franjas libres.";
+  }
+  if (m === "elegir") {
+    if (!$("#n-dia").value) $("#n-dia").value = diaClave(new Date(Date.now() + 86400000));
+    const f = $("#n-franja").value;
+    caja.textContent = `Franja ${f}: ${describirFranja(f, redes)}`;
+  }
+  if (m === "horas") {
+    for (const id of ["#n-yt-hora", "#n-tt-hora", "#n-ig-hora"]) if (!$(id).value) $(id).value = dateAMadrid(new Date(Date.now() + 3600000)).slice(0, 14) + "00";
+  }
+}
+
+function limpiarFormulario() {
+  editando = null; archivo = null;
+  $("#form-video").reset(); $("#previa").classList.add("oculto"); $("#previa").removeAttribute("src");
+  soltar.textContent = "Arrastra aquí el .mp4 o el textos.json, o haz clic (máx. 50 MB)";
+  $("#n-titulo-vista").textContent = "Nuevo vídeo"; $("#btn-guardar").textContent = "Subir y programar";
+  $("#btn-cancelar-edicion").classList.add("oculto"); $("#nota-edicion").textContent = "";
+  $$("input[name=modo]").forEach((r) => (r.disabled = false));
+  $$(".campos").forEach((c) => c.classList.remove("oculto"));
+  contar();
+}
+$("#btn-cancelar-edicion").addEventListener("click", () => { limpiarFormulario(); mostrar("calendario"); });
+
+async function editarVideo(id) {
+  const { data: v, error } = await sb.from("videos").select("*, publicaciones(plataforma)").eq("id", id).single();
+  if (error) return fallo(error);
+  limpiarFormulario(); editando = v;
+  $("#n-titulo-vista").textContent = "Editar textos"; $("#btn-guardar").textContent = "Guardar cambios";
+  $("#btn-cancelar-edicion").classList.remove("oculto");
+  $("#nota-edicion").textContent = "Cambiar los textos afecta a lo que aún no ha salido. Las horas se cambian desde el calendario.";
+  $$("input[name=modo]").forEach((r) => (r.disabled = true));
+  $("#n-codigo").value = v.codigo ?? ""; $("#n-slug").value = v.slug ?? ""; $("#n-titulo").value = v.titulo;
+  $("#n-ia").checked = v.ia; $("#n-yt-titulo").value = v.yt_titulo ?? ""; $("#n-yt-desc").value = v.yt_descripcion ?? "";
+  $("#n-tt").value = v.tiktok_texto ?? ""; $("#n-ig").value = v.ig_texto ?? "";
+  soltar.textContent = v.archivo ? "Vídeo ya subido (arrastra otro para cambiarlo)" : "Arrastra el vídeo para subirlo";
+  mostrar("nuevo"); contar(); actualizarFranjaElegida();
+}
+
+function subirConProgreso(ruta, f) {
+  return new Promise((ok, ko) => {
+    const x = new XMLHttpRequest();
+    x.open("POST", `${SUPABASE_URL}/storage/v1/object/videos/${ruta}`);
+    x.setRequestHeader("Authorization", `Bearer ${sesion.access_token}`);
+    x.setRequestHeader("apikey", SUPABASE_KEY);
+    x.setRequestHeader("x-upsert", "true");
+    x.setRequestHeader("Content-Type", f.type || "video/mp4");
+    x.upload.onprogress = (e) => { if (e.lengthComputable) $("#progreso").value = (e.loaded / e.total) * 100; };
+    x.onload = () => (x.status < 300 ? ok() : ko(new Error(`Subida: ${x.status} ${x.responseText}`)));
+    x.onerror = () => ko(new Error("Se cortó la subida"));
+    x.send(f);
+  });
+}
+const hashtags = (t) => [...(t || "").matchAll(/#([\p{L}\p{N}_]+)/gu)].map((m) => m[1]).filter((h) => h.toLowerCase() !== "shorts").slice(0, 15);
+
+$("#form-video").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const redes = redesElegidas();
+  if (!redes.length) return avisar("Elige al menos una red.");
+  if (!editando && !archivo) return avisar("Falta el vídeo.");
+  if ($$(".contador.mal").length) return avisar("Algún texto pasa del límite de caracteres.");
+  const btn = $("#btn-guardar"); btn.disabled = true;
+  const datos = {
+    codigo: $("#n-codigo").value.trim() || null, slug: $("#n-slug").value.trim() || null, titulo: $("#n-titulo").value.trim(),
+    ia: $("#n-ia").checked, yt_titulo: $("#n-yt-titulo").value.trim() || null, yt_descripcion: $("#n-yt-desc").value.trim() || null,
+    yt_tags: hashtags($("#n-yt-desc").value), tiktok_texto: $("#n-tt").value.trim() || null, ig_texto: $("#n-ig").value.trim() || null,
+  };
+  try {
+    if (archivo) {
+      const nombre = `${datos.codigo ?? "video"}-${(datos.slug ?? "").replace(/[^a-z0-9-]/gi, "")}-${Date.now()}.${archivo.name.split(".").pop()}`.replace(/--+/g, "-");
+      $("#progreso").classList.remove("oculto"); $("#progreso").value = 0;
+      await subirConProgreso(nombre, archivo);
+      if (editando?.archivo) await sb.storage.from("videos").remove([editando.archivo]);
+      datos.archivo = nombre; datos.tamano = archivo.size;
+    }
+    if (editando) {
+      await sb.from("videos").update(datos).eq("id", editando.id).throwOnError();
+      avisar("✅ Textos guardados"); limpiarFormulario(); mostrar("calendario"); return;
+    }
+    const { data: v } = await sb.from("videos").insert(datos).select().single().throwOnError();
+    const m = modo();
+    let creadas = [];
+    if (m === "franja" || m === "elegir") {
+      const args = { p_video: v.id, p_plataformas: redes };
+      if (m === "elegir") { args.p_dia = $("#n-dia").value; args.p_franja = $("#n-franja").value; }
+      const { data, error } = await sb.rpc("programar_en_franja", args);
+      if (error) throw error;
+      creadas = data;
+    } else {
+      const horas = { youtube: "#n-yt-hora", tiktok: "#n-tt-hora", instagram: "#n-ig-hora" };
+      const filas = redes.map((r) => ({
+        video_id: v.id, plataforma: r, estado: m === "borrador" ? "borrador" : "programado",
+        programado_para: (m === "borrador" ? new Date(Date.now() + 86400000) : madridADate($(horas[r]).value)).toISOString(),
+      }));
+      ({ data: creadas } = await sb.from("publicaciones").insert(filas).select().throwOnError());
+    }
+    avisar("✅ " + creadas.map((p) => `${REDES[p.plataforma]} ${fechaTxt(new Date(p.programado_para))}`).join(" · "), 8000);
+    lunes = inicioSemana(new Date(creadas[0]?.programado_para ?? Date.now()));
+    borrarBorrador(); limpiarFormulario(); mostrar("calendario");
+  } catch (e) { fallo(e); }
+  btn.disabled = false; $("#progreso").classList.add("oculto");
+});
+
+// ---------- Borrador de "Nuevo vídeo" ----------
+// Si Chrome recarga la pestaña (o cambias de vista), lo escrito no se pierde.
+const CAMPOS = ["n-codigo", "n-slug", "n-titulo", "n-yt-titulo", "n-yt-desc", "n-tt", "n-ig"];
+function guardarBorrador() {
+  if (editando) return;
+  const b = { ia: $("#n-ia").checked, redes: redesElegidas(), modo: modo(), archivo: archivo?.name ?? null };
+  for (const c of CAMPOS) b[c] = $("#" + c).value;
+  try { localStorage.setItem("borrador", JSON.stringify(b)); } catch {}
+}
+function borrarBorrador() {
+  try { localStorage.removeItem("borrador"); } catch {}
+  $("#nota-borrador").classList.add("oculto");
+}
+function restaurarBorrador() {
+  let b = null;
+  try { b = JSON.parse(localStorage.getItem("borrador") || "null"); } catch {}
+  if (!b || !CAMPOS.some((c) => b[c]) || CAMPOS.some((c) => $("#" + c).value)) return;
+  for (const c of CAMPOS) $("#" + c).value = b[c] ?? "";
+  $("#n-ia").checked = b.ia ?? true;
+  $$(".n-red").forEach((x) => {
+    x.checked = (b.redes ?? []).includes(x.value);
+    $(`.campos[data-red=${x.value}]`).classList.toggle("oculto", !x.checked);
+  });
+  const radio = $$("input[name=modo]").find((x) => x.value === b.modo);
+  if (radio) radio.checked = true;
+  const falta = b.archivo && !archivo ? ` Vuelve a elegir el vídeo <b>${esc(b.archivo)}</b>.` : "";
+  $("#nota-borrador").innerHTML = `📝 Recuperado lo que dejaste a medias.${falta} <button type="button" class="btn" id="btn-vaciar">Empezar de cero</button>`;
+  $("#nota-borrador").classList.remove("oculto");
+  $("#btn-vaciar").addEventListener("click", () => { borrarBorrador(); limpiarFormulario(); actualizarFranjaElegida(); });
+  contar();
+}
+$("#form-video").addEventListener("input", guardarBorrador);
+$("#form-video").addEventListener("change", guardarBorrador);
+
+// ---------- Estadísticas ----------
+let est = null, estCargando = false;
+const nf = new Intl.NumberFormat("es-ES");
+const nfCorto = new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 });
+const cifra = (n) => (n === null || n === undefined ? "—" : nf.format(n));
+const cifraCorta = (n) => (n === null || n === undefined ? "—" : n < 10000 ? nf.format(n) : nfCorto.format(n));
+
+async function cargarEstadisticas(forzar = false) {
+  if (estCargando) return;
+  if (!forzar && est && Date.now() - Date.parse(est.generado) < 5 * 60000) return pintarEstadisticas();
+  estCargando = true;
+  $(".est-contenido").style.opacity = est ? ".5" : "1"; // se mantiene lo anterior mientras carga
+  $("#est-hora").textContent = "Cargando…";
+  try {
+    const { data, error } = await sb.functions.invoke("programador/estadisticas", { method: "POST", body: {} });
+    if (error) throw new Error((await error.context?.json?.().catch(() => null))?.error || error.message);
+    est = data;
+  } catch (e) { fallo(e); }
+  estCargando = false;
+  $(".est-contenido").style.opacity = "1";
+  pintarEstadisticas();
+}
+
+function postsFiltrados() {
+  const dias = Number($("#est-periodo").value), red = $("#est-red").value, ahora = Date.now();
+  const desde = dias ? ahora - dias * 86400000 : 0;
+  const lista = [];
+  for (const p of Object.keys(REDES)) {
+    if (red && red !== p) continue;
+    for (const x of est?.[p]?.posts ?? []) {
+      const t = Date.parse(x.fecha);
+      if (t <= ahora && t >= desde) lista.push({ ...x, red: p, t });
+    }
+  }
+  const orden = $("#est-orden").value;
+  lista.sort((a, b) => (orden === "fecha" ? b.t - a.t : (b[orden] ?? -1) - (a[orden] ?? -1)));
+  return lista;
+}
+const sumar = (lista, campo) => {
+  const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
+  return v.length ? v.reduce((a, b) => a + b, 0) : null;
+};
+
+function pintarEstadisticas() {
+  if (!est) { $("#est-hora").textContent = ""; return; }
+  $("#est-hora").textContent = `Datos de las ${horaTxt(new Date(est.generado))}`;
+  const red = $("#est-red").value;
+  const redes = Object.keys(REDES).filter((p) => !red || red === p);
+  const avisos = redes.flatMap((p) => [...(est[p]?.avisos ?? []),
+    ...(est[p]?.error ? [est[p].error.startsWith(REDES[p]) ? est[p].error : `${REDES[p]}: ${est[p].error}`] : [])]);
+  $("#est-avisos").innerHTML = avisos.length ? `<div class="panel avisos">${avisos.map((a) => `<p>ℹ️ ${esc(a)}</p>`).join("")}</div>` : "";
+
+  const posts = postsFiltrados();
+  const kpis = [["Vistas", sumar(posts, "vistas")], ["Likes", sumar(posts, "likes")], ["Comentarios", sumar(posts, "comentarios")],
+    ["Compartidos", sumar(posts, "compartidos")], ["Publicaciones", posts.length]];
+  $("#est-kpis").innerHTML = kpis.map(([l, v]) =>
+    `<div class="kpi"><span class="kpi-l">${l}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span></div>`).join("");
+
+  $("#est-cuentas").innerHTML = redes.map((p) => {
+    const d = est[p], n = REDES[p];
+    const cab = `<h3><span class="punto" data-p="${p}"></span>${n}${d?.cuenta?.nombre ? ` <span class="sub" style="margin:0">${esc(d.cuenta.nombre)}</span>` : ""}</h3>`;
+    if (!d?.conectada) return `<div class="panel cuenta-est">${cab}<p class="sub">Sin conectar: conéctala en Cuentas.</p></div>`;
+    if (!d.cuenta) return `<div class="panel cuenta-est">${cab}<p class="sub">No se pudieron leer los datos (mira el aviso de arriba).</p></div>`;
+    const c = d.cuenta;
+    const extra = [["Vistas del canal", c.vistas], ["Likes totales", c.likes], ["Publicaciones", c.publicaciones], ["Siguiendo", c.siguiendo]]
+      .filter(([, v]) => v !== undefined && v !== null);
+    const deLaRed = posts.filter((x) => x.red === p);
+    const partes = [["vistas", sumar(deLaRed, "vistas")], ["likes", sumar(deLaRed, "likes")], ["comentarios", sumar(deLaRed, "comentarios")]]
+      .filter(([, v]) => v !== null).map(([l, v]) => `<b>${cifra(v)}</b> ${l}`);
+    const periodo = $("#est-periodo").selectedOptions[0].textContent;
+    const resumen = deLaRed.length ? `${periodo}: ${partes.join(" · ")}` : `${periodo}: sin publicaciones`;
+    return `<div class="panel cuenta-est">${cab}
+      <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v" title="${cifra(c.seguidores)}">${cifraCorta(c.seguidores)}</span></div>
+      <dl class="mini">${extra.map(([l, v]) => `<div><dt>${l}</dt><dd>${cifra(v)}</dd></div>`).join("")}</dl>
+      <p class="periodo-red">${resumen}</p>
+    </div>`;
+  }).join("");
+
+  const max = Math.max(1, ...posts.map((x) => x.vistas ?? 0));
+  $("#est-tabla").innerHTML = posts.length ? `<div class="tabla-est" role="table" aria-label="Publicaciones">
+    <div class="fila cab" role="row"><span role="columnheader">Publicación</span><span role="columnheader" class="num">Vistas</span>
+      <span role="columnheader" class="num">Likes</span><span role="columnheader" class="num">Coment.</span><span role="columnheader" class="num">Compart.</span></div>
+    ${posts.map((x) => `<div class="fila" role="row">
+      <span role="cell" class="pub-est">
+        ${x.miniatura ? `<img src="${esc(x.miniatura)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="sin-img"></span>`}
+        <span class="txt"><a href="${esc(x.url ?? "#")}" target="_blank" rel="noopener" title="${esc(x.titulo)}">${esc(x.titulo)}</a>
+          <span class="sub" style="margin:0"><span class="punto" data-p="${x.red}"></span>${REDES[x.red]} · ${fmt({ day: "numeric", month: "short" }).format(new Date(x.t))}${x.privado ? " · privado" : ""}</span></span>
+      </span>
+      <span role="cell" class="num vistas" data-l="Vistas"><span>${cifra(x.vistas)}</span>
+        ${x.vistas === null || x.vistas === undefined ? "" : `<span class="barra-pista"><span class="barra-dato" style="width:${x.vistas ? Math.max(2, (x.vistas / max) * 100) : 0}%"></span></span>`}</span>
+      <span role="cell" class="num" data-l="Likes">${cifra(x.likes)}</span>
+      <span role="cell" class="num" data-l="Coment.">${cifra(x.comentarios)}</span>
+      <span role="cell" class="num" data-l="Compart.">${cifra(x.compartidos)}</span>
+    </div>`).join("")}
+  </div>` : `<p class="sub">No hay publicaciones en este periodo.</p>`;
+}
+["#est-periodo", "#est-red", "#est-orden"].forEach((sel) => $(sel).addEventListener("change", pintarEstadisticas));
+$("#est-actualizar").addEventListener("click", () => cargarEstadisticas(true));
+
+// ---------- Cuentas ----------
+async function pintarCuentas() {
+  const { data, error } = await sb.rpc("estado_cuentas");
+  if (error) return fallo(error);
+  const por = Object.fromEntries((data ?? []).map((c) => [c.plataforma, c]));
+  $("#lista-cuentas").innerHTML = Object.entries(REDES).map(([p, n]) => {
+    const c = por[p];
+    const caduca = c?.expira && p === "instagram" ? ` · caduca ${fmt({ day: "numeric", month: "short" }).format(new Date(c.expira))} (se renueva solo)` : "";
+    return `<div class="panel cuenta">
+      <h3><span class="punto" data-p="${p}"></span>${n}</h3>
+      <p>${c ? `✅ <span class="nombre">${esc(c.nombre)}</span><br><span class="sub">Conectada ${fmt({ day: "numeric", month: "short" }).format(new Date(c.actualizado))}${caduca}</span>` : "Sin conectar"}</p>
+      <div class="acciones"><button class="btn primario" data-conectar="${p}">${c ? "Reconectar" : "Conectar"}</button>
+      ${c ? `<button class="btn peligro" data-desconectar="${p}">Desconectar</button>` : ""}</div>
+      <label>Redirect URI para la app de ${n}</label>
+      <code class="copiar" title="Clic para copiar">${SUPABASE_URL}/functions/v1/programador/oauth/callback/${p}/</code>
+    </div>`;
+  }).join("");
+  $$("[data-conectar]").forEach((b) => b.addEventListener("click", () => conectar(b.dataset.conectar)));
+  $$("[data-desconectar]").forEach((b) => b.addEventListener("click", async () => {
+    if (!confirm("¿Desconectar? Lo programado para esa red fallará hasta que la vuelvas a conectar.")) return;
+    const { error } = await sb.rpc("desconectar_cuenta", { p: b.dataset.desconectar }); if (error) fallo(error); pintarCuentas();
+  }));
+  $$("code.copiar").forEach((c) => c.addEventListener("click", () => navigator.clipboard.writeText(c.textContent).then(() => avisar("Copiado"))));
+}
+async function conectar(p) {
+  const ventana = window.open("about:blank", "_blank");
+  try {
+    const { data, error } = await sb.functions.invoke("programador/oauth/inicio", { method: "POST", body: { plataforma: p } });
+    if (error) throw new Error((await error.context?.json?.().catch(() => null))?.error || error.message);
+    ventana.location = data.url;
+    avisar("Da permiso en la pestaña nueva y vuelve aquí.", 8000);
+  } catch (e) { ventana?.close(); fallo(e); }
+}
+window.addEventListener("focus", () => { if (vista === "cuentas" && sesion) pintarCuentas(); });
+
+// ---------- Ajustes ----------
+async function pintarAjustes() {
+  const { data } = await sb.from("credenciales").select("clave, valor");
+  const por = Object.fromEntries((data ?? []).map((c) => [c.clave, c.valor]));
+  for (const k of CLAVES) { const el = $("#c-" + k); if (por[k] !== undefined) el.value = por[k]; }
+  for (const k of CASILLAS) $("#c-" + k).checked = por[k] === "si";
+  $("#tabla-franjas").innerHTML = Object.keys(franjasMapa).map((f) => `<tr><td><b>${f}</b></td>` +
+    ["youtube", "tiktok", "instagram"].map((r) => `<td><input type="time" data-franja="${f}" data-red="${r}" value="${franjasMapa[f][r] ?? ""}" aria-label="Franja ${f} ${REDES[r]}"></td>`).join("") + "</tr>").join("");
+  const { data: reg } = await sb.from("registro").select("*").order("creado", { ascending: false }).limit(40);
+  $("#registro").innerHTML = (reg ?? []).map((r) => `<li class="${r.nivel === "error" ? "error" : ""}"><span class="sub">${fechaTxt(new Date(r.creado))}</span> ${esc(r.mensaje)}</li>`).join("") || "<li class='sub'>Nada todavía.</li>";
+}
+$("#form-credenciales").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const filas = CLAVES.map((k) => ({ clave: k, valor: $("#c-" + k).value.trim() })).filter((f) => f.valor)
+    .concat(CASILLAS.map((k) => ({ clave: k, valor: $("#c-" + k).checked ? "si" : "no" })));
+  const { error } = await sb.from("credenciales").upsert(filas);
+  error ? fallo(error) : avisar("✅ Claves guardadas");
+});
+$("#btn-franjas").addEventListener("click", async () => {
+  const filas = $$("#tabla-franjas input").filter((i) => i.value).map((i) => ({ franja: i.dataset.franja, plataforma: i.dataset.red, hora: i.value }));
+  const { error } = await sb.from("franjas").upsert(filas);
+  if (error) return fallo(error);
+  await cargarFranjas(); avisar("✅ Franjas guardadas");
+});
+
+contar();
+arrancar();
+</script>
+</body>
+</html>

@@ -10,6 +10,7 @@
     --bg: #f6f6f4; --panel: #ffffff; --texto: #1d1d1f; --suave: #6b6b70; --linea: #e4e4e0;
     --acento: #2f5bea; --acento-texto: #ffffff; --peligro: #c62f2f;
     --yt: #e62117; --tt: #0e9fae; --ig: #c13584;
+    --sube: #1d7a3e; --baja: #c62f2f; --eje: #c9c8c2;
     --e-borrador: #8a8a8f; --e-programado: #2f5bea; --e-curso: #c98a00; --e-publicado: #1f8a4c;
     --e-bandeja: #7a4bd6; --e-error: #c62f2f; --e-externo: #5b7083;
     --sombra: 0 1px 2px rgb(0 0 0 / .05), 0 4px 16px rgb(0 0 0 / .05);
@@ -18,11 +19,13 @@
     :root:not([data-theme="light"]) {
       --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
       --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
+      --sube: #3fb871; --baja: #ff6b6b; --eje: #46464d;
     }
   }
   :root[data-theme="dark"] {
     --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
     --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
+      --sube: #3fb871; --baja: #ff6b6b; --eje: #46464d;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--texto); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -118,35 +121,122 @@
   .filtros select { width: auto; }
   .est-contenido { transition: opacity .2s; }
   .avisos { margin-bottom: 16px; } .avisos p { margin: 4px 0; font-size: 14px; color: var(--suave); }
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .kpi { display: flex; flex-direction: column; gap: 2px; }
-  .kpis .kpi { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; }
+  .seccion { font-size: 16px; margin: 24px 0 10px; }
+  #est-avisos + .seccion { margin-top: 0; }
+  .sube { color: var(--sube); } .baja { color: var(--baja); }
+
+  .kpi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .kpi-l { font-size: 13px; color: var(--suave); }
-  .kpi-v { font-size: 28px; font-weight: 600; letter-spacing: -.01em; }
+  .kpi-v { font-size: 28px; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+  .kpi-d { font-size: 12px; color: var(--suave); }
+  .kpi-d b { font-weight: 600; }
+  .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (min-width: 600px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  button.kpi { position: relative; text-align: left; justify-content: flex-start; background: var(--panel); border: 1px solid var(--linea);
+               border-radius: 12px; padding: 12px 14px; cursor: pointer; box-shadow: var(--sombra); transition: border-color .15s; }
+  button.kpi:hover { border-color: var(--suave); }
+  button.kpi[aria-pressed="true"] { border-color: var(--acento); }
+  button.kpi[aria-pressed="true"]::before { content: ""; position: absolute; left: 14px; right: 14px; top: -1px; height: 3px;
+                                            border-radius: 0 0 3px 3px; background: var(--acento); }
+
   .cuenta-est h3 { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .spark { height: 52px; margin: 10px 0 2px; border-radius: 6px; outline-offset: 4px; }
+  .spark svg { display: block; overflow: visible; }
+  .spark .linea { fill: none; stroke: var(--c); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .spark .area { fill: var(--c); opacity: .1; }
+  .spark .fin, .spark .encima { fill: var(--c); stroke: var(--panel); stroke-width: 2; }
+  .spark .cruz { stroke: var(--suave); stroke-width: 1; }
+  .spark-vacia { font-size: 12px; color: var(--suave); margin: 10px 0 0; }
   .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px 0 0; }
   .mini dt { font-size: 12px; color: var(--suave); } .mini dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .periodo-red { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--linea); font-size: 13px; color: var(--suave); }
-  .periodo-red b { color: var(--texto); font-weight: 600; }
-  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 150px 80px 80px 80px; gap: 12px; align-items: center;
+  .mini dd small { font-weight: 400; color: var(--suave); }
+
+  .grafica { margin: 16px 0 0; }
+  .graf-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px 12px; flex-wrap: wrap; }
+  .graf-cab h3 { margin: 0 0 2px; }
+  .graf-cab .sub { margin: 0; font-size: 13px; }
+  .leyenda { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 0; }
+  .leyenda button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--linea); background: none;
+                    border-radius: 99px; padding: 3px 10px 3px 8px; cursor: pointer; font-size: 13px; transition: opacity .15s; }
+  .leyenda button:hover { border-color: var(--suave); }
+  .leyenda button[aria-pressed="true"] { border-color: var(--texto); }
+  .leyenda button.apagada { opacity: .5; }
+  .leyenda .muestra { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
+  .leyenda .tot { color: var(--suave); font-variant-numeric: tabular-nums; }
+  .lienzo { min-height: 200px; margin-top: 8px; }
+  .lienzo svg { display: block; overflow: visible; }
+  .lienzo text { font: 11px system-ui, -apple-system, "Segoe UI", sans-serif; fill: var(--suave); font-variant-numeric: tabular-nums; }
+  .lienzo .guia { stroke: var(--linea); } .lienzo .base { stroke: var(--eje); }
+  .lienzo .seg { fill: var(--c); }
+  .lienzo .col { pointer-events: none; transition: opacity .15s; }
+  .lienzo .col.tenue { opacity: .3; }
+  .lienzo .cima { fill: var(--texto); font-size: 12px; font-weight: 600; pointer-events: none; }
+  .lienzo .hit { fill: transparent; cursor: pointer; outline: none; }
+  .lienzo .hit.sin { cursor: default; }
+  .lienzo .hit:hover, .lienzo .hit.activo { fill: color-mix(in srgb, var(--texto) 6%, transparent); }
+  .lienzo .hit:focus-visible { fill: color-mix(in srgb, var(--texto) 6%, transparent); stroke: var(--acento); stroke-width: 2; }
+  .vacio { display: grid; place-items: center; min-height: 200px; color: var(--suave); font-size: 14px; text-align: center; padding: 0 16px; }
+  .tabla-cubos .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .multiples { display: grid; gap: 18px 28px; margin-top: 12px; }
+  @media (min-width: 600px) { .multiples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .multiples { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .multiple h4, .franja-red h4 { display: flex; align-items: center; margin: 0 0 6px; font-size: 13px; font-weight: 600; }
+  .hb { display: grid; grid-template-columns: 84px minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 13px; padding: 3px 0; transition: opacity .15s; }
+  .hb-n { color: var(--suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hb-n b { color: var(--texto); }
+  .hb-n small { display: block; font-size: 11px; }
+  .hb-barra { display: block; height: 10px; background: var(--c); border-radius: 0 4px 4px 0; }
+  .hb-v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .hb-v.nulo { font-weight: 400; color: var(--suave); }
+  [data-resalta=youtube] .hb:not([data-p=youtube]), [data-resalta=tiktok] .hb:not([data-p=tiktok]),
+  [data-resalta=instagram] .hb:not([data-p=instagram]) { opacity: .3; }
+  .conclusion { font-size: 13px; margin: 8px 0 0; }
+  .conclusion .sub { display: block; margin: 2px 0 0; }
+
+  #panel-tabla { scroll-margin-top: 72px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--bg); border: 1px solid var(--linea); border-radius: 99px;
+          padding: 2px 4px 2px 10px; font-size: 13px; }
+  .chip button { border: 0; background: none; cursor: pointer; padding: 2px 7px; border-radius: 99px; color: var(--suave); }
+  .chip button:hover { color: var(--texto); background: var(--linea); }
+  .tabla-est { margin-top: 8px; }
+  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 130px 72px 72px 72px 76px; gap: 12px; align-items: center;
                      padding: 10px 0; border-top: 1px solid var(--linea); }
-  .tabla-est .cab { border-top: 0; font-size: 12px; color: var(--suave); padding-top: 0; }
+  .tabla-est .cab { border-top: 0; padding: 0 0 4px; }
+  .tabla-est .cab button { background: none; border: 0; padding: 2px 0; cursor: pointer; font-size: 12px; color: var(--suave); white-space: nowrap; }
+  .tabla-est .cab button:hover, .tabla-est .cab [aria-sort=ascending] button, .tabla-est .cab [aria-sort=descending] button { color: var(--texto); }
+  .tabla-est .cab [aria-sort=ascending] button, .tabla-est .cab [aria-sort=descending] button { font-weight: 600; }
   .tabla-est .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tabla-est .cab .num button { width: 100%; text-align: right; }
   .pub-est { display: flex; gap: 10px; align-items: center; min-width: 0; }
   .pub-est img, .sin-img { width: 40px; height: 56px; object-fit: cover; border-radius: 6px; background: var(--bg); flex: none; }
   .pub-est .txt { display: flex; flex-direction: column; min-width: 0; }
   .pub-est a { color: var(--texto); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pub-est a:hover { text-decoration: underline; }
-  .vistas { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .barra-pista { width: 100%; height: 6px; display: flex; border-radius: 3px; background: color-mix(in srgb, var(--acento) 14%, transparent); }
-  .barra-dato { height: 6px; background: var(--acento); border-radius: 0 3px 3px 0; }
+  .celda-barra { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .barra-pista { width: 100%; height: 6px; display: flex; border-radius: 3px; background: color-mix(in srgb, var(--c) 16%, transparent); }
+  .barra-dato { height: 6px; background: var(--c); border-radius: 0 3px 3px 0; }
+  .mas { margin-top: 12px; }
   @media (max-width: 699px) {
-    .tabla-est .cab { display: none; }
-    .tabla-est .fila { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tabla-est .cab { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+    .tabla-est .cab .num button { width: auto; }
+    .tabla-est .fila:not(.cab) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; align-items: start; }
     .tabla-est .pub-est { grid-column: 1 / -1; }
-    .tabla-est .num { text-align: left; align-items: flex-start; }
-    .tabla-est .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
+    .tabla-est .fila:not(.cab) .num { text-align: left; }
+    .tabla-est .celda-barra { align-items: stretch; }
+    .tabla-est .fila:not(.cab) .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
   }
+
+  #tip { position: fixed; z-index: 30; pointer-events: none; background: var(--panel); color: var(--texto); border: 1px solid var(--linea);
+         border-radius: 10px; padding: 8px 10px; box-shadow: 0 6px 24px rgb(0 0 0 / .16); font-size: 13px; max-width: 280px; }
+  #tip[hidden] { display: none; }
+  .tip-t { color: var(--suave); font-size: 12px; margin-bottom: 4px; }
+  .tip-f { display: flex; align-items: center; gap: 6px; line-height: 1.6; }
+  .tip-f b { font-variant-numeric: tabular-nums; }
+  .tip-f span:last-child { color: var(--suave); }
+  .tip-k { width: 12px; height: 2px; border-radius: 1px; background: var(--c); flex: none; }
+  .tip-p { color: var(--suave); font-size: 12px; margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--linea); }
 </style>
 </head>
 <body>
@@ -168,7 +258,7 @@
 <div id="app" class="oculto">
 <header>
   <div class="barra">
-    <span class="marca">📅 Programador <small class="version">v7</small></span>
+    <span class="marca">📅 Programador <small class="version">v8</small></span>
     <nav>
       <button data-vista="calendario" aria-current="true">Calendario</button>
       <button data-vista="estadisticas">Estadísticas</button>
@@ -211,17 +301,40 @@
         <option value="">Todas las redes</option><option value="youtube">YouTube</option>
         <option value="tiktok">TikTok</option><option value="instagram">Instagram</option>
       </select>
-      <select id="est-orden" aria-label="Ordenar">
-        <option value="fecha">Más recientes</option><option value="vistas">Más vistas</option>
-        <option value="likes">Más likes</option><option value="comentarios">Más comentarios</option>
-      </select>
       <button class="btn" id="est-actualizar">Actualizar</button>
     </div>
     <div class="est-contenido">
       <div id="est-avisos"></div>
-      <div class="kpis" id="est-kpis"></div>
+      <h3 class="seccion">Comunidad</h3>
       <div class="rejilla tres" id="est-cuentas"></div>
-      <div class="panel" style="margin-top:16px"><h3>Publicaciones</h3><div id="est-tabla"><p class="sub">Cargando…</p></div></div>
+
+      <h3 class="seccion" id="est-titulo-periodo">En el periodo</h3>
+      <div class="kpis" id="est-kpis" role="group" aria-label="Qué dibuja la gráfica"></div>
+      <figure class="panel grafica">
+        <div class="graf-cab">
+          <div><h3 id="graf-titulo"></h3><p class="sub" id="graf-sub"></p></div>
+          <button class="btn" id="graf-tabla" aria-pressed="false">Ver como tabla</button>
+        </div>
+        <div class="leyenda" id="est-leyenda"></div>
+        <div class="lienzo" id="est-grafica"></div>
+      </figure>
+
+      <div class="panel" style="margin-top:16px">
+        <h3>Comparativa por red</h3>
+        <p class="sub" style="margin:0">Interacción = (likes + comentarios + compartidos + guardados) ÷ vistas.</p>
+        <div class="multiples" id="est-comparativa"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h3>¿Qué franja funciona mejor?</h3>
+        <p class="sub" id="franja-sub" style="margin:0"></p>
+        <div class="rejilla tres" id="est-franjas" style="margin-top:12px"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px" id="panel-tabla">
+        <div class="graf-cab"><h3>Publicaciones</h3><span id="est-chip"></span></div>
+        <div id="est-tabla"><p class="sub">Cargando…</p></div>
+      </div>
     </div>
   </section>
 
@@ -363,6 +476,7 @@
 
 <dialog id="dlg"><div class="dlg" id="dlg-cuerpo"></div></dialog>
 <div id="aviso" class="oculto" role="status"></div>
+<div id="tip" role="tooltip" hidden></div>
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
@@ -786,11 +900,51 @@ $("#form-video").addEventListener("input", guardarBorrador);
 $("#form-video").addEventListener("change", guardarBorrador);
 
 // ---------- Estadísticas ----------
-let est = null, estCargando = false;
+let est = null, estCargando = false, calc = null; // calc: lo calculado para el último dibujo
 const nf = new Intl.NumberFormat("es-ES");
 const nfCorto = new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 });
+const pct = new Intl.NumberFormat("es-ES", { style: "percent", maximumFractionDigits: 1 });
 const cifra = (n) => (n === null || n === undefined ? "—" : nf.format(n));
-const cifraCorta = (n) => (n === null || n === undefined ? "—" : n < 10000 ? nf.format(n) : nfCorto.format(n));
+const cifraCorta = (n) => (n === null || n === undefined ? "—" : Math.abs(n) < 10000 ? nf.format(n) : nfCorto.format(n));
+const cifraEje = (n) => (n < 1000 ? nf.format(n) : nfCorto.format(n));
+const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const videos = (n) => `${cifra(n)} ${n === 1 ? "vídeo" : "vídeos"}`;
+const flecha = (v) => (v > 0 ? "▲" : "▼");
+const fDiaCorto = fmt({ day: "numeric", month: "short" });
+const fDiaLargo = fmt({ weekday: "long", day: "numeric", month: "long" });
+const fPost = fmt({ day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+const fHoraMin = new Intl.DateTimeFormat("en-GB", { timeZone: ZONA, hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+const diaCorto = (k) => fDiaCorto.format(madridADate(k + "T12:00"));
+
+const METRICAS = {
+  vistas: { nombre: "Vistas", unidad: "vistas" },
+  interacciones: { nombre: "Interacciones", unidad: "interacciones" },
+  likes: { nombre: "Likes", unidad: "likes" },
+  comentarios: { nombre: "Comentarios", unidad: "comentarios" },
+  compartidos: { nombre: "Compartidos", unidad: "compartidos" },
+  publicaciones: { nombre: "Publicaciones", unidad: "vídeos" },
+};
+const COLUMNAS = [["vistas", "Vistas"], ["likes", "Likes"], ["comentarios", "Coment."], ["compartidos", "Compart."], ["tasa", "Interac."]];
+const PASOS = { dia: ["día", "el día"], semana: ["semana", "la semana"], mes: ["mes", "el mes"] };
+const ui = { metrica: "vistas", orden: "fecha", asc: false, dia: null, todas: false, verTabla: false };
+
+// Lo que eliges en Estadísticas se recuerda en este navegador.
+function guardarPrefs() {
+  try {
+    localStorage.setItem("estadisticas", JSON.stringify({ periodo: $("#est-periodo").value, red: $("#est-red").value,
+      metrica: ui.metrica, orden: ui.orden, asc: ui.asc }));
+  } catch {}
+}
+function cargarPrefs() {
+  let p = null;
+  try { p = JSON.parse(localStorage.getItem("estadisticas") || "null"); } catch {}
+  if (!p) return;
+  if (["7", "30", "90", "0"].includes(p.periodo)) $("#est-periodo").value = p.periodo;
+  if (p.red === "" || Object.hasOwn(REDES, p.red)) $("#est-red").value = p.red;
+  if (Object.hasOwn(METRICAS, p.metrica)) ui.metrica = p.metrica;
+  if (p.orden === "fecha" || COLUMNAS.some(([c]) => c === p.orden)) { ui.orden = p.orden; ui.asc = !!p.asc; }
+}
+cargarPrefs();
 
 async function cargarEstadisticas(forzar = false) {
   if (estCargando) return;
@@ -808,81 +962,548 @@ async function cargarEstadisticas(forzar = false) {
   pintarEstadisticas();
 }
 
-function postsFiltrados() {
-  const dias = Number($("#est-periodo").value), red = $("#est-red").value, ahora = Date.now();
-  const desde = dias ? ahora - dias * 86400000 : 0;
-  const lista = [];
-  for (const p of Object.keys(REDES)) {
-    if (red && red !== p) continue;
-    for (const x of est?.[p]?.posts ?? []) {
-      const t = Date.parse(x.fecha);
-      if (t <= ahora && t >= desde) lista.push({ ...x, red: p, t });
+// Franja a la que corresponde la hora de salida (la más cercana, a menos de 90 minutos), o null.
+function franjaDe(red, t) {
+  const [h, m] = fHoraMin.format(new Date(t)).split(":").map(Number), min = h * 60 + m;
+  let mejor = null, dist = 91;
+  for (const [f, horas] of Object.entries(franjasMapa)) {
+    if (!horas[red]) continue;
+    const [fh, fm] = horas[red].split(":").map(Number), d = Math.abs(fh * 60 + fm - min);
+    if (Math.min(d, 1440 - d) < dist) { dist = Math.min(d, 1440 - d); mejor = f; }
+  }
+  return mejor;
+}
+
+// Todas las publicaciones ya salidas, con interacciones, tasa de interacción y franja.
+function publicacionesEst() {
+  const ahora = Date.now(), lista = [];
+  for (const red of Object.keys(REDES)) {
+    for (const x of est?.[red]?.posts ?? []) {
+      const t = Date.parse(String(x.fecha).replace(/([+-]\d\d)(\d\d)$/, "$1:$2")); // Safari no entiende "+0000"
+      if (!(t <= ahora)) continue; // sin fecha válida o programada para más adelante
+      const partes = ["likes", "comentarios", "compartidos", "guardados"].map((c) => x[c]).filter((n) => typeof n === "number");
+      const interacciones = partes.length ? partes.reduce((a, b) => a + b, 0) : null;
+      lista.push({ ...x, red, t, interacciones, franja: franjaDe(red, t),
+        tasa: x.vistas > 0 && interacciones !== null ? interacciones / x.vistas : null });
     }
   }
-  const orden = $("#est-orden").value;
-  lista.sort((a, b) => (orden === "fecha" ? b.t - a.t : (b[orden] ?? -1) - (a[orden] ?? -1)));
   return lista;
+}
+
+// Periodo en días naturales de Madrid (hoy incluido) y el periodo anterior del mismo largo.
+function rango() {
+  const dias = Number($("#est-periodo").value);
+  if (!dias) return { dias: 0, desde: 0, desdeK: "" };
+  const desdeK = sumarDias(diaClave(new Date()), -(dias - 1));
+  return { dias, desdeK, desde: madridADate(desdeK + "T00:00").getTime(), antes: madridADate(sumarDias(desdeK, -dias) + "T00:00").getTime() };
 }
 const sumar = (lista, campo) => {
   const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
   return v.length ? v.reduce((a, b) => a + b, 0) : null;
 };
+const total = (lista, m) => (m === "publicaciones" ? lista.length : sumar(lista, m));
+function media(lista, campo) {
+  const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
+  return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+}
+function tasaDe(lista) { // solo cuenta las publicaciones que tienen vistas
+  const l = lista.filter((x) => x.tasa !== null);
+  return l.length ? sumar(l, "interacciones") / sumar(l, "vistas") : null;
+}
 
 function pintarEstadisticas() {
+  guardarPrefs();
   if (!est) { $("#est-hora").textContent = ""; return; }
   $("#est-hora").textContent = `Datos de las ${horaTxt(new Date(est.generado))}`;
-  const red = $("#est-red").value;
-  const redes = Object.keys(REDES).filter((p) => !red || red === p);
-  const avisos = redes.flatMap((p) => [...(est[p]?.avisos ?? []),
+  const r = rango(), red = $("#est-red").value, todas = publicacionesEst();
+  const deRed = (l) => l.filter((x) => !red || x.red === red);
+  const enPeriodo = todas.filter((x) => x.t >= r.desde);
+  calc = { r, red, enPeriodo, redes: Object.keys(REDES).filter((p) => !red || red === p), posts: deRed(enPeriodo),
+    previos: r.dias ? deRed(todas.filter((x) => x.t >= r.antes && x.t < r.desde)) : [] };
+  $("#est-titulo-periodo").textContent = $("#est-periodo").selectedOptions[0].textContent;
+  pintarAvisos();
+  pintarComunidad();
+  pintarKpis();
+  pintarMetrica();
+  pintarComparativa();
+  pintarTabla();
+}
+
+function pintarAvisos() {
+  const avisos = calc.redes.flatMap((p) => [...(est[p]?.avisos ?? []),
     ...(est[p]?.error ? [est[p].error.startsWith(REDES[p]) ? est[p].error : `${REDES[p]}: ${est[p].error}`] : [])]);
   $("#est-avisos").innerHTML = avisos.length ? `<div class="panel avisos">${avisos.map((a) => `<p>ℹ️ ${esc(a)}</p>`).join("")}</div>` : "";
+}
 
-  const posts = postsFiltrados();
-  const kpis = [["Vistas", sumar(posts, "vistas")], ["Likes", sumar(posts, "likes")], ["Comentarios", sumar(posts, "comentarios")],
-    ["Compartidos", sumar(posts, "compartidos")], ["Publicaciones", posts.length]];
-  $("#est-kpis").innerHTML = kpis.map(([l, v]) =>
-    `<div class="kpi"><span class="kpi-l">${l}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span></div>`).join("");
+// ----- Comunidad: seguidores y su evolución (una foto por día, que guarda el servidor) -----
+function pintarComunidad() {
+  const hist = {};
+  for (const d of est.historial ?? []) {
+    if (d.dia < calc.r.desdeK) continue;
+    for (const p of Object.keys(REDES)) if (d[p]) (hist[p] ??= []).push({ dia: d.dia, ...d[p] });
+  }
+  calc.hist = hist;
+  $("#est-cuentas").innerHTML = calc.redes.map((p) => tarjetaRed(p, hist[p] ?? [])).join("");
+  pintarSparks();
+}
+function cambio(h, campo) { // diferencia entre la primera y la última foto del periodo
+  const s = h.filter((x) => x[campo] !== null && x[campo] !== undefined);
+  return s.length > 1 ? { v: s.at(-1)[campo] - s[0][campo], desde: s[0].dia } : null;
+}
+function tarjetaRed(p, h) {
+  const d = est[p];
+  const cab = `<h3><span class="punto" data-p="${p}"></span>${REDES[p]}${d?.cuenta?.nombre ? ` <span class="sub" style="margin:0">${esc(d.cuenta.nombre)}</span>` : ""}</h3>`;
+  const caja = (cuerpo) => `<div class="panel cuenta-est" data-p="${p}">${cab}${cuerpo}</div>`;
+  if (!d?.conectada) return caja(`<p class="sub">Sin conectar: conéctala en Cuentas.</p>`);
+  const c = d.cuenta;
+  if (!c || (c.seguidores == null && c.vistas == null && !d.posts?.length)) return caja(`<p class="sub">Aún no hay datos (mira el aviso de arriba).</p>`);
+  const serie = h.filter((x) => x.seguidores !== null && x.seguidores !== undefined);
+  const cs = cambio(h, "seguidores");
+  const delta = !cs ? "" : cs.v ? `<span class="kpi-d"><b class="${cs.v > 0 ? "sube" : "baja"}">${flecha(cs.v)} ${cifra(Math.abs(cs.v))}</b> desde el ${diaCorto(cs.desde)}</span>`
+    : `<span class="kpi-d">Sin cambios desde el ${diaCorto(cs.desde)}</span>`;
+  const extra = [["Vistas del canal", c.vistas, "vistas"], ["Likes totales", c.likes, "likes"], ["Publicaciones", c.publicaciones, "publicaciones"], ["Siguiendo", c.siguiendo]]
+    .filter(([, v]) => v !== undefined && v !== null);
+  return caja(`
+    <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v" title="${cifra(c.seguidores)}">${cifraCorta(c.seguidores)}</span>${delta}</div>
+    ${serie.length > 1
+      ? `<div class="spark" data-spark="${p}" tabindex="0" role="img" aria-label="Seguidores: ${cifra(serie[0].seguidores)} el ${diaCorto(serie[0].dia)} y ${cifra(serie.at(-1).seguidores)} el ${diaCorto(serie.at(-1).dia)}"></div>`
+      : `<p class="spark-vacia">📈 La evolución de seguidores saldrá a partir de mañana: cada noche se guarda una foto.</p>`}
+    <dl class="mini">${extra.map(([l, v, campo]) => {
+      const x = campo && cambio(h, campo);
+      return `<div><dt>${l}</dt><dd>${cifra(v)}${x?.v ? ` <small title="Desde el ${diaCorto(x.desde)}">${x.v > 0 ? "+" : "−"}${cifra(Math.abs(x.v))}</small>` : ""}</dd></div>`;
+    }).join("")}</dl>`);
+}
+function pintarSparks() {
+  for (const el of $$("#est-cuentas [data-spark]")) {
+    const pts = (calc.hist[el.dataset.spark] ?? []).filter((x) => x.seguidores !== null && x.seguidores !== undefined);
+    const W = Math.floor(el.clientWidth), H = 52, m = 5;
+    if (!W || pts.length < 2) continue;
+    let lo = Math.min(...pts.map((x) => x.seguidores)), hi = Math.max(...pts.map((x) => x.seguidores));
+    if (lo === hi) { lo -= 1; hi += 1; }
+    const X = (i) => m + (i / (pts.length - 1)) * (W - 2 * m);
+    const Y = (v) => m + (1 - (v - lo) / (hi - lo)) * (H - 2 * m);
+    const linea = pts.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x.seguidores).toFixed(1)}`).join("");
+    const u = pts.length - 1;
+    el.innerHTML = `<svg width="${W}" height="${H}" aria-hidden="true">
+      <path class="area" d="${linea}L${X(u).toFixed(1)},${H}L${X(0).toFixed(1)},${H}Z"/><path class="linea" d="${linea}"/>
+      <line class="cruz" y1="0" y2="${H}" visibility="hidden"/>
+      <circle class="fin" r="4" cx="${X(u).toFixed(1)}" cy="${Y(pts[u].seguidores).toFixed(1)}"/>
+      <circle class="encima" r="4" visibility="hidden"/></svg>`;
+    el._spark = { pts, X, Y, m };
+  }
+}
+function marcarSpark(el, i) {
+  const s = el._spark;
+  i = Math.max(0, Math.min(s.pts.length - 1, i));
+  const x = s.X(i), y = s.Y(s.pts[i].seguidores);
+  const cruz = el.querySelector(".cruz"), punto = el.querySelector(".encima");
+  cruz.setAttribute("x1", x); cruz.setAttribute("x2", x); cruz.removeAttribute("visibility");
+  punto.setAttribute("cx", x); punto.setAttribute("cy", y); punto.removeAttribute("visibility");
+  el._i = i;
+  const r = el.getBoundingClientRect();
+  verTip({ titulo: capital(fDiaLargo.format(madridADate(s.pts[i].dia + "T12:00"))),
+    filas: [{ p: el.dataset.spark, valor: cifra(s.pts[i].seguidores), nombre: "seguidores" }] }, r.left + x, r.top + y);
+}
 
-  $("#est-cuentas").innerHTML = redes.map((p) => {
-    const d = est[p], n = REDES[p];
-    const cab = `<h3><span class="punto" data-p="${p}"></span>${n}${d?.cuenta?.nombre ? ` <span class="sub" style="margin:0">${esc(d.cuenta.nombre)}</span>` : ""}</h3>`;
-    if (!d?.conectada) return `<div class="panel cuenta-est">${cab}<p class="sub">Sin conectar: conéctala en Cuentas.</p></div>`;
-    if (!d.cuenta) return `<div class="panel cuenta-est">${cab}<p class="sub">No se pudieron leer los datos (mira el aviso de arriba).</p></div>`;
-    const c = d.cuenta;
-    const extra = [["Vistas del canal", c.vistas], ["Likes totales", c.likes], ["Publicaciones", c.publicaciones], ["Siguiendo", c.siguiendo]]
-      .filter(([, v]) => v !== undefined && v !== null);
-    const deLaRed = posts.filter((x) => x.red === p);
-    const partes = [["vistas", sumar(deLaRed, "vistas")], ["likes", sumar(deLaRed, "likes")], ["comentarios", sumar(deLaRed, "comentarios")]]
-      .filter(([, v]) => v !== null).map(([l, v]) => `<b>${cifra(v)}</b> ${l}`);
-    const periodo = $("#est-periodo").selectedOptions[0].textContent;
-    const resumen = deLaRed.length ? `${periodo}: ${partes.join(" · ")}` : `${periodo}: sin publicaciones`;
-    return `<div class="panel cuenta-est">${cab}
-      <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v" title="${cifra(c.seguidores)}">${cifraCorta(c.seguidores)}</span></div>
-      <dl class="mini">${extra.map(([l, v]) => `<div><dt>${l}</dt><dd>${cifra(v)}</dd></div>`).join("")}</dl>
-      <p class="periodo-red">${resumen}</p>
-    </div>`;
+// ----- Cifras del periodo: cada una, al pulsarla, es lo que dibuja la gráfica -----
+function pintarKpis() {
+  const { posts, previos, r } = calc, tasa = tasaDe(posts);
+  $("#est-kpis").innerHTML = Object.entries(METRICAS).map(([m, { nombre }]) => {
+    const v = total(posts, m), antes = r.dias ? total(previos, m) : null;
+    let d = "";
+    if (v !== null && antes) {
+      const x = (v - antes) / antes;
+      d = Math.abs(x) < 0.005 ? `<span class="kpi-d">Igual que el periodo anterior</span>`
+        : `<span class="kpi-d" title="Periodo anterior: ${cifra(antes)}"><b class="${x > 0 ? "sube" : "baja"}">${flecha(x)} ${pct.format(Math.abs(x))}</b> vs. periodo anterior</span>`;
+    }
+    const extra = m === "interacciones" && tasa !== null ? `<span class="kpi-d">${pct.format(tasa)} de las vistas</span>` : "";
+    return `<button type="button" class="kpi" data-metrica="${m}" aria-pressed="${ui.metrica === m}">
+      <span class="kpi-l">${nombre}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span>${d}${extra}</button>`;
   }).join("");
+}
 
-  const max = Math.max(1, ...posts.map((x) => x.vistas ?? 0));
-  $("#est-tabla").innerHTML = posts.length ? `<div class="tabla-est" role="table" aria-label="Publicaciones">
-    <div class="fila cab" role="row"><span role="columnheader">Publicación</span><span role="columnheader" class="num">Vistas</span>
-      <span role="columnheader" class="num">Likes</span><span role="columnheader" class="num">Coment.</span><span role="columnheader" class="num">Compart.</span></div>
-    ${posts.map((x) => `<div class="fila" role="row">
+// ----- Gráfica: la cifra elegida, sumada por el día (o semana, o mes) en que salió cada vídeo -----
+function claveCubo(k, paso) {
+  if (paso === "dia") return k;
+  if (paso === "mes") return k.slice(0, 7);
+  const [a, m, d] = k.split("-").map(Number);
+  return sumarDias(k, -((new Date(Date.UTC(a, m - 1, d)).getUTCDay() + 6) % 7)); // lunes de esa semana
+}
+function siguienteCubo(k, paso) {
+  if (paso === "dia") return sumarDias(k, 1);
+  if (paso === "semana") return sumarDias(k, 7);
+  const [a, m] = k.split("-").map(Number);
+  return m === 12 ? `${a + 1}-01` : `${a}-${String(m + 1).padStart(2, "0")}`;
+}
+function etiquetasCubo(k, paso) {
+  if (paso === "mes") {
+    const d = madridADate(k + "-15T12:00");
+    return { corta: fmt({ month: "short" }).format(d), larga: capital(fmt({ month: "long", year: "numeric" }).format(d)) };
+  }
+  const d = madridADate(k + "T12:00");
+  return { corta: fDiaCorto.format(d), larga: paso === "dia" ? capital(fDiaLargo.format(d)) : `Semana del ${fmt({ day: "numeric", month: "long" }).format(d)}` };
+}
+function datosGrafica() {
+  const { posts, r, redes } = calc, m = ui.metrica, hoy = diaClave(new Date());
+  const desdeK = r.dias ? r.desdeK : posts.length ? diaClave(new Date(Math.min(...posts.map((x) => x.t)))) : hoy;
+  const largo = (Date.parse(hoy) - Date.parse(desdeK)) / 86400000 + 1;
+  const paso = largo <= 31 ? "dia" : largo <= 190 ? "semana" : "mes";
+  const cubos = [];
+  for (let k = claveCubo(desdeK, paso), fin = claveCubo(hoy, paso); k <= fin; k = siguienteCubo(k, paso)) {
+    cubos.push({ k, porRed: {}, nRed: {}, conDato: {}, total: 0, n: 0, ...etiquetasCubo(k, paso) });
+  }
+  const indice = new Map(cubos.map((c) => [c.k, c]));
+  for (const x of posts) {
+    x.cubo = claveCubo(diaClave(new Date(x.t)), paso);
+    const c = indice.get(x.cubo);
+    if (!c) continue;
+    const v = m === "publicaciones" ? 1 : x[m];
+    c.n++; c.nRed[x.red] = (c.nRed[x.red] ?? 0) + 1;
+    if (typeof v === "number") { c.porRed[x.red] = (c.porRed[x.red] ?? 0) + v; c.total += v; c.conDato[x.red] = true; }
+  }
+  return { cubos, paso, m, redes: redes.filter((p) => posts.some((x) => x.red === p)),
+    hayDato: cubos.some((c) => Object.keys(c.conDato).length) };
+}
+function pintarMetrica() {
+  const g = (calc.grafica = datosGrafica());
+  if (ui.dia && (ui.dia.paso !== g.paso || !g.cubos.some((c) => c.k === ui.dia.k))) ui.dia = null;
+  $$("#est-kpis [data-metrica]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.metrica === g.m)));
+  $("#graf-titulo").textContent = g.m === "publicaciones" ? `Vídeos publicados por ${PASOS[g.paso][0]}`
+    : `${METRICAS[g.m].nombre} por ${PASOS[g.paso][0]} de publicación`;
+  $("#graf-sub").textContent = (g.m === "publicaciones" ? "" : `Lo que lleva cada vídeo, sumado según ${PASOS[g.paso][1]} en que salió. `)
+    + "Pulsa una barra para ver esos vídeos.";
+  pintarLeyenda();
+  pintarGrafica();
+  pintarFranjas();
+}
+function pintarLeyenda() {
+  const { enPeriodo, red } = calc, m = ui.metrica;
+  const redes = Object.keys(REDES).filter((p) => p === red || enPeriodo.some((x) => x.red === p));
+  $("#est-leyenda").innerHTML = redes.length < 2 && !red ? "" : redes.map((p) => {
+    const v = total(enPeriodo.filter((x) => x.red === p), m);
+    return `<button type="button" data-p="${p}" data-red="${p}" aria-pressed="${red === p}" class="${red && red !== p ? "apagada" : ""}"
+      title="${red === p ? "Volver a todas las redes" : `Ver solo ${REDES[p]}`}"><span class="muestra"></span>${REDES[p]} <span class="tot">${cifraCorta(v)}</span></button>`;
+  }).join("");
+}
+// Marcas del eje Y en números redondos, sin decimales (todo lo que se cuenta aquí son enteros).
+function ticksLimpios(max, n = 4) {
+  if (!(max > 0)) return [0, 1];
+  const bruto = max / n, mag = 10 ** Math.floor(Math.log10(bruto)), f = bruto / mag;
+  const paso = Math.max(1, (mag >= 10 ? [1, 2, 2.5, 5, 10] : [1, 2, 5, 10]).find((x) => f <= x) * mag);
+  const ticks = [];
+  for (let v = 0; ; v += paso) { ticks.push(v); if (v >= max) break; }
+  return ticks;
+}
+// Columna con las esquinas de arriba redondeadas (el extremo del dato) y recta en la base.
+function rectArriba(x, y, w, h, r) {
+  r = Math.min(r, w / 2, h);
+  const f = (n) => n.toFixed(1);
+  return `M${f(x)},${f(y + h)}V${f(y + r)}A${f(r)},${f(r)} 0 0 1 ${f(x + r)},${f(y)}H${f(x + w - r)}A${f(r)},${f(r)} 0 0 1 ${f(x + w)},${f(y + r)}V${f(y + h)}Z`;
+}
+function tipCubo(c, g, unidad) {
+  if (!c.n) return { titulo: c.larga, pie: "Sin publicaciones" };
+  return {
+    titulo: c.larga,
+    filas: g.redes.filter((p) => c.nRed[p]).reverse().map((p) => ({ p,
+      valor: g.m === "publicaciones" ? cifra(c.nRed[p]) : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato",
+      nombre: g.m === "publicaciones" ? REDES[p] : `${REDES[p]} · ${videos(c.nRed[p])}` })),
+    pie: g.m === "publicaciones" ? `Total: ${videos(c.n)} · pulsa para verlos` : `Total: ${cifra(c.total)} ${unidad} · pulsa para ver los vídeos`,
+  };
+}
+function pintarGrafica() {
+  const caja = $("#est-grafica"), g = calc?.grafica, W = Math.floor(caja.clientWidth);
+  if (!g || !W) return;
+  const unidad = METRICAS[g.m].unidad;
+  if (!g.cubos.some((c) => c.n)) return void (caja.innerHTML = `<div class="vacio">No hay publicaciones en este periodo.</div>`);
+  if (!g.hayDato) return void (caja.innerHTML = `<div class="vacio">Estas redes todavía no dan «${unidad}».</div>`);
+  if (ui.verTabla) return void (caja.innerHTML = tablaCubos(g));
+  const H = W < 560 ? 160 : 220, izq = 46, der = 16, arriba = 24, abajo = 26;
+  const ticks = ticksLimpios(Math.max(...g.cubos.map((c) => c.total))), tope = ticks.at(-1);
+  const y = (v) => arriba + H - (v / tope) * H;
+  const slot = (W - izq - der) / g.cubos.length, bw = Math.max(3, Math.min(24, slot * 0.62));
+  let s = `<svg width="${W}" height="${arriba + H + abajo}" role="group" aria-label="${esc($("#graf-titulo").textContent)}">`;
+  for (const t of ticks) {
+    const yy = Math.round(y(t)) + 0.5;
+    s += `<line class="${t ? "guia" : "base"}" x1="${izq}" x2="${W - der}" y1="${yy}" y2="${yy}"/><text x="${izq - 8}" y="${yy + 4}" text-anchor="end">${cifraEje(t)}</text>`;
+  }
+  // Primero las zonas de toque (todo el alto de cada día), debajo de las barras, que no capturan el ratón.
+  g.cubos.forEach((c, i) => {
+    tips.set("g" + i, tipCubo(c, g, unidad));
+    const aria = `${c.larga}: ${g.m === "publicaciones" ? videos(c.n) : `${cifra(c.total)} ${unidad}, ${videos(c.n)}`}`;
+    s += `<rect class="hit${c.n ? "" : " sin"}" data-tip="g${i}" data-cubo="${i}" x="${(izq + i * slot).toFixed(1)}" y="${arriba - 10}" width="${slot.toFixed(1)}" height="${H + 10 + abajo}"`
+      + (c.n ? ` tabindex="0" role="button" aria-label="${esc(aria)}"/>` : "/>");
+  });
+  let cima = -1;
+  g.cubos.forEach((c, i) => {
+    if (c.total > 0 && (cima < 0 || c.total > g.cubos[cima].total)) cima = i;
+    const x = izq + i * slot + (slot - bw) / 2, tramos = [];
+    let base = arriba + H;
+    for (const p of g.redes) { // de abajo arriba en el orden fijo de las redes, con 2 px de hueco entre tramos
+      const v = c.porRed[p];
+      if (!v) continue;
+      const h = Math.max((v / tope) * H, tramos.length ? 0 : 2), hueco = tramos.length ? 2 : 0;
+      if (h - hueco >= 1) tramos.push({ p, y: base - h, h: h - hueco });
+      base -= h;
+    }
+    s += `<g class="col" data-k="${c.k}">` + tramos.map((t, j) => j === tramos.length - 1
+      ? `<path class="seg" data-p="${t.p}" d="${rectArriba(x, t.y, bw, t.h, 4)}"/>`
+      : `<rect class="seg" data-p="${t.p}" x="${x.toFixed(1)}" y="${t.y.toFixed(1)}" width="${bw.toFixed(1)}" height="${t.h.toFixed(1)}"/>`).join("") + "</g>";
+  });
+  if (cima >= 0) {
+    s += `<text class="cima" x="${(izq + (cima + 0.5) * slot).toFixed(1)}" y="${(y(g.cubos[cima].total) - 7).toFixed(1)}" text-anchor="middle">${cifraCorta(g.cubos[cima].total)}</text>`;
+  }
+  const cada = Math.max(1, Math.ceil(56 / slot)); // etiquetas a 56 px como mínimo, contando desde hoy
+  g.cubos.forEach((c, i) => {
+    if ((g.cubos.length - 1 - i) % cada) return;
+    s += `<text x="${(izq + (i + 0.5) * slot).toFixed(1)}" y="${arriba + H + 18}" text-anchor="middle">${esc(c.corta)}</text>`;
+  });
+  caja.innerHTML = s + "</svg>";
+  marcarCubo();
+}
+function tablaCubos(g) { // la misma información que la gráfica, en tabla
+  return `<table class="tabla-cubos"><thead><tr><th>${capital(PASOS[g.paso][0])}</th>${g.redes.map((p) => `<th class="num">${REDES[p]}</th>`).join("")}<th class="num">Total</th></tr></thead>
+    <tbody>${g.cubos.filter((c) => c.n).reverse().map((c) => `<tr><td>${esc(c.larga)}</td>${g.redes.map((p) =>
+      `<td class="num">${!c.nRed[p] ? "—" : g.m === "publicaciones" ? cifra(c.nRed[p]) : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato"}</td>`).join("")}
+      <td class="num"><b>${cifra(c.total)}</b></td></tr>`).join("")}</tbody></table>`;
+}
+function marcarCubo() {
+  const k = ui.dia?.k;
+  $$("#est-grafica .hit").forEach((h) => {
+    const si = !!k && calc.grafica.cubos[h.dataset.cubo]?.k === k;
+    h.classList.toggle("activo", si);
+    if (h.hasAttribute("role")) h.setAttribute("aria-pressed", String(si));
+  });
+  $$("#est-grafica .col").forEach((c) => c.classList.toggle("tenue", !!k && c.dataset.k !== k));
+}
+function elegirCubo(h) {
+  const c = h && calc?.grafica.cubos[h.dataset.cubo];
+  if (!c?.n) return;
+  ui.dia = ui.dia?.k === c.k ? null : { k: c.k, paso: calc.grafica.paso, etiqueta: c.larga };
+  ui.todas = false;
+  marcarCubo();
+  pintarTabla();
+  const panel = $("#panel-tabla");
+  if (ui.dia && panel.getBoundingClientRect().top > innerHeight - 120) {
+    panel.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+}
+
+// ----- Comparativa por red (una minigráfica por cifra, misma escala dentro de cada una) -----
+const COMPARAR = [
+  ["vistas", "Vistas", (l) => sumar(l, "vistas"), cifraCorta, cifra],
+  ["media", "Vistas por vídeo", (l) => media(l, "vistas"), (v) => cifraCorta(Math.round(v)), (v) => cifra(Math.round(v))],
+  ["tasa", "Interacción", tasaDe, (v) => pct.format(v), (v) => pct.format(v)],
+  ["likes", "Likes", (l) => sumar(l, "likes"), cifraCorta, cifra],
+  ["comentarios", "Comentarios", (l) => sumar(l, "comentarios"), cifraCorta, cifra],
+  ["compartidos", "Compartidos", (l) => sumar(l, "compartidos"), cifraCorta, cifra],
+];
+function pintarComparativa() {
+  const { posts } = calc, caja = $("#est-comparativa");
+  const redes = Object.keys(REDES).filter((p) => posts.some((x) => x.red === p));
+  if (redes.length < 2) {
+    caja.innerHTML = `<p class="sub" style="margin:0">${calc.red ? "Elige «Todas las redes» para compararlas." : "Hace falta tener publicaciones en al menos dos redes en este periodo."}</p>`;
+    return;
+  }
+  caja.innerHTML = COMPARAR.map(([id, nombre, calcular, corto, largo]) => {
+    const vals = redes.map((p) => { const l = posts.filter((x) => x.red === p); return [p, calcular(l), l.length]; });
+    if (vals.every(([, v]) => v === null)) return "";
+    const max = Math.max(...vals.map(([, v]) => v ?? 0));
+    return `<div class="multiple"><h4>${nombre}</h4>${vals.map(([p, v, n]) => {
+      tips.set(`c:${id}:${p}`, { titulo: nombre, filas: [{ p, valor: v === null ? "sin dato" : largo(v), nombre: REDES[p] }], pie: `${videos(n)} en el periodo` });
+      return `<div class="hb" data-p="${p}" data-tip="c:${id}:${p}"><span class="hb-n">${REDES[p]}</span>
+        <span>${v ? `<span class="hb-barra" style="width:${Math.max(1, (v / max) * 100).toFixed(1)}%"></span>` : ""}</span>
+        <span class="hb-v${v === null ? " nulo" : ""}">${v === null ? "sin dato" : corto(v)}</span></div>`;
+    }).join("")}</div>`;
+  }).join("");
+}
+
+// ----- Franjas: media de la cifra elegida según la franja en la que salió cada vídeo -----
+function pintarFranjas() {
+  const { posts } = calc, m = ui.metrica, unidad = METRICAS[m].unidad, caja = $("#est-franjas");
+  const franjas = Object.keys(franjasMapa).sort();
+  $("#franja-sub").textContent = (m === "publicaciones" ? "Cuántos vídeos salieron en cada franja" : `Media de ${unidad} por vídeo según la franja en la que salió`)
+    + " (cuenta la hora real de salida, con 90 minutos de margen).";
+  const redes = Object.keys(REDES).filter((p) => posts.some((x) => x.red === p));
+  if (!franjas.length || !redes.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No hay publicaciones en este periodo.</p>`);
+  caja.innerHTML = redes.map((p) => {
+    const deLaRed = posts.filter((x) => x.red === p);
+    const grupos = [...franjas.map((f) => [f, franjasMapa[f][p]]), [null, ""]].map(([f, hora]) => {
+      const l = deLaRed.filter((x) => x.franja === f);
+      return { f, hora, n: l.length, v: m === "publicaciones" ? l.length : media(l, m) };
+    }).filter((g) => g.f !== null || g.n);
+    const max = Math.max(...grupos.map((g) => g.v ?? 0));
+    const filas = grupos.map((g) => {
+      const clave = `f:${p}:${g.f}`, nombre = g.f ? `Franja ${g.f}${g.hora ? ` (${g.hora})` : ""}` : "Otra hora";
+      tips.set(clave, { titulo: `${REDES[p]} · ${nombre}`, pie: videos(g.n),
+        filas: [{ p, valor: g.v === null ? "sin dato" : cifra(Math.round(g.v)), nombre: m === "publicaciones" ? "vídeos" : `${unidad} de media` }] });
+      return `<div class="hb" data-p="${p}" data-tip="${esc(clave)}"><span class="hb-n">${g.f ? `<b>${esc(g.f)}</b> · ${esc(g.hora ?? "?")}` : "Otra hora"}<small>${videos(g.n)}</small></span>
+        <span>${g.v ? `<span class="hb-barra" style="width:${Math.max(1, (g.v / max) * 100).toFixed(1)}%"></span>` : ""}</span>
+        <span class="hb-v${g.v === null ? " nulo" : ""}">${g.v === null ? (g.n ? "sin dato" : "—") : cifraCorta(Math.round(g.v))}</span></div>`;
+    }).join("");
+    return `<div class="franja-red"><h4><span class="punto" data-p="${p}"></span>${REDES[p]}</h4>${filas}${conclusionFranja(grupos.filter((g) => g.f !== null), m, unidad)}</div>`;
+  }).join("");
+}
+function conclusionFranja(grupos, m, unidad) {
+  if (m === "publicaciones") return "";
+  const con = grupos.filter((g) => g.n && g.v !== null).sort((a, b) => b.v - a.v);
+  if (con.length < 2) return `<p class="conclusion sub">Aún no hay vídeos en ${con.length ? "las dos franjas" : "ninguna franja"} para comparar.</p>`;
+  const [a, b] = con, nombre = `La franja ${esc(a.f)}${a.hora ? ` (${esc(a.hora)})` : ""}`;
+  const txt = !b.v ? `Solo la franja ${esc(a.f)} tiene ${unidad}.`
+    : a.v / b.v < 1.1 ? `Las franjas ${esc(a.f)} y ${esc(b.f)} van parecidas.`
+    : a.v / b.v >= 2 ? `${nombre} saca ${nf.format(Math.round((a.v / b.v) * 10) / 10)} veces más ${unidad} de media.`
+    : `${nombre} saca un ${pct.format(a.v / b.v - 1)} más de ${unidad} de media.`;
+  const pocos = con.some((g) => g.n < 3) ? `<span class="sub">Aún son pocos vídeos para fiarse del todo.</span>` : "";
+  return `<p class="conclusion">💡 ${txt}${pocos}</p>`;
+}
+
+// ----- Tabla de publicaciones (se ordena pulsando las cabeceras) -----
+function ordenar(lista) {
+  const c = ui.orden, s = ui.asc ? 1 : -1, val = (x) => (c === "fecha" ? x.t : x[c]);
+  return lista.sort((a, b) => {
+    const va = val(a), vb = val(b);
+    if (va == null || vb == null) return (va == null) - (vb == null) || b.t - a.t; // sin dato, al final
+    return (va - vb) * s || b.t - a.t;
+  });
+}
+function celdaEst(x, c, l, max) {
+  const v = x[c], txt = v === null || v === undefined ? "—" : c === "tasa" ? pct.format(v) : cifra(v);
+  const barra = max > 0 && typeof v === "number"
+    ? `<span class="barra-pista"><span class="barra-dato" style="width:${v ? Math.max(2, (v / max) * 100).toFixed(1) : 0}%"></span></span>` : "";
+  return `<span role="cell" class="num${barra ? " celda-barra" : ""}" data-l="${l}"><span>${txt}</span>${barra}</span>`;
+}
+function pintarTabla() {
+  if (!calc) return;
+  const d = ui.dia, lista = ordenar(d ? calc.posts.filter((x) => x.cubo === d.k) : calc.posts.slice());
+  $("#est-chip").innerHTML = d ? `<span class="chip">📅 ${esc(d.etiqueta)} · ${videos(lista.length)}<button type="button" id="est-quitar" aria-label="Quitar el filtro de fecha" title="Ver todas">✕</button></span>` : "";
+  if (!lista.length) return void ($("#est-tabla").innerHTML = `<p class="sub">No hay publicaciones en este periodo.</p>`);
+  const barra = ui.orden === "fecha" ? "vistas" : ui.orden; // la barrita va en la columna por la que se ordena
+  const max = Math.max(0, ...lista.map((x) => x[barra] ?? 0));
+  const sentido = (c) => (ui.orden === c ? (ui.asc ? "ascending" : "descending") : "none");
+  const marca = (c) => (ui.orden === c ? (ui.asc ? " ↑" : " ↓") : "");
+  $("#est-tabla").innerHTML = `<div class="tabla-est" role="table" aria-label="Publicaciones">
+    <div class="fila cab" role="row">
+      <span role="columnheader" aria-sort="${sentido("fecha")}"><button type="button" data-orden="fecha">Publicación${marca("fecha")}</button></span>
+      ${COLUMNAS.map(([c, l]) => `<span role="columnheader" class="num" aria-sort="${sentido(c)}"><button type="button" data-orden="${c}"${c === "tasa"
+        ? ` title="(likes + comentarios + compartidos + guardados) ÷ vistas"` : ""}>${l}${marca(c)}</button></span>`).join("")}
+    </div>
+    ${(ui.todas ? lista : lista.slice(0, 10)).map((x) => `<div class="fila" role="row" data-p="${x.red}">
       <span role="cell" class="pub-est">
         ${x.miniatura ? `<img src="${esc(x.miniatura)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="sin-img"></span>`}
         <span class="txt"><a href="${esc(x.url ?? "#")}" target="_blank" rel="noopener" title="${esc(x.titulo)}">${esc(x.titulo)}</a>
-          <span class="sub" style="margin:0"><span class="punto" data-p="${x.red}"></span>${REDES[x.red]} · ${fmt({ day: "numeric", month: "short" }).format(new Date(x.t))}${x.privado ? " · privado" : ""}</span></span>
+          <span class="sub" style="margin:0"><span class="punto"></span>${REDES[x.red]} · ${fPost.format(new Date(x.t))}${x.franja ? ` · franja ${esc(x.franja)}` : ""}${x.privado ? " · privado" : ""}</span></span>
       </span>
-      <span role="cell" class="num vistas" data-l="Vistas"><span>${cifra(x.vistas)}</span>
-        ${x.vistas === null || x.vistas === undefined ? "" : `<span class="barra-pista"><span class="barra-dato" style="width:${x.vistas ? Math.max(2, (x.vistas / max) * 100) : 0}%"></span></span>`}</span>
-      <span role="cell" class="num" data-l="Likes">${cifra(x.likes)}</span>
-      <span role="cell" class="num" data-l="Coment.">${cifra(x.comentarios)}</span>
-      <span role="cell" class="num" data-l="Compart.">${cifra(x.compartidos)}</span>
+      ${COLUMNAS.map(([c, l]) => celdaEst(x, c, l, c === barra ? max : 0)).join("")}
     </div>`).join("")}
-  </div>` : `<p class="sub">No hay publicaciones en este periodo.</p>`;
+  </div>
+  ${lista.length > 10 ? `<button type="button" class="btn mas" id="est-mas">${ui.todas ? "Ver menos" : `Ver las ${lista.length}`}</button>` : ""}`;
 }
-["#est-periodo", "#est-red", "#est-orden"].forEach((sel) => $(sel).addEventListener("change", pintarEstadisticas));
+
+["#est-periodo", "#est-red"].forEach((sel) => $(sel).addEventListener("change", () => { ui.dia = null; ui.todas = false; pintarEstadisticas(); }));
 $("#est-actualizar").addEventListener("click", () => cargarEstadisticas(true));
+$("#est-kpis").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-metrica]");
+  if (!b || !calc) return;
+  ui.metrica = b.dataset.metrica; guardarPrefs(); pintarMetrica();
+});
+$("#est-leyenda").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-red]");
+  if (!b) return;
+  $("#est-red").value = $("#est-red").value === b.dataset.red ? "" : b.dataset.red;
+  ui.dia = null; ui.todas = false;
+  pintarEstadisticas();
+  $(`#est-leyenda [data-red="${b.dataset.red}"]`)?.focus();
+});
+$("#graf-tabla").addEventListener("click", (e) => {
+  ui.verTabla = !ui.verTabla;
+  e.currentTarget.setAttribute("aria-pressed", String(ui.verTabla));
+  e.currentTarget.textContent = ui.verTabla ? "Ver como gráfica" : "Ver como tabla";
+  pintarGrafica();
+});
+$("#est-grafica").addEventListener("click", (e) => elegirCubo(e.target.closest(".hit")));
+$("#est-grafica").addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("hit")) { e.preventDefault(); elegirCubo(e.target); }
+});
+$("#est-comparativa").addEventListener("pointerover", (e) => {
+  const f = e.target.closest(".hb");
+  if (f) e.currentTarget.dataset.resalta = f.dataset.p; else delete e.currentTarget.dataset.resalta;
+});
+$("#est-comparativa").addEventListener("pointerleave", (e) => delete e.currentTarget.dataset.resalta);
+$("#est-tabla").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-orden]");
+  if (b) {
+    const c = b.dataset.orden;
+    if (ui.orden === c) ui.asc = !ui.asc; else { ui.orden = c; ui.asc = false; }
+    guardarPrefs(); pintarTabla(); $(`#est-tabla [data-orden="${c}"]`)?.focus();
+  } else if (e.target.closest("#est-mas")) { ui.todas = !ui.todas; pintarTabla(); $("#est-mas")?.focus(); }
+});
+$("#est-chip").addEventListener("click", (e) => { if (e.target.closest("#est-quitar")) { ui.dia = null; marcarCubo(); pintarTabla(); } });
+let anchoGrafica = 0;
+new ResizeObserver(() => requestAnimationFrame(() => {
+  const w = $("#est-grafica").clientWidth;
+  if (!w || w === anchoGrafica || !calc) return;
+  anchoGrafica = w; pintarGrafica(); pintarSparks();
+})).observe($("#est-grafica"));
+
+// ---------- Globo de las gráficas ----------
+// Uno solo para toda la página; se monta con textContent porque los títulos vienen de las redes.
+const tip = $("#tip"), tips = new Map();
+function nodo(tag, clase, texto) {
+  const n = document.createElement(tag);
+  if (clase) n.className = clase;
+  if (texto !== undefined) n.textContent = texto;
+  return n;
+}
+function verTip(d, x, y) {
+  const partes = d.titulo ? [nodo("div", "tip-t", d.titulo)] : [];
+  for (const f of d.filas ?? []) {
+    const k = nodo("span", "tip-k"), fila = nodo("div", "tip-f");
+    k.dataset.p = f.p;
+    fila.append(k, nodo("b", "", f.valor), nodo("span", "", f.nombre));
+    partes.push(fila);
+  }
+  if (d.pie) partes.push(nodo("div", "tip-p", d.pie));
+  tip.replaceChildren(...partes);
+  tip.hidden = false;
+  const r = tip.getBoundingClientRect();
+  let l = x + 14, t = y + 14;
+  if (l + r.width > innerWidth - 8) l = x - r.width - 14;
+  if (t + r.height > innerHeight - 8) t = y - r.height - 14;
+  tip.style.left = `${Math.max(8, l)}px`; tip.style.top = `${Math.max(8, t)}px`;
+}
+function ocultarTip() {
+  tip.hidden = true;
+  $$("[data-spark] .cruz, [data-spark] .encima").forEach((n) => n.setAttribute("visibility", "hidden"));
+}
+function tipEn(e) {
+  const sp = e.target.closest?.("[data-spark]");
+  if (sp?._spark) {
+    const r = sp.getBoundingClientRect(), s = sp._spark;
+    return marcarSpark(sp, Math.round(((e.clientX - r.left - s.m) / (r.width - 2 * s.m)) * (s.pts.length - 1)));
+  }
+  const el = e.target.closest?.("[data-tip]");
+  if (el && tips.has(el.dataset.tip)) verTip(tips.get(el.dataset.tip), e.clientX, e.clientY);
+  else ocultarTip();
+}
+const zonaEst = $("#v-estadisticas");
+zonaEst.addEventListener("pointermove", (e) => { if (e.pointerType !== "touch") tipEn(e); });
+zonaEst.addEventListener("pointerdown", (e) => { if (e.pointerType === "touch") tipEn(e); });
+zonaEst.addEventListener("pointerleave", (e) => { if (e.pointerType !== "touch") ocultarTip(); });
+zonaEst.addEventListener("focusin", (e) => {
+  const sp = e.target.closest("[data-spark]");
+  if (sp?._spark) return marcarSpark(sp, sp._spark.pts.length - 1);
+  const el = e.target.closest("[data-tip]");
+  if (el && tips.has(el.dataset.tip)) { const r = el.getBoundingClientRect(); verTip(tips.get(el.dataset.tip), r.left + r.width / 2, r.top + 8); }
+});
+zonaEst.addEventListener("focusout", ocultarTip);
+zonaEst.addEventListener("keydown", (e) => {
+  const sp = e.target.closest("[data-spark]");
+  if (!sp?._spark || (e.key !== "ArrowLeft" && e.key !== "ArrowRight")) return;
+  e.preventDefault();
+  marcarSpark(sp, (sp._i ?? sp._spark.pts.length - 1) + (e.key === "ArrowLeft" ? -1 : 1));
+});
+document.addEventListener("pointerdown", (e) => { if (!e.target.closest?.("#v-estadisticas")) ocultarTip(); });
+addEventListener("scroll", ocultarTip, { passive: true });
+addEventListener("keydown", (e) => { if (e.key === "Escape") ocultarTip(); });
 
 // ---------- Cuentas ----------
 async function pintarCuentas() {
@@ -921,7 +1542,7 @@ window.addEventListener("focus", () => { if (vista === "cuentas" && sesion) pint
 
 // ---------- Ajustes ----------
 async function pintarAjustes() {
-  const { data } = await sb.from("credenciales").select("clave, valor");
+  const { data } = await sb.from("credenciales").select("clave, valor").neq("clave", "HISTORIAL_ESTADISTICAS");
   const por = Object.fromEntries((data ?? []).map((c) => [c.clave, c.valor]));
   for (const k of CLAVES) { const el = $("#c-" + k); if (por[k] !== undefined) el.value = por[k]; }
   for (const k of CASILLAS) $("#c-" + k).checked = por[k] === "si";

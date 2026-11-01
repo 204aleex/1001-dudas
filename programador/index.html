@@ -7,138 +7,246 @@
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root {
-    --bg: #f6f6f4; --panel: #ffffff; --texto: #1d1d1f; --suave: #6b6b70; --linea: #e4e4e0;
-    --acento: #2f5bea; --acento-texto: #ffffff; --peligro: #c62f2f;
+    color-scheme: light;
+    --bg: #f5f4fa; --panel: #ffffff; --texto: #1c1830; --suave: #6b6880; --linea: #e7e4f0; --eje: #cbc7d9;
+    --acento: #6246ea; --acento-fuerte: #4f35d1; --acento-suave: #efebff; --acento-texto: #ffffff; --peligro: #c62f2f;
     --yt: #e62117; --tt: #0e9fae; --ig: #c13584;
-    --sube: #1d7a3e; --baja: #c62f2f; --eje: #c9c8c2;
-    --e-borrador: #8a8a8f; --e-programado: #2f5bea; --e-curso: #c98a00; --e-publicado: #1f8a4c;
-    --e-bandeja: #7a4bd6; --e-error: #c62f2f; --e-externo: #5b7083;
-    --sombra: 0 1px 2px rgb(0 0 0 / .05), 0 4px 16px rgb(0 0 0 / .05);
+    --sube: #1d7a3e; --baja: #c62f2f;
+    --e-borrador: #8a8794; --e-programado: #6246ea; --e-curso: #c98a00; --e-publicado: #1e9a55;
+    --e-bandeja: #2f7fe0; --e-error: #d23c3c; --e-externo: #60708a;
+    --sombra: 0 1px 2px rgb(28 24 48 / .04), 0 6px 20px rgb(28 24 48 / .05);
+    --radio: 14px;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
-      --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
-      --sube: #3fb871; --baja: #ff6b6b; --eje: #46464d;
+      color-scheme: dark;
+      --bg: #12111a; --panel: #1c1a27; --texto: #eeecf6; --suave: #a29fb5; --linea: #2d2a3c; --eje: #45415a;
+      --acento: #9d8bff; --acento-fuerte: #b6a8ff; --acento-suave: #2a2446; --acento-texto: #14121e; --peligro: #ff6b6b;
+      --yt: #e5463c; --tt: #1fa8b3; --ig: #b2448a;
+      --sube: #3fb871; --baja: #ff6b6b;
+      --e-borrador: #9c99a8; --e-programado: #9d8bff; --e-curso: #e3a72f; --e-publicado: #3fb871;
+      --e-bandeja: #5aa2ff; --e-error: #ff6b6b; --e-externo: #8fa0b8;
+      --sombra: none;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #141416; --panel: #1d1d20; --texto: #ececee; --suave: #9a9aa2; --linea: #2e2e33;
-    --acento: #6f8dff; --acento-texto: #0d0d10; --yt: #e5463c; --tt: #1fa8b3; --ig: #a63a7f; --sombra: none;
-      --sube: #3fb871; --baja: #ff6b6b; --eje: #46464d;
+    color-scheme: dark;
+    --bg: #12111a; --panel: #1c1a27; --texto: #eeecf6; --suave: #a29fb5; --linea: #2d2a3c; --eje: #45415a;
+    --acento: #9d8bff; --acento-fuerte: #b6a8ff; --acento-suave: #2a2446; --acento-texto: #14121e; --peligro: #ff6b6b;
+    --yt: #e5463c; --tt: #1fa8b3; --ig: #b2448a;
+    --sube: #3fb871; --baja: #ff6b6b;
+    --e-borrador: #9c99a8; --e-programado: #9d8bff; --e-curso: #e3a72f; --e-publicado: #3fb871;
+    --e-bandeja: #5aa2ff; --e-error: #ff6b6b; --e-externo: #8fa0b8;
+    --sombra: none;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--texto); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { margin: 0; background: var(--bg); color: var(--texto); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
   button, input, textarea, select { font: inherit; color: inherit; }
   a { color: var(--acento); }
+  :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
   .oculto { display: none !important; }
+  [data-p=youtube] { --c: var(--yt); } [data-p=tiktok] { --c: var(--tt); } [data-p=instagram] { --c: var(--ig); }
+  .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 6px; flex: none; }
 
+  /* Cabecera */
   header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--linea); }
-  .barra { max-width: 1200px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .marca { font-weight: 700; letter-spacing: -.01em; }
-  nav { display: flex; gap: 4px; flex-wrap: wrap; }
-  nav button { background: none; border: 0; padding: 6px 12px; border-radius: 8px; cursor: pointer; color: var(--suave); }
-  nav button[aria-current="true"] { background: var(--bg); color: var(--texto); font-weight: 600; }
-  .usuario { margin-left: auto; color: var(--suave); font-size: 13px; display: flex; gap: 8px; align-items: center; }
+  .barra { max-width: 1200px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 24px; }
+  .marca { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .marca b { display: block; font-size: 15px; letter-spacing: -.01em; line-height: 1.2; }
+  .marca small { display: block; color: var(--suave); font-size: 12px; line-height: 1.2; }
+  .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex: none; color: #fff; font-size: 11px;
+          font-weight: 800; letter-spacing: -.03em; background: linear-gradient(135deg, #8a6cff, #5536dc); }
+  nav { display: flex; gap: 2px; }
+  nav button { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 8px 12px; border-radius: 10px;
+               cursor: pointer; color: var(--suave); font-weight: 500; }
+  nav svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  nav button:hover { color: var(--texto); background: var(--bg); }
+  nav button[aria-current="true"] { background: var(--acento-suave); color: var(--acento-fuerte); font-weight: 600; }
+  .usuario { margin-left: auto; color: var(--suave); font-size: 13px; display: flex; gap: 10px; align-items: center; }
 
-  main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
-  h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -.01em; }
-  h3 { font-size: 15px; margin: 0 0 8px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; }
+  h2 { font-size: 24px; margin: 0 0 4px; letter-spacing: -.02em; }
+  h3 { font-size: 16px; margin: 0 0 8px; letter-spacing: -.01em; }
   .sub { color: var(--suave); margin: 0 0 16px; }
-  .panel { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 16px; box-shadow: var(--sombra); }
-  .rejilla { display: grid; gap: 16px; }
+  .cabecera { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .cabecera .sub { margin: 0; }
+  .panel { background: var(--panel); border: 1px solid var(--linea); border-radius: var(--radio); padding: 18px; box-shadow: var(--sombra); }
+  .rejilla { display: grid; gap: 16px; align-content: start; }
+  .rejilla > * { min-width: 0; }
   @media (min-width: 900px) { .dos { grid-template-columns: 1fr 1fr; } .tres { grid-template-columns: repeat(3, 1fr); } }
 
-  .btn { border: 1px solid var(--linea); background: var(--panel); padding: 7px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
-  .btn:hover { border-color: var(--suave); }
+  .btn { border: 1px solid var(--linea); background: var(--panel); padding: 8px 14px; border-radius: 10px; cursor: pointer; white-space: nowrap; font-weight: 500; }
+  .btn:hover { border-color: var(--eje); }
   .btn.primario { background: var(--acento); border-color: var(--acento); color: var(--acento-texto); font-weight: 600; }
+  .btn.primario:hover { background: var(--acento-fuerte); border-color: var(--acento-fuerte); }
   .btn.peligro { color: var(--peligro); }
+  .btn.peq { padding: 5px 12px; font-size: 13px; }
+  .btn.grande { padding: 11px 20px; font-size: 16px; }
   .btn:disabled { opacity: .5; cursor: default; }
   .acciones { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-  label { display: block; font-size: 13px; color: var(--suave); margin: 12px 0 4px; }
+  label { display: block; font-size: 13px; color: var(--suave); margin: 14px 0 6px; font-weight: 500; }
   input[type=text], input[type=email], input[type=password], input[type=datetime-local], input[type=date], input[type=time], textarea, select {
-    width: 100%; padding: 8px 10px; border: 1px solid var(--linea); border-radius: 8px; background: var(--bg);
+    width: 100%; padding: 9px 12px; border: 1px solid var(--linea); border-radius: 10px; background: var(--bg);
   }
-  textarea { min-height: 84px; resize: vertical; }
-  .contador { float: right; font-variant-numeric: tabular-nums; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--acento); box-shadow: 0 0 0 3px var(--acento-suave); }
+  input[type=checkbox], input[type=radio] { accent-color: var(--acento); width: 17px; height: 17px; margin: 0; flex: none; }
+  textarea { min-height: 90px; resize: vertical; }
+  .contador { float: right; font-variant-numeric: tabular-nums; font-weight: 400; }
   .contador.mal { color: var(--peligro); }
-  .check { display: flex; gap: 8px; align-items: center; color: var(--texto); font-size: 15px; margin: 8px 0; }
+  .check { display: flex; gap: 10px; align-items: center; color: var(--texto); font-size: 15px; margin: 8px 0; cursor: pointer; }
+  details > summary { cursor: pointer; }
 
-  /* Calendario */
-  .cabecera-cal { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .cabecera-cal h2 { margin-right: auto; }
-  .semana { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
-  .dia { background: var(--panel); border: 1px solid var(--linea); border-radius: 10px; min-height: 180px; padding: 8px; }
-  .dia.hoy { border-color: var(--acento); }
-  .dia h4 { margin: 0 0 6px; font-size: 12px; font-weight: 600; color: var(--suave); text-transform: capitalize; }
-  .dia.hoy h4 { color: var(--acento); }
-  @media (max-width: 899px) { .semana { grid-template-columns: 1fr; } .dia { min-height: 0; } .dia:not(:has(.pub)) { display: none; } }
-  .pub { display: block; width: 100%; text-align: left; border: 1px solid var(--linea); border-left: 4px solid var(--c); background: var(--bg);
-         border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; cursor: pointer; font-size: 13px; }
-  .pub:hover { border-color: var(--suave); border-left-color: var(--c); }
-  .pub .hora { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .pub .tit { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .pub[data-p=youtube] { --c: var(--yt); } .pub[data-p=tiktok] { --c: var(--tt); } .pub[data-p=instagram] { --c: var(--ig); }
-  .red { font-size: 11px; font-weight: 700; letter-spacing: .02em; }
-  .estado { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; color: #fff; background: var(--e); }
+  /* Estados (siempre con su texto, el color solo acompaña) */
+  .estado { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 2px 10px 2px 8px; border-radius: 99px;
+            white-space: nowrap; color: color-mix(in srgb, var(--e) 72%, var(--texto)); background: color-mix(in srgb, var(--e) 14%, transparent); }
+  .estado::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--e); }
   .estado[data-e=borrador] { --e: var(--e-borrador); } .estado[data-e=programado] { --e: var(--e-programado); }
   .estado[data-e=subiendo], .estado[data-e=procesando] { --e: var(--e-curso); } .estado[data-e=publicado] { --e: var(--e-publicado); }
   .estado[data-e=bandeja] { --e: var(--e-bandeja); } .estado[data-e=error] { --e: var(--e-error); } .estado[data-e=externo] { --e: var(--e-externo); }
-  .resumen { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; color: var(--suave); font-size: 13px; }
-  .resumen b { color: var(--texto); }
 
-  /* Nuevo */
-  .soltar { border: 2px dashed var(--linea); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; color: var(--suave); }
-  .soltar.encima { border-color: var(--acento); color: var(--acento); }
-  video.previa { width: 100%; max-height: 360px; border-radius: 10px; background: #000; margin-top: 8px; }
-  .red-bloque { border-top: 1px solid var(--linea); padding-top: 8px; margin-top: 12px; }
-  .franja-elegida { padding: 10px 12px; border-radius: 8px; background: var(--bg); margin-top: 8px; font-size: 14px; }
-  progress { width: 100%; height: 8px; margin-top: 8px; }
+  /* Calendario: un día por fila, cada vídeo con sus redes */
+  .resumen { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ficha { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 0 6px; background: var(--panel); border: 1px solid var(--linea);
+           border-radius: 12px; padding: 5px 12px; font-size: 13px; color: var(--suave); max-width: 100%; }
+  .ficha b { color: var(--texto); font-weight: 600; }
+  .ficha.mal { color: var(--e-error); border-color: color-mix(in srgb, var(--e-error) 35%, var(--linea)); }
+  .ficha.mal b { color: inherit; }
+  .banda { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 14px; margin-bottom: 16px; border-radius: 12px;
+           background: color-mix(in srgb, var(--e-curso) 12%, var(--panel)); border: 1px solid color-mix(in srgb, var(--e-curso) 35%, var(--linea)); }
+  .banda span { flex: 1 1 260px; }
+  .semana { display: grid; gap: 10px; }
+  .dia { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 16px; align-items: start; background: var(--panel);
+         border: 1px solid var(--linea); border-radius: var(--radio); padding: 14px 16px; }
+  .dia.hoy { border-color: var(--acento); box-shadow: 0 0 0 3px var(--acento-suave); }
+  .dia.libre { padding-block: 10px; }
+  .dia-cab { display: flex; flex-direction: column; gap: 2px; }
+  .dia-cab b { text-transform: capitalize; }
+  .dia-cab span { color: var(--suave); font-size: 13px; }
+  .dia-cab .hoy-et { width: max-content; font-size: 11px; font-weight: 700; color: var(--acento-fuerte); background: var(--acento-suave); border-radius: 99px; padding: 1px 8px; }
+  .dia.pasado .dia-cab b { color: var(--suave); }
+  .nada { color: var(--suave); font-size: 14px; margin: 0; }
+  .dia-videos { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
+  .video-dia { border: 1px solid var(--linea); border-radius: 12px; padding: 10px 12px 6px; background: var(--bg); }
+  .video-dia h4 { margin: 0 0 4px; font-size: 14px; font-weight: 600; line-height: 1.35; }
+  .video-dia h4 small { color: var(--suave); font-weight: 500; font-size: 13px; }
+  .pub { display: grid; grid-template-columns: 92px 42px minmax(0, 1fr); gap: 10px; align-items: center; width: calc(100% + 12px); margin: 0 -6px;
+         text-align: left; border: 0; background: none; padding: 5px 6px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+  .pub:hover { background: var(--panel); }
+  .pub .red { display: flex; align-items: center; font-weight: 500; min-width: 0; }
+  .pub .hora { font-variant-numeric: tabular-nums; color: var(--suave); }
+  .pub .estado { justify-self: start; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 699px) {
+    .dia { grid-template-columns: 1fr; gap: 8px; padding: 12px; }
+    .dia-cab { flex-direction: row; align-items: baseline; gap: 6px; }
+    .dia-videos { grid-template-columns: 1fr; }
+  }
 
-  /* Cuentas */
-  .cuenta .nombre { font-weight: 600; }
-  code.copiar { display: block; font-size: 12px; padding: 6px 8px; background: var(--bg); border-radius: 6px; word-break: break-all; cursor: copy; margin-top: 4px; }
+  /* Nuevo vídeo: tres pasos */
+  #form-video { display: grid; gap: 16px; align-items: start; }
+  @media (min-width: 900px) {
+    #form-video { grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; grid-template-areas: "uno dos" "tres dos"; }
+    #paso-1 { grid-area: uno; } #paso-2 { grid-area: dos; } #paso-3 { grid-area: tres; }
+  }
+  .paso { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; }
+  .paso i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; flex: none;
+            background: var(--acento-suave); color: var(--acento-fuerte); font-size: 13px; font-weight: 700; }
+  .soltar { border: 2px dashed var(--eje); border-radius: 14px; padding: 26px 16px; text-align: center; cursor: pointer; color: var(--suave); background: var(--bg); }
+  .soltar b { color: var(--acento-fuerte); }
+  .soltar small { display: block; margin-top: 4px; font-size: 12px; }
+  .soltar.encima { border-color: var(--acento); background: var(--acento-suave); color: var(--acento-fuerte); }
+  video.previa { width: 100%; max-height: 360px; border-radius: 12px; background: #000; margin-top: 10px; }
+  .mas-datos { margin-top: 12px; }
+  .mas-datos summary { color: var(--suave); font-size: 13px; }
+  .opciones { display: grid; gap: 8px; }
+  .opciones .check { margin: 0; padding: 10px 12px; border: 1px solid var(--linea); border-radius: 12px; align-items: flex-start; }
+  .opciones .check input { margin-top: 2px; }
+  .opciones .check:has(input:checked) { border-color: var(--acento); background: var(--acento-suave); }
+  .opciones .check small { display: block; color: var(--suave); font-size: 12px; }
+  .red-bloque { border-top: 1px solid var(--linea); padding-top: 12px; margin-top: 16px; }
+  .red-bloque:first-of-type { border: 0; padding: 0; margin: 0; }
+  .red-bloque > .check b { display: flex; align-items: center; }
+  .franja-elegida { padding: 12px 14px; border-radius: 12px; background: var(--acento-suave); color: var(--texto); margin-top: 12px; font-size: 14px; }
+  progress { width: 100%; height: 8px; margin-top: 12px; accent-color: var(--acento); }
+
+  /* Cuentas y ajustes */
+  .cuenta h3 { display: flex; align-items: center; }
+  .estado-cuenta { margin: 0 0 2px; }
+  .estado-cuenta.ok { color: var(--sube); font-weight: 600; }
+  .estado-cuenta.ok b { color: var(--texto); }
+  .tecnico { margin-top: 14px; }
+  .tecnico summary { color: var(--suave); font-size: 13px; }
+  .tecnico label { margin-top: 8px; }
+  code.copiar { display: block; font-size: 12px; padding: 8px 10px; background: var(--bg); border-radius: 8px; word-break: break-all; cursor: copy; }
+  details.grupo { border: 1px solid var(--linea); border-radius: 12px; padding: 0 14px; margin-bottom: 10px; }
+  details.grupo > summary { list-style: none; padding: 12px 0; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+  details.grupo > summary::-webkit-details-marker { display: none; }
+  details.grupo > summary::after { content: "Abrir"; margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--acento); }
+  details.grupo[open] > summary::after { content: "Cerrar"; }
+  details.grupo[open] { padding-bottom: 14px; }
+  .listo { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--suave); }
+  .listo.si { color: var(--sube); }
+  .ayuda { font-size: 13px; color: var(--suave); margin: 4px 0 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--linea); }
+  th { font-size: 13px; color: var(--suave); font-weight: 500; }
+  .tabla-franjas { table-layout: fixed; }
+  .tabla-franjas td:first-child, .tabla-franjas th:first-child { width: 104px; white-space: nowrap; font-weight: 500; }
+  .tabla-franjas input { min-width: 0; padding-inline: 8px; }
+  .registro { list-style: none; padding: 0; margin: 0; }
+  .registro li { font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--linea); }
+  .registro li:last-child { border: 0; }
+  .registro .error { color: var(--peligro); }
+  .registro .sub { display: block; margin: 0; font-size: 12px; }
 
   /* Diálogo y avisos */
-  dialog { border: 1px solid var(--linea); border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--panel); color: var(--texto); }
-  dialog::backdrop { background: rgb(0 0 0 / .4); }
-  .dlg { padding: 18px; }
-  .dlg pre { white-space: pre-wrap; background: var(--bg); padding: 8px 10px; border-radius: 8px; font: 13px/1.4 system-ui, sans-serif; max-height: 200px; overflow: auto; }
+  dialog { border: 1px solid var(--linea); border-radius: 16px; padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--panel); color: var(--texto); }
+  dialog::backdrop { background: rgb(18 17 26 / .45); }
+  .dlg { padding: 20px; }
+  .dlg .red { display: inline-flex; align-items: center; font-weight: 600; }
+  .dlg pre { white-space: pre-wrap; background: var(--bg); padding: 10px 12px; border-radius: 10px; font: 13px/1.45 system-ui, sans-serif; max-height: 200px; overflow: auto; }
   #aviso { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--texto); color: var(--bg); padding: 10px 16px;
-           border-radius: 10px; max-width: calc(100vw - 32px); z-index: 20; }
-  .registro li { margin-bottom: 6px; font-size: 13px; }
-  .registro .error { color: var(--peligro); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  td, th { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--linea); }
-  .login { max-width: 380px; margin: 10vh auto; }
-  .version { font-weight: 400; color: var(--suave); font-size: 12px; }
-  [data-p=youtube] { --c: var(--yt); } [data-p=tiktok] { --c: var(--tt); } [data-p=instagram] { --c: var(--ig); }
-  .punto { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: 6px; }
+           border-radius: 12px; max-width: calc(100vw - 32px); z-index: 20; box-shadow: 0 8px 24px rgb(0 0 0 / .2); }
+  .login { max-width: 400px; margin: 10vh auto; }
+  .login .marca { margin-bottom: 16px; }
+
+  /* Móvil: las pestañas, abajo como en una app */
+  @media (max-width: 699px) {
+    .barra { gap: 12px; }
+    #u-email { display: none; }
+    nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+          background: var(--panel); border-top: 1px solid var(--linea); padding: 6px 4px calc(6px + env(safe-area-inset-bottom)); }
+    nav button { flex-direction: column; gap: 3px; font-size: 11px; padding: 6px 2px; }
+    nav svg { width: 22px; height: 22px; }
+    nav .largo { display: none; }
+    main { padding-bottom: 100px; }
+    #aviso { bottom: 86px; }
+    h2 { font-size: 21px; }
+  }
 
   /* Estadísticas */
-  .filtros { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
-  .filtros select { width: auto; }
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .filtros select { width: auto; background: var(--panel); }
   .est-contenido { transition: opacity .2s; }
   .avisos { margin-bottom: 16px; } .avisos p { margin: 4px 0; font-size: 14px; color: var(--suave); }
-  .seccion { font-size: 16px; margin: 24px 0 10px; }
+  .seccion { font-size: 18px; margin: 28px 0 4px; }
   #est-avisos + .seccion { margin-top: 0; }
+  .seccion + .sub { font-size: 14px; }
+  .seccion-sola { margin-bottom: 12px; }
   .sube { color: var(--sube); } .baja { color: var(--baja); }
 
   .kpi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .kpi-l { font-size: 13px; color: var(--suave); }
-  .kpi-v { font-size: 28px; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+  .kpi-l { font-size: 13px; color: var(--suave); font-weight: 500; }
+  .kpi-v { font-size: 30px; font-weight: 650; letter-spacing: -.02em; line-height: 1.2; }
   .kpi-d { font-size: 12px; color: var(--suave); }
   .kpi-d b { font-weight: 600; }
   .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  @media (min-width: 600px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @media (min-width: 1000px) { .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (min-width: 800px) { .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   button.kpi { position: relative; text-align: left; justify-content: flex-start; background: var(--panel); border: 1px solid var(--linea);
-               border-radius: 12px; padding: 12px 14px; cursor: pointer; box-shadow: var(--sombra); transition: border-color .15s; }
-  button.kpi:hover { border-color: var(--suave); }
-  button.kpi[aria-pressed="true"] { border-color: var(--acento); }
-  button.kpi[aria-pressed="true"]::before { content: ""; position: absolute; left: 14px; right: 14px; top: -1px; height: 3px;
-                                            border-radius: 0 0 3px 3px; background: var(--acento); }
+               border-radius: var(--radio); padding: 14px 16px; cursor: pointer; box-shadow: var(--sombra); transition: border-color .15s; }
+  button.kpi:hover { border-color: var(--eje); }
+  button.kpi[aria-pressed="true"] { border-color: var(--acento); background: color-mix(in srgb, var(--acento-suave) 45%, var(--panel)); }
+  button.kpi[aria-pressed="true"] .kpi-l { color: var(--acento-fuerte); }
 
   .cuenta-est h3 { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .spark { height: 52px; margin: 10px 0 2px; border-radius: 6px; outline-offset: 4px; }
@@ -159,7 +267,7 @@
   .leyenda { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 0; }
   .leyenda button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--linea); background: none;
                     border-radius: 99px; padding: 3px 10px 3px 8px; cursor: pointer; font-size: 13px; transition: opacity .15s; }
-  .leyenda button:hover { border-color: var(--suave); }
+  .leyenda button:hover { border-color: var(--eje); }
   .leyenda button[aria-pressed="true"] { border-color: var(--texto); }
   .leyenda button.apagada { opacity: .5; }
   .leyenda .muestra { width: 10px; height: 10px; border-radius: 2px; background: var(--c); }
@@ -174,58 +282,63 @@
   .lienzo .cima { fill: var(--texto); font-size: 12px; font-weight: 600; pointer-events: none; }
   .lienzo .hit { fill: transparent; cursor: pointer; outline: none; }
   .lienzo .hit.sin { cursor: default; }
-  .lienzo .hit:hover, .lienzo .hit.activo { fill: color-mix(in srgb, var(--texto) 6%, transparent); }
-  .lienzo .hit:focus-visible { fill: color-mix(in srgb, var(--texto) 6%, transparent); stroke: var(--acento); stroke-width: 2; }
+  .lienzo .hit:hover, .lienzo .hit.activo { fill: color-mix(in srgb, var(--acento) 9%, transparent); }
+  .lienzo .hit:focus-visible { fill: color-mix(in srgb, var(--acento) 9%, transparent); stroke: var(--acento); stroke-width: 2; }
   .vacio { display: grid; place-items: center; min-height: 200px; color: var(--suave); font-size: 14px; text-align: center; padding: 0 16px; }
   .tabla-cubos .num { text-align: right; font-variant-numeric: tabular-nums; }
 
-  .multiples { display: grid; gap: 18px 28px; margin-top: 12px; }
-  @media (min-width: 600px) { .multiples { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 900px) { .multiples { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .multiple h4, .franja-red h4 { display: flex; align-items: center; margin: 0 0 6px; font-size: 13px; font-weight: 600; }
-  .hb { display: grid; grid-template-columns: 84px minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 13px; padding: 3px 0; transition: opacity .15s; }
+  .red-fila { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
+  .red-fila:first-child { border-top: 0; padding-top: 4px; }
+  .red-nombre { display: flex; flex-direction: column; }
+  .red-nombre b { display: flex; align-items: center; }
+  .red-nombre small { color: var(--suave); font-size: 12px; margin-left: 16px; }
+  .red-dato { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .red-dato .barra-pista { height: 8px; } .red-dato .barra-dato { height: 8px; border-radius: 0 4px 4px 0; }
+  .red-extra { grid-column: 2; font-size: 12px; color: var(--suave); }
+  .franjas-red { display: grid; gap: 18px; margin-top: 12px; }
+  .franja-red h4 { display: flex; align-items: center; margin: 0 0 6px; font-size: 14px; font-weight: 600; }
+  .hb { display: grid; grid-template-columns: 84px minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 13px; padding: 3px 0; }
   .hb-n { color: var(--suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .hb-n b { color: var(--texto); }
   .hb-n small { display: block; font-size: 11px; }
   .hb-barra { display: block; height: 10px; background: var(--c); border-radius: 0 4px 4px 0; }
   .hb-v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
   .hb-v.nulo { font-weight: 400; color: var(--suave); }
-  [data-resalta=youtube] .hb:not([data-p=youtube]), [data-resalta=tiktok] .hb:not([data-p=tiktok]),
-  [data-resalta=instagram] .hb:not([data-p=instagram]) { opacity: .3; }
-  .conclusion { font-size: 13px; margin: 8px 0 0; }
-  .conclusion .sub { display: block; margin: 2px 0 0; }
+  .conclusion { font-size: 14px; margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--acento-suave); }
+  .conclusion .sub { display: block; margin: 2px 0 0; font-size: 12px; }
 
-  #panel-tabla { scroll-margin-top: 72px; }
-  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--bg); border: 1px solid var(--linea); border-radius: 99px;
-          padding: 2px 4px 2px 10px; font-size: 13px; }
+  #panel-tabla { margin-top: 16px; scroll-margin-top: 72px; }
+  .segmentos { display: flex; gap: 4px; flex-wrap: wrap; margin: 10px 0 4px; }
+  .segmentos button { border: 1px solid var(--linea); background: none; border-radius: 99px; padding: 5px 12px; cursor: pointer; font-size: 13px; color: var(--suave); }
+  .segmentos button:hover { color: var(--texto); border-color: var(--eje); }
+  .segmentos button[aria-pressed="true"] { background: var(--acento-suave); border-color: var(--acento); color: var(--acento-fuerte); font-weight: 600; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--acento-suave); border-radius: 99px; padding: 2px 4px 2px 10px; font-size: 13px; }
   .chip button { border: 0; background: none; cursor: pointer; padding: 2px 7px; border-radius: 99px; color: var(--suave); }
-  .chip button:hover { color: var(--texto); background: var(--linea); }
+  .chip button:hover { color: var(--texto); background: var(--panel); }
   .tabla-est { margin-top: 8px; }
-  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 130px 72px 72px 72px 76px; gap: 12px; align-items: center;
+  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 140px 84px 96px 96px; gap: 12px; align-items: center;
                      padding: 10px 0; border-top: 1px solid var(--linea); }
-  .tabla-est .cab { border-top: 0; padding: 0 0 4px; }
-  .tabla-est .cab button { background: none; border: 0; padding: 2px 0; cursor: pointer; font-size: 12px; color: var(--suave); white-space: nowrap; }
-  .tabla-est .cab button:hover, .tabla-est .cab [aria-sort=ascending] button, .tabla-est .cab [aria-sort=descending] button { color: var(--texto); }
-  .tabla-est .cab [aria-sort=ascending] button, .tabla-est .cab [aria-sort=descending] button { font-weight: 600; }
+  .tabla-est .cab { border-top: 0; padding: 0 0 4px; font-size: 12px; color: var(--suave); }
   .tabla-est .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .tabla-est .cab .num button { width: 100%; text-align: right; }
+  .tabla-est .cab .activa { color: var(--texto); font-weight: 600; }
   .pub-est { display: flex; gap: 10px; align-items: center; min-width: 0; }
-  .pub-est img, .sin-img { width: 40px; height: 56px; object-fit: cover; border-radius: 6px; background: var(--bg); flex: none; }
+  .pub-est img, .sin-img { width: 40px; height: 56px; object-fit: cover; border-radius: 8px; background: var(--bg); flex: none; }
   .pub-est .txt { display: flex; flex-direction: column; min-width: 0; }
-  .pub-est a { color: var(--texto); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pub-est a { color: var(--texto); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
   .pub-est a:hover { text-decoration: underline; }
+  .pub-est .sub { display: flex; align-items: center; font-size: 13px; }
   .celda-barra { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
   .barra-pista { width: 100%; height: 6px; display: flex; border-radius: 3px; background: color-mix(in srgb, var(--c) 16%, transparent); }
   .barra-dato { height: 6px; background: var(--c); border-radius: 0 3px 3px 0; }
   .mas { margin-top: 12px; }
   @media (max-width: 699px) {
-    .tabla-est .cab { display: flex; flex-wrap: wrap; gap: 4px 14px; }
-    .tabla-est .cab .num button { width: auto; }
-    .tabla-est .fila:not(.cab) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; align-items: start; }
+    .tabla-est .cab { display: none; }
+    .tabla-est .fila { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: start; }
     .tabla-est .pub-est { grid-column: 1 / -1; }
-    .tabla-est .fila:not(.cab) .num { text-align: left; }
+    .tabla-est .num { text-align: left; }
     .tabla-est .celda-barra { align-items: stretch; }
-    .tabla-est .fila:not(.cab) .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
+    .tabla-est .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
+    .red-fila { grid-template-columns: 96px minmax(0, 1fr); }
   }
 
   #tip { position: fixed; z-index: 30; pointer-events: none; background: var(--panel); color: var(--texto); border: 1px solid var(--linea);
@@ -242,14 +355,14 @@
 <body>
 
 <section id="vista-login" class="login panel oculto">
-  <h2>Programador de vídeos</h2>
+  <div class="marca"><span class="logo">1001</span><span><b>1001 Dudas</b><small>Programador de vídeos</small></span></div>
   <p class="sub">Entra con tu cuenta.</p>
   <form id="form-login">
     <label for="l-email">Email</label>
     <input id="l-email" type="email" required autocomplete="email">
     <label for="l-pass">Contraseña</label>
     <input id="l-pass" type="password" required minlength="8" autocomplete="current-password">
-    <div class="acciones" style="margin-top:16px">
+    <div class="acciones" style="margin-top:18px">
       <button class="btn primario" type="submit">Entrar</button>
     </div>
   </form>
@@ -258,15 +371,15 @@
 <div id="app" class="oculto">
 <header>
   <div class="barra">
-    <span class="marca">📅 Programador <small class="version">v8</small></span>
-    <nav>
-      <button data-vista="calendario" aria-current="true">Calendario</button>
-      <button data-vista="estadisticas">Estadísticas</button>
-      <button data-vista="nuevo">Nuevo vídeo</button>
-      <button data-vista="cuentas">Cuentas</button>
-      <button data-vista="ajustes">Ajustes</button>
+    <span class="marca"><span class="logo">1001</span><span><b>1001 Dudas</b><small>Programador · v9</small></span></span>
+    <nav aria-label="Secciones">
+      <button data-vista="calendario" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendario</button>
+      <button data-vista="estadisticas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-10M3 20h18"/></svg>Estadísticas</button>
+      <button data-vista="nuevo"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Nuevo<span class="largo"> vídeo</span></span></button>
+      <button data-vista="cuentas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>Cuentas</button>
+      <button data-vista="ajustes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>Ajustes</button>
     </nav>
-    <span class="usuario"><span id="u-email"></span><button class="btn" id="btn-salir">Salir</button></span>
+    <span class="usuario"><span id="u-email"></span><button class="btn peq" id="btn-salir">Salir</button></span>
   </div>
 </header>
 
@@ -275,64 +388,68 @@
 
   <!-- CALENDARIO -->
   <section id="v-calendario">
-    <div class="cabecera-cal">
-      <h2 id="cal-titulo">Semana</h2>
-      <button class="btn" id="cal-ant" aria-label="Semana anterior">←</button>
-      <button class="btn" id="cal-hoy">Hoy</button>
-      <button class="btn" id="cal-sig" aria-label="Semana siguiente">→</button>
-      <button class="btn primario" id="btn-ejecutar" title="Sube ya lo que tenga la hora pasada">Subir pendientes ahora</button>
+    <div class="cabecera">
+      <div><h2 id="cal-titulo">Semana</h2><p class="sub">Lo que sale cada día en tus redes. Pulsa una red para ver el texto o cambiar la hora.</p></div>
+      <div class="acciones">
+        <button class="btn" id="cal-ant" aria-label="Semana anterior">←</button>
+        <button class="btn" id="cal-hoy">Esta semana</button>
+        <button class="btn" id="cal-sig" aria-label="Semana siguiente">→</button>
+      </div>
     </div>
+    <div class="banda oculto" id="atrasados"><span id="atrasados-txt"></span><button class="btn primario peq" id="btn-ejecutar">Subir ahora</button></div>
     <div class="resumen" id="resumen"></div>
     <div class="semana" id="semana"></div>
   </section>
 
   <!-- ESTADÍSTICAS -->
   <section id="v-estadisticas" class="oculto">
-    <div class="cabecera-cal">
-      <h2 style="margin-right:0">Estadísticas</h2>
-      <span class="sub" id="est-hora" style="margin:0 auto 0 4px"></span>
-    </div>
-    <div class="filtros">
-      <select id="est-periodo" aria-label="Periodo">
-        <option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option>
-        <option value="90">Últimos 90 días</option><option value="0">Todo</option>
-      </select>
-      <select id="est-red" aria-label="Red">
-        <option value="">Todas las redes</option><option value="youtube">YouTube</option>
-        <option value="tiktok">TikTok</option><option value="instagram">Instagram</option>
-      </select>
-      <button class="btn" id="est-actualizar">Actualizar</button>
+    <div class="cabecera">
+      <div><h2>Estadísticas</h2><p class="sub" id="est-hora"></p></div>
+      <div class="filtros">
+        <select id="est-periodo" aria-label="Periodo">
+          <option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option>
+          <option value="90">Últimos 90 días</option><option value="0">Desde el principio</option>
+        </select>
+        <select id="est-red" aria-label="Red">
+          <option value="">Todas las redes</option><option value="youtube">YouTube</option>
+          <option value="tiktok">TikTok</option><option value="instagram">Instagram</option>
+        </select>
+        <button class="btn" id="est-actualizar">Actualizar</button>
+      </div>
     </div>
     <div class="est-contenido">
       <div id="est-avisos"></div>
-      <h3 class="seccion">Comunidad</h3>
+      <h3 class="seccion seccion-sola">Tus seguidores</h3>
       <div class="rejilla tres" id="est-cuentas"></div>
 
-      <h3 class="seccion" id="est-titulo-periodo">En el periodo</h3>
+      <h3 class="seccion">Cómo van tus vídeos</h3>
+      <p class="sub" id="est-titulo-periodo"></p>
       <div class="kpis" id="est-kpis" role="group" aria-label="Qué dibuja la gráfica"></div>
       <figure class="panel grafica">
         <div class="graf-cab">
           <div><h3 id="graf-titulo"></h3><p class="sub" id="graf-sub"></p></div>
-          <button class="btn" id="graf-tabla" aria-pressed="false">Ver como tabla</button>
+          <button class="btn peq" id="graf-tabla" aria-pressed="false">Ver números</button>
         </div>
         <div class="leyenda" id="est-leyenda"></div>
         <div class="lienzo" id="est-grafica"></div>
       </figure>
 
-      <div class="panel" style="margin-top:16px">
-        <h3>Comparativa por red</h3>
-        <p class="sub" style="margin:0">Interacción = (likes + comentarios + compartidos + guardados) ÷ vistas.</p>
-        <div class="multiples" id="est-comparativa"></div>
+      <div class="rejilla dos" style="margin-top:16px">
+        <div class="panel">
+          <h3>¿Qué red te funciona mejor?</h3>
+          <p class="sub">Vistas que saca de media cada vídeo. «Interactúan» = de cada 100 que lo ven, cuántos dan me gusta, comentan o comparten.</p>
+          <div id="est-comparativa"></div>
+        </div>
+        <div class="panel">
+          <h3>¿A qué hora te va mejor?</h3>
+          <p class="sub" id="franja-sub" style="margin:0"></p>
+          <div class="franjas-red" id="est-franjas"></div>
+        </div>
       </div>
 
-      <div class="panel" style="margin-top:16px">
-        <h3>¿Qué franja funciona mejor?</h3>
-        <p class="sub" id="franja-sub" style="margin:0"></p>
-        <div class="rejilla tres" id="est-franjas" style="margin-top:12px"></div>
-      </div>
-
-      <div class="panel" style="margin-top:16px" id="panel-tabla">
-        <div class="graf-cab"><h3>Publicaciones</h3><span id="est-chip"></span></div>
+      <div class="panel" id="panel-tabla">
+        <div class="graf-cab"><h3>Tus vídeos</h3><span id="est-chip"></span></div>
+        <div class="segmentos" id="est-orden" role="group" aria-label="Ordenar los vídeos"></div>
         <div id="est-tabla"><p class="sub">Cargando…</p></div>
       </div>
     </div>
@@ -340,58 +457,50 @@
 
   <!-- NUEVO / EDITAR -->
   <section id="v-nuevo" class="oculto">
-    <h2 id="n-titulo-vista">Nuevo vídeo</h2>
-    <p class="sub">Sube el vídeo, pon los textos de cada red y elige cuándo sale.</p>
+    <div class="cabecera"><div><h2 id="n-titulo-vista">Nuevo vídeo</h2><p class="sub">Elige el vídeo, revisa los textos y decide cuándo sale. Lo demás se hace solo.</p></div></div>
     <p class="panel oculto" id="nota-borrador" style="margin:0 0 16px"></p>
-    <form id="form-video" class="rejilla dos">
-      <div class="panel">
-        <h3>Vídeo</h3>
-        <div class="soltar" id="soltar" tabindex="0">Arrastra aquí el .mp4 o haz clic (máx. 50 MB)</div>
+    <form id="form-video">
+      <div class="panel" id="paso-1">
+        <h3 class="paso"><i>1</i>El vídeo</h3>
+        <div class="soltar" id="soltar" tabindex="0" role="button"></div>
         <input type="file" id="f-video" accept="video/mp4,video/quicktime,video/webm" hidden>
         <video class="previa oculto" id="previa" controls muted playsinline></video>
         <div class="acciones" style="margin-top:12px">
-          <button class="btn" type="button" id="btn-textos">Rellenar desde textos.json</button>
+          <button class="btn" type="button" id="btn-textos">Rellenar los textos con un textos.json</button>
           <input type="file" id="f-textos" accept="application/json,.json" hidden>
         </div>
-        <div class="rejilla dos" style="gap:8px">
-          <div><label for="n-codigo">Número</label><input id="n-codigo" type="text" placeholder="019"></div>
-          <div><label for="n-slug">Nombre corto</label><input id="n-slug" type="text" placeholder="gota-bala"></div>
-        </div>
-        <label for="n-titulo">Título interno</label>
+        <label for="n-titulo">Título (solo lo ves tú, para reconocerlo)</label>
         <input id="n-titulo" type="text" required placeholder="¿Una gota puede parar una bala?">
-        <label class="check"><input type="checkbox" id="n-ia" checked> Hecho con IA (lo marca en YouTube y TikTok)</label>
-
-        <h3 style="margin-top:20px">Cuándo sale</h3>
-        <label class="check"><input type="radio" name="modo" value="franja" checked> Siguiente franja libre</label>
-        <label class="check"><input type="radio" name="modo" value="elegir"> Elegir día y franja</label>
-        <label class="check"><input type="radio" name="modo" value="horas"> Hora exacta en cada red</label>
-        <label class="check"><input type="radio" name="modo" value="borrador"> Guardar como borrador</label>
-        <div id="m-elegir" class="rejilla dos oculto" style="gap:8px">
-          <div><label for="n-dia">Día</label><input id="n-dia" type="date"></div>
-          <div><label for="n-franja">Franja</label><select id="n-franja"></select></div>
-        </div>
-        <div class="franja-elegida" id="franja-elegida">Calculando…</div>
-        <p class="sub" id="nota-edicion" style="margin-top:8px"></p>
+        <label class="check" style="margin-top:12px"><input type="checkbox" id="n-ia" checked> Hecho con IA (se avisa en YouTube y TikTok)</label>
+        <details class="mas-datos">
+          <summary>Número y nombre corto (opcional)</summary>
+          <div class="rejilla dos" style="gap:8px">
+            <div><label for="n-codigo">Número</label><input id="n-codigo" type="text" placeholder="019"></div>
+            <div><label for="n-slug">Nombre corto</label><input id="n-slug" type="text" placeholder="gota-bala"></div>
+          </div>
+        </details>
       </div>
 
-      <div class="panel">
-        <div class="red-bloque" style="border:0;margin:0;padding:0">
+      <div class="panel" id="paso-2">
+        <h3 class="paso"><i>2</i>Los textos de cada red</h3>
+        <p class="sub" style="margin-top:-6px">Desmarca una red si no quieres subirlo ahí.</p>
+        <div class="red-bloque">
           <label class="check"><input type="checkbox" class="n-red" value="youtube" checked> <b><span class="punto" data-p="youtube"></span>YouTube Shorts</b></label>
           <div class="campos" data-red="youtube">
             <label for="n-yt-titulo">Título <span class="contador" data-para="n-yt-titulo" data-max="100"></span></label>
             <input id="n-yt-titulo" type="text">
             <label for="n-yt-desc">Descripción <span class="contador" data-para="n-yt-desc" data-max="5000"></span></label>
             <textarea id="n-yt-desc"></textarea>
-            <label for="n-yt-hora" class="solo-horas oculto">Hora</label>
+            <label for="n-yt-hora" class="solo-horas oculto">Hora en YouTube</label>
             <input id="n-yt-hora" type="datetime-local" class="solo-horas oculto">
           </div>
         </div>
         <div class="red-bloque">
           <label class="check"><input type="checkbox" class="n-red" value="tiktok" checked> <b><span class="punto" data-p="tiktok"></span>TikTok</b></label>
           <div class="campos" data-red="tiktok">
-            <label for="n-tt">Descripción <span class="contador" data-para="n-tt" data-max="2200"></span></label>
+            <label for="n-tt">Texto <span class="contador" data-para="n-tt" data-max="2200"></span></label>
             <textarea id="n-tt"></textarea>
-            <label for="n-tt-hora" class="solo-horas oculto">Hora</label>
+            <label for="n-tt-hora" class="solo-horas oculto">Hora en TikTok</label>
             <input id="n-tt-hora" type="datetime-local" class="solo-horas oculto">
           </div>
         </div>
@@ -400,12 +509,28 @@
           <div class="campos" data-red="instagram">
             <label for="n-ig">Texto <span class="contador" data-para="n-ig" data-max="2200"></span></label>
             <textarea id="n-ig"></textarea>
-            <label for="n-ig-hora" class="solo-horas oculto">Hora</label>
+            <label for="n-ig-hora" class="solo-horas oculto">Hora en Instagram</label>
             <input id="n-ig-hora" type="datetime-local" class="solo-horas oculto">
           </div>
         </div>
-        <div class="acciones" style="margin-top:20px">
-          <button class="btn primario" type="submit" id="btn-guardar">Subir y programar</button>
+      </div>
+
+      <div class="panel" id="paso-3">
+        <h3 class="paso"><i>3</i>Cuándo sale</h3>
+        <div class="opciones">
+          <label class="check"><input type="radio" name="modo" value="franja" checked><span>En el próximo hueco libre<small>Recomendado. Va a la siguiente franja libre de cada red.</small></span></label>
+          <label class="check"><input type="radio" name="modo" value="elegir"><span>Elegir el día<small>Tú eliges el día y la franja (A o B).</small></span></label>
+          <label class="check"><input type="radio" name="modo" value="horas"><span>Hora exacta en cada red<small>Para casos especiales: pones la hora de cada red en el paso 2.</small></span></label>
+          <label class="check"><input type="radio" name="modo" value="borrador"><span>Guardar sin programar<small>Se queda como borrador en el calendario.</small></span></label>
+        </div>
+        <div id="m-elegir" class="rejilla dos oculto" style="gap:8px">
+          <div><label for="n-dia">Día</label><input id="n-dia" type="date"></div>
+          <div><label for="n-franja">Franja</label><select id="n-franja"></select></div>
+        </div>
+        <div class="franja-elegida" id="franja-elegida">Calculando…</div>
+        <p class="sub" id="nota-edicion" style="margin:8px 0 0"></p>
+        <div class="acciones" style="margin-top:16px">
+          <button class="btn primario grande" type="submit" id="btn-guardar">Subir y programar</button>
           <button class="btn oculto" type="button" id="btn-cancelar-edicion">Cancelar</button>
         </div>
         <progress id="progreso" class="oculto" max="100" value="0"></progress>
@@ -415,60 +540,64 @@
 
   <!-- CUENTAS -->
   <section id="v-cuentas" class="oculto">
-    <h2>Cuentas</h2>
-    <p class="sub">Antes de conectar, pon las claves de cada app en Ajustes. Cada app de desarrollador debe tener como "redirect URI" la dirección de su tarjeta.</p>
+    <div class="cabecera"><div><h2>Cuentas</h2><p class="sub">Las redes donde se publican tus vídeos. Si una deja de funcionar, pulsa «Reconectar».</p></div></div>
     <div class="rejilla tres" id="lista-cuentas"></div>
   </section>
 
   <!-- AJUSTES -->
   <section id="v-ajustes" class="oculto">
-    <h2>Ajustes</h2>
-    <p class="sub">Claves de tus apps de desarrollador. Solo se guardan en tu Supabase.</p>
+    <div class="cabecera"><div><h2>Ajustes</h2><p class="sub">Normalmente no hace falta tocar nada aquí.</p></div></div>
     <div class="rejilla dos">
-      <form class="panel" id="form-credenciales">
-        <h3><span class="punto" data-p="youtube"></span>YouTube (Google Cloud)</h3>
-        <label for="c-GOOGLE_CLIENT_ID">Client ID</label><input type="text" id="c-GOOGLE_CLIENT_ID" autocomplete="off">
-        <label for="c-GOOGLE_CLIENT_SECRET">Client secret</label><input type="password" id="c-GOOGLE_CLIENT_SECRET" autocomplete="off">
-        <label for="c-YOUTUBE_PRIVACIDAD">Visibilidad</label>
-        <select id="c-YOUTUBE_PRIVACIDAD"><option value="public">Público</option><option value="unlisted">Oculto</option><option value="private">Privado</option></select>
-
-        <h3 style="margin-top:20px"><span class="punto" data-p="tiktok"></span>TikTok</h3>
-        <label for="c-TIKTOK_CLIENT_KEY">Client key</label><input type="text" id="c-TIKTOK_CLIENT_KEY" autocomplete="off">
-        <label for="c-TIKTOK_CLIENT_SECRET">Client secret</label><input type="password" id="c-TIKTOK_CLIENT_SECRET" autocomplete="off">
-        <label for="c-TIKTOK_MODO">Modo</label>
-        <select id="c-TIKTOK_MODO">
-          <option value="borrador">A tu bandeja de TikTok (tú le das a publicar en el móvil)</option>
-          <option value="directo">Publicar directamente (necesita la app auditada por TikTok)</option>
-        </select>
-        <label for="c-TIKTOK_PRIVACIDAD">Visibilidad en modo directo</label>
-        <select id="c-TIKTOK_PRIVACIDAD">
-          <option value="PUBLIC_TO_EVERYONE">Público</option><option value="SELF_ONLY">Solo yo</option>
-          <option value="MUTUAL_FOLLOW_FRIENDS">Amigos</option><option value="FOLLOWER_OF_CREATOR">Seguidores</option>
-        </select>
-        <label for="c-TIKTOK_USUARIO">Usuario (para los enlaces)</label><input type="text" id="c-TIKTOK_USUARIO" placeholder="1001.dudas">
-        <label class="check"><input type="checkbox" id="c-TIKTOK_ESTADISTICAS"> Leer estadísticas (seguidores, vistas, likes)</label>
-        <p class="sub" style="margin:0">Antes añade los scopes <code>user.info.stats</code> y <code>video.list</code> en tu app de TikTok; luego pulsa Reconectar en Cuentas.</p>
-
-        <h3 style="margin-top:20px"><span class="punto" data-p="instagram"></span>Instagram (Meta)</h3>
-        <label for="c-INSTAGRAM_APP_ID">Instagram app ID</label><input type="text" id="c-INSTAGRAM_APP_ID" autocomplete="off">
-        <label for="c-INSTAGRAM_APP_SECRET">Instagram app secret</label><input type="password" id="c-INSTAGRAM_APP_SECRET" autocomplete="off">
-        <label class="check"><input type="checkbox" id="c-INSTAGRAM_ESTADISTICAS"> Leer reproducciones y alcance</label>
-        <p class="sub" style="margin:0">Funciona con la conexión que ya tienes.</p>
-
-        <div class="acciones" style="margin-top:20px"><button class="btn primario" type="submit">Guardar claves</button></div>
-      </form>
-
       <div class="rejilla">
         <div class="panel">
-          <h3>Franjas (hora de Madrid)</h3>
-          <table><thead><tr><th>Franja</th><th>YouTube</th><th>TikTok</th><th>Instagram</th></tr></thead><tbody id="tabla-franjas"></tbody></table>
-          <div class="acciones" style="margin-top:12px"><button class="btn" id="btn-franjas">Guardar franjas</button></div>
+          <h3>Horas de publicación</h3>
+          <p class="sub">Cada red tiene dos horas fijas: la franja A y la B (hora de Madrid). Los vídeos nuevos van a la primera que esté libre.</p>
+          <table class="tabla-franjas"><thead><tr id="cab-franjas"></tr></thead><tbody id="tabla-franjas"></tbody></table>
+          <div class="acciones" style="margin-top:12px"><button class="btn" id="btn-franjas">Guardar horas</button></div>
         </div>
         <div class="panel">
-          <h3>Actividad</h3>
+          <h3>Lo último que ha pasado</h3>
           <ul class="registro" id="registro"></ul>
         </div>
       </div>
+
+      <form class="panel" id="form-credenciales">
+        <h3>Claves de las apps</h3>
+        <p class="sub">Las claves de tus apps de desarrollador. Solo se guardan en tu Supabase.</p>
+        <details class="grupo" data-claves="GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET">
+          <summary><span class="punto" data-p="youtube"></span>YouTube <span class="listo"></span></summary>
+          <label for="c-GOOGLE_CLIENT_ID">Client ID</label><input type="text" id="c-GOOGLE_CLIENT_ID" autocomplete="off">
+          <label for="c-GOOGLE_CLIENT_SECRET">Client secret</label><input type="password" id="c-GOOGLE_CLIENT_SECRET" autocomplete="off">
+          <label for="c-YOUTUBE_PRIVACIDAD">Visibilidad de los vídeos</label>
+          <select id="c-YOUTUBE_PRIVACIDAD"><option value="public">Público</option><option value="unlisted">Oculto</option><option value="private">Privado</option></select>
+        </details>
+        <details class="grupo" data-claves="TIKTOK_CLIENT_KEY,TIKTOK_CLIENT_SECRET">
+          <summary><span class="punto" data-p="tiktok"></span>TikTok <span class="listo"></span></summary>
+          <label for="c-TIKTOK_CLIENT_KEY">Client key</label><input type="text" id="c-TIKTOK_CLIENT_KEY" autocomplete="off">
+          <label for="c-TIKTOK_CLIENT_SECRET">Client secret</label><input type="password" id="c-TIKTOK_CLIENT_SECRET" autocomplete="off">
+          <label for="c-TIKTOK_MODO">Cómo se publica</label>
+          <select id="c-TIKTOK_MODO">
+            <option value="borrador">Llega a tu bandeja de TikTok y tú le das a publicar en el móvil</option>
+            <option value="directo">Se publica solo (necesita la app revisada por TikTok)</option>
+          </select>
+          <label for="c-TIKTOK_PRIVACIDAD">Visibilidad cuando se publica solo</label>
+          <select id="c-TIKTOK_PRIVACIDAD">
+            <option value="PUBLIC_TO_EVERYONE">Público</option><option value="SELF_ONLY">Solo yo</option>
+            <option value="MUTUAL_FOLLOW_FRIENDS">Amigos</option><option value="FOLLOWER_OF_CREATOR">Seguidores</option>
+          </select>
+          <label for="c-TIKTOK_USUARIO">Usuario (para los enlaces)</label><input type="text" id="c-TIKTOK_USUARIO" placeholder="1001.dudas">
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="c-TIKTOK_ESTADISTICAS"> Leer estadísticas (seguidores, vistas, me gusta)</label>
+          <p class="ayuda">Antes añade los permisos <code>user.info.stats</code> y <code>video.list</code> en tu app de TikTok; luego pulsa «Reconectar» en Cuentas.</p>
+        </details>
+        <details class="grupo" data-claves="INSTAGRAM_APP_ID,INSTAGRAM_APP_SECRET">
+          <summary><span class="punto" data-p="instagram"></span>Instagram <span class="listo"></span></summary>
+          <label for="c-INSTAGRAM_APP_ID">Instagram app ID</label><input type="text" id="c-INSTAGRAM_APP_ID" autocomplete="off">
+          <label for="c-INSTAGRAM_APP_SECRET">Instagram app secret</label><input type="password" id="c-INSTAGRAM_APP_SECRET" autocomplete="off">
+          <label class="check" style="margin-top:12px"><input type="checkbox" id="c-INSTAGRAM_ESTADISTICAS"> Leer reproducciones y alcance</label>
+          <p class="ayuda">Funciona con la conexión que ya tienes.</p>
+        </details>
+        <div class="acciones" style="margin-top:16px"><button class="btn primario" type="submit">Guardar claves</button></div>
+      </form>
     </div>
   </section>
 </main>
@@ -487,8 +616,8 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 const ZONA = "Europe/Madrid";
 const REDES = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram" };
 const ESTADOS = {
-  borrador: "Borrador", programado: "Programado", subiendo: "Subiendo", procesando: "Procesando",
-  publicado: "Publicado", bandeja: "En bandeja TikTok", error: "Error", externo: "Programado a mano",
+  borrador: "Borrador", programado: "Programado", subiendo: "Subiendo…", procesando: "Procesando…",
+  publicado: "Publicado", bandeja: "En tu bandeja de TikTok", error: "Error", externo: "Programado a mano",
 };
 const CLAVES = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "YOUTUBE_PRIVACIDAD", "TIKTOK_CLIENT_KEY", "TIKTOK_CLIENT_SECRET",
   "TIKTOK_MODO", "TIKTOK_PRIVACIDAD", "TIKTOK_USUARIO", "INSTAGRAM_APP_ID", "INSTAGRAM_APP_SECRET"];
@@ -593,32 +722,52 @@ async function pintarCalendario() {
     .gte("programado_para", lunes.toISOString()).lt("programado_para", fin.toISOString()).order("programado_para");
   if (error) return fallo(error);
   publicaciones = data;
-  $("#cal-titulo").textContent = `Semana del ${fmt({ day: "numeric", month: "long" }).format(lunes)}`;
+  const findeSemana = masDias(lunes, 6);
+  $("#cal-titulo").textContent = `Del ${fmt({ day: "numeric", month: "long" }).format(lunes)} al ${fmt({ day: "numeric", month: "long" }).format(findeSemana)}`;
   const hoy = diaClave(new Date());
   let html = "";
   for (let i = 0; i < 7; i++) {
-    const d = masDias(lunes, i); const k = diaClave(d);
-    const delDia = data.filter((p) => diaClave(new Date(p.programado_para)) === k);
-    html += `<div class="dia ${k === hoy ? "hoy" : ""}"><h4>${esc(fmt({ weekday: "long", day: "numeric", month: "numeric" }).format(d))}</h4>`;
-    for (const p of delDia) {
-      const v = p.videos;
-      html += `<button class="pub" data-p="${p.plataforma}" data-id="${p.id}">
-        <span class="hora">${horaTxt(new Date(p.programado_para))}</span> <span class="red">${REDES[p.plataforma]}</span>
-        <span class="tit">${esc((v.codigo ? v.codigo + " · " : "") + v.titulo)}</span>
-        <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></button>`;
+    const d = masDias(lunes, i), k = diaClave(d);
+    // Un mismo vídeo sale en varias redes el mismo día: se agrupa en una tarjeta.
+    const grupos = [];
+    for (const p of data.filter((x) => diaClave(new Date(x.programado_para)) === k)) {
+      let g = grupos.find((x) => x.v.id === p.videos.id);
+      if (!g) grupos.push(g = { v: p.videos, pubs: [] });
+      g.pubs.push(p);
     }
-    html += "</div>";
+    html += `<div class="dia${k === hoy ? " hoy" : ""}${k < hoy ? " pasado" : ""}${grupos.length ? "" : " libre"}">
+      <div class="dia-cab"><b>${esc(fmt({ weekday: "long" }).format(d))}</b><span>${esc(fmt({ day: "numeric", month: "short" }).format(d))}</span>${k === hoy ? `<span class="hoy-et">Hoy</span>` : ""}</div>
+      ${!grupos.length ? `<p class="nada">Nada programado</p>` : `<div class="dia-videos">${grupos.map(({ v, pubs }) => `<div class="video-dia">
+        <h4>${v.codigo ? `<small>${esc(v.codigo)} · </small>` : ""}${esc(v.titulo)}</h4>
+        ${pubs.map((p) => `<button class="pub" data-p="${p.plataforma}" data-id="${p.id}" title="Ver o cambiar">
+          <span class="red"><span class="punto"></span>${REDES[p.plataforma]}</span>
+          <span class="hora">${horaTxt(new Date(p.programado_para))}</span>
+          <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></button>`).join("")}
+      </div>`).join("")}</div>`}
+    </div>`;
   }
   $("#semana").innerHTML = html;
   $$("#semana .pub").forEach((b) => b.addEventListener("click", () => abrirPublicacion(b.dataset.id)));
 
-  const { count: pendientes } = await sb.from("publicaciones").select("id", { count: "exact", head: true }).eq("estado", "programado");
-  const { count: errores } = await sb.from("publicaciones").select("id", { count: "exact", head: true }).eq("estado", "error");
-  const { data: sig } = await sb.from("publicaciones").select("programado_para, plataforma, videos(titulo)")
-    .eq("estado", "programado").order("programado_para").limit(1);
-  $("#resumen").innerHTML = `<span><b>${pendientes ?? 0}</b> en cola</span>` +
-    (errores ? `<span style="color:var(--peligro)"><b>${errores}</b> con error</span>` : "") +
-    (sig?.[0] ? `<span>Próximo: <b>${esc(sig[0].videos.titulo)}</b> en ${REDES[sig[0].plataforma]}, ${fechaTxt(new Date(sig[0].programado_para))}</span>` : "");
+  const ahora = new Date().toISOString();
+  const cuantas = (q) => q.select("id", { count: "exact", head: true });
+  const [{ count: pendientes }, { count: errores }, { count: atrasadas }, { data: sig }] = await Promise.all([
+    cuantas(sb.from("publicaciones")).eq("estado", "programado"),
+    cuantas(sb.from("publicaciones")).eq("estado", "error"),
+    cuantas(sb.from("publicaciones")).eq("estado", "programado").lte("programado_para", ahora)
+      .or(`siguiente_intento.is.null,siguiente_intento.lte.${ahora}`),
+    sb.from("publicaciones").select("programado_para, plataforma, videos(titulo)")
+      .eq("estado", "programado").gt("programado_para", ahora).order("programado_para").limit(1),
+  ]);
+  $("#resumen").innerHTML =
+    (sig?.[0] ? `<span class="ficha">Lo próximo: <b>${esc(sig[0].videos.titulo)}</b> · ${REDES[sig[0].plataforma]}, ${fechaTxt(new Date(sig[0].programado_para))}</span>`
+      : `<span class="ficha">No hay nada programado</span>`) +
+    `<span class="ficha"><b>${pendientes ?? 0}</b> por salir</span>` +
+    (errores ? `<span class="ficha mal"><b>${errores}</b> con error</span>` : "");
+  // El servidor las sube solo cada minuto; esto solo aparece si alguna se ha quedado atrás.
+  $("#atrasados").classList.toggle("oculto", !atrasadas);
+  $("#atrasados-txt").textContent = atrasadas === 1 ? "Hay 1 publicación con la hora pasada que aún no ha salido."
+    : `Hay ${atrasadas} publicaciones con la hora pasada que aún no han salido.`;
 }
 
 function abrirPublicacion(id) {
@@ -628,7 +777,7 @@ function abrirPublicacion(id) {
   const editable = ["programado", "borrador", "error"].includes(p.estado);
   $("#dlg-cuerpo").innerHTML = `
     <h3>${esc((v.codigo ? v.codigo + " · " : "") + v.titulo)}</h3>
-    <p><span class="red">${REDES[p.plataforma]}</span> · ${fechaTxt(new Date(p.programado_para))} · <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></p>
+    <p><span class="red" data-p="${p.plataforma}"><span class="punto"></span>${REDES[p.plataforma]}</span> · ${fechaTxt(new Date(p.programado_para))} · <span class="estado" data-e="${p.estado}">${ESTADOS[p.estado]}</span></p>
     ${p.estado === "externo" ? `<p class="sub">Lo programaste directamente en ${REDES[p.plataforma]}: el programador no lo vuelve a subir.</p>` : ""}
     ${p.estado === "bandeja" ? `<p class="sub">Está en tu bandeja de TikTok: abre la notificación en la app, pega el texto (botón «Copiar texto») y publícalo.</p>` : ""}
     ${p.error ? `<p style="color:var(--peligro)"><b>Error:</b> ${esc(p.error)}</p>` : ""}
@@ -689,6 +838,8 @@ $("#btn-ejecutar").addEventListener("click", ejecutar);
 // ---------- Nuevo / editar vídeo ----------
 let archivo = null, editando = null, franjasMapa = {};
 const soltar = $("#soltar");
+const SOLTAR = `<b>Elige el vídeo</b> o arrástralo aquí<small>.mp4 de hasta 50 MB. También puedes soltar el textos.json.</small>`;
+soltar.innerHTML = SOLTAR;
 soltar.addEventListener("click", () => $("#f-video").click());
 soltar.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") $("#f-video").click(); });
 soltar.addEventListener("dragover", (e) => { e.preventDefault(); soltar.classList.add("encima"); });
@@ -704,7 +855,7 @@ $("#f-textos").addEventListener("change", (e) => e.target.files[0] && leerTextos
 function elegirVideo(f) {
   if (f.size > 50 * 1024 * 1024) return avisar("Ese vídeo pasa de 50 MB (el límite del plan gratis). Usa la versión -web.mp4.");
   archivo = f;
-  soltar.textContent = `${f.name} · ${(f.size / 1048576).toFixed(1)} MB`;
+  soltar.innerHTML = `<b>✓ ${esc(f.name)}</b><small>${(f.size / 1048576).toFixed(1)} MB · pulsa para cambiarlo</small>`;
   const pv = $("#previa"); pv.src = URL.createObjectURL(f); pv.classList.remove("oculto");
   const m = f.name.match(/^(\d{3})-(.+?)(-web)?\.\w+$/);
   if (m) { if (!$("#n-codigo").value) $("#n-codigo").value = m[1]; if (!$("#n-slug").value) $("#n-slug").value = m[2]; }
@@ -777,7 +928,7 @@ async function actualizarFranjaElegida() {
 function limpiarFormulario() {
   editando = null; archivo = null;
   $("#form-video").reset(); $("#previa").classList.add("oculto"); $("#previa").removeAttribute("src");
-  soltar.textContent = "Arrastra aquí el .mp4 o el textos.json, o haz clic (máx. 50 MB)";
+  soltar.innerHTML = SOLTAR;
   $("#n-titulo-vista").textContent = "Nuevo vídeo"; $("#btn-guardar").textContent = "Subir y programar";
   $("#btn-cancelar-edicion").classList.add("oculto"); $("#nota-edicion").textContent = "";
   $$("input[name=modo]").forEach((r) => (r.disabled = false));
@@ -797,7 +948,7 @@ async function editarVideo(id) {
   $("#n-codigo").value = v.codigo ?? ""; $("#n-slug").value = v.slug ?? ""; $("#n-titulo").value = v.titulo;
   $("#n-ia").checked = v.ia; $("#n-yt-titulo").value = v.yt_titulo ?? ""; $("#n-yt-desc").value = v.yt_descripcion ?? "";
   $("#n-tt").value = v.tiktok_texto ?? ""; $("#n-ig").value = v.ig_texto ?? "";
-  soltar.textContent = v.archivo ? "Vídeo ya subido (arrastra otro para cambiarlo)" : "Arrastra el vídeo para subirlo";
+  soltar.innerHTML = v.archivo ? `<b>✓ Vídeo ya subido</b><small>Elige otro solo si quieres cambiarlo.</small>` : SOLTAR;
   mostrar("nuevo"); contar(); actualizarFranjaElegida();
 }
 
@@ -902,8 +1053,9 @@ $("#form-video").addEventListener("change", guardarBorrador);
 // ---------- Estadísticas ----------
 let est = null, estCargando = false, calc = null; // calc: lo calculado para el último dibujo
 const nf = new Intl.NumberFormat("es-ES");
+const nf1 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 });
 const nfCorto = new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 });
-const pct = new Intl.NumberFormat("es-ES", { style: "percent", maximumFractionDigits: 1 });
+const pct = new Intl.NumberFormat("es-ES", { style: "percent", maximumFractionDigits: 0 });
 const cifra = (n) => (n === null || n === undefined ? "—" : nf.format(n));
 const cifraCorta = (n) => (n === null || n === undefined ? "—" : Math.abs(n) < 10000 ? nf.format(n) : nfCorto.format(n));
 const cifraEje = (n) => (n < 1000 ? nf.format(n) : nfCorto.format(n));
@@ -918,21 +1070,19 @@ const diaCorto = (k) => fDiaCorto.format(madridADate(k + "T12:00"));
 
 const METRICAS = {
   vistas: { nombre: "Vistas", unidad: "vistas" },
-  interacciones: { nombre: "Interacciones", unidad: "interacciones" },
-  likes: { nombre: "Likes", unidad: "likes" },
+  likes: { nombre: "Me gusta", unidad: "me gusta" },
   comentarios: { nombre: "Comentarios", unidad: "comentarios" },
   compartidos: { nombre: "Compartidos", unidad: "compartidos" },
-  publicaciones: { nombre: "Publicaciones", unidad: "vídeos" },
 };
-const COLUMNAS = [["vistas", "Vistas"], ["likes", "Likes"], ["comentarios", "Coment."], ["compartidos", "Compart."], ["tasa", "Interac."]];
-const PASOS = { dia: ["día", "el día"], semana: ["semana", "la semana"], mes: ["mes", "el mes"] };
-const ui = { metrica: "vistas", orden: "fecha", asc: false, dia: null, todas: false, verTabla: false };
+const COLUMNAS = [["vistas", "Vistas"], ["likes", "Me gusta"], ["comentarios", "Comentarios"], ["compartidos", "Compartidos"]];
+const ORDENES = [["fecha", "Más recientes"], ["vistas", "Más vistos"], ["likes", "Más me gusta"], ["comentarios", "Más comentados"], ["compartidos", "Más compartidos"]];
+const PASOS = { dia: "día", semana: "semana", mes: "mes" };
+const ui = { metrica: "vistas", orden: "fecha", dia: null, todas: false, verTabla: false };
 
 // Lo que eliges en Estadísticas se recuerda en este navegador.
 function guardarPrefs() {
   try {
-    localStorage.setItem("estadisticas", JSON.stringify({ periodo: $("#est-periodo").value, red: $("#est-red").value,
-      metrica: ui.metrica, orden: ui.orden, asc: ui.asc }));
+    localStorage.setItem("estadisticas", JSON.stringify({ periodo: $("#est-periodo").value, red: $("#est-red").value, metrica: ui.metrica, orden: ui.orden }));
   } catch {}
 }
 function cargarPrefs() {
@@ -942,7 +1092,7 @@ function cargarPrefs() {
   if (["7", "30", "90", "0"].includes(p.periodo)) $("#est-periodo").value = p.periodo;
   if (p.red === "" || Object.hasOwn(REDES, p.red)) $("#est-red").value = p.red;
   if (Object.hasOwn(METRICAS, p.metrica)) ui.metrica = p.metrica;
-  if (p.orden === "fecha" || COLUMNAS.some(([c]) => c === p.orden)) { ui.orden = p.orden; ui.asc = !!p.asc; }
+  if (ORDENES.some(([o]) => o === p.orden)) ui.orden = p.orden;
 }
 cargarPrefs();
 
@@ -951,7 +1101,7 @@ async function cargarEstadisticas(forzar = false) {
   if (!forzar && est && Date.now() - Date.parse(est.generado) < 5 * 60000) return pintarEstadisticas();
   estCargando = true;
   $(".est-contenido").style.opacity = est ? ".5" : "1"; // se mantiene lo anterior mientras carga
-  $("#est-hora").textContent = "Cargando…";
+  $("#est-hora").textContent = "Cargando los datos de las redes…";
   try {
     const { data, error } = await sb.functions.invoke("programador/estadisticas", { method: "POST", body: {} });
     if (error) throw new Error((await error.context?.json?.().catch(() => null))?.error || error.message);
@@ -1001,7 +1151,6 @@ const sumar = (lista, campo) => {
   const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
   return v.length ? v.reduce((a, b) => a + b, 0) : null;
 };
-const total = (lista, m) => (m === "publicaciones" ? lista.length : sumar(lista, m));
 function media(lista, campo) {
   const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
   return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
@@ -1014,18 +1163,20 @@ function tasaDe(lista) { // solo cuenta las publicaciones que tienen vistas
 function pintarEstadisticas() {
   guardarPrefs();
   if (!est) { $("#est-hora").textContent = ""; return; }
-  $("#est-hora").textContent = `Datos de las ${horaTxt(new Date(est.generado))}`;
+  $("#est-hora").textContent = `Datos actualizados a las ${horaTxt(new Date(est.generado))}.`;
   const r = rango(), red = $("#est-red").value, todas = publicacionesEst();
   const deRed = (l) => l.filter((x) => !red || x.red === red);
   const enPeriodo = todas.filter((x) => x.t >= r.desde);
   calc = { r, red, enPeriodo, redes: Object.keys(REDES).filter((p) => !red || red === p), posts: deRed(enPeriodo),
     previos: r.dias ? deRed(todas.filter((x) => x.t >= r.antes && x.t < r.desde)) : [] };
-  $("#est-titulo-periodo").textContent = $("#est-periodo").selectedOptions[0].textContent;
+  $("#est-titulo-periodo").textContent = `${$("#est-periodo").selectedOptions[0].textContent}: ${videos(calc.posts.length)} publicados. `
+    + "Pulsa una cifra para verla en la gráfica.";
   pintarAvisos();
   pintarComunidad();
   pintarKpis();
   pintarMetrica();
   pintarComparativa();
+  pintarFranjas();
   pintarTabla();
 }
 
@@ -1035,7 +1186,7 @@ function pintarAvisos() {
   $("#est-avisos").innerHTML = avisos.length ? `<div class="panel avisos">${avisos.map((a) => `<p>ℹ️ ${esc(a)}</p>`).join("")}</div>` : "";
 }
 
-// ----- Comunidad: seguidores y su evolución (una foto por día, que guarda el servidor) -----
+// ----- Seguidores y su evolución (una foto por día, que guarda el servidor) -----
 function pintarComunidad() {
   const hist = {};
   for (const d of est.historial ?? []) {
@@ -1060,16 +1211,16 @@ function tarjetaRed(p, h) {
   const serie = h.filter((x) => x.seguidores !== null && x.seguidores !== undefined);
   const cs = cambio(h, "seguidores");
   const delta = !cs ? "" : cs.v ? `<span class="kpi-d"><b class="${cs.v > 0 ? "sube" : "baja"}">${flecha(cs.v)} ${cifra(Math.abs(cs.v))}</b> desde el ${diaCorto(cs.desde)}</span>`
-    : `<span class="kpi-d">Sin cambios desde el ${diaCorto(cs.desde)}</span>`;
-  const extra = [["Vistas del canal", c.vistas, "vistas"], ["Likes totales", c.likes, "likes"], ["Publicaciones", c.publicaciones, "publicaciones"], ["Siguiendo", c.siguiendo]]
+    : `<span class="kpi-d">Igual que el ${diaCorto(cs.desde)}</span>`;
+  const extra = [["Vistas del canal", c.vistas, "vistas"], ["Me gusta en total", c.likes, "likes"], ["Vídeos", c.publicaciones, "publicaciones"]]
     .filter(([, v]) => v !== undefined && v !== null);
   return caja(`
     <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v" title="${cifra(c.seguidores)}">${cifraCorta(c.seguidores)}</span>${delta}</div>
     ${serie.length > 1
       ? `<div class="spark" data-spark="${p}" tabindex="0" role="img" aria-label="Seguidores: ${cifra(serie[0].seguidores)} el ${diaCorto(serie[0].dia)} y ${cifra(serie.at(-1).seguidores)} el ${diaCorto(serie.at(-1).dia)}"></div>`
-      : `<p class="spark-vacia">📈 La evolución de seguidores saldrá a partir de mañana: cada noche se guarda una foto.</p>`}
+      : `<p class="spark-vacia">📈 Desde mañana verás aquí cómo cambian tus seguidores.</p>`}
     <dl class="mini">${extra.map(([l, v, campo]) => {
-      const x = campo && cambio(h, campo);
+      const x = cambio(h, campo);
       return `<div><dt>${l}</dt><dd>${cifra(v)}${x?.v ? ` <small title="Desde el ${diaCorto(x.desde)}">${x.v > 0 ? "+" : "−"}${cifra(Math.abs(x.v))}</small>` : ""}</dd></div>`;
     }).join("")}</dl>`);
 }
@@ -1105,20 +1256,19 @@ function marcarSpark(el, i) {
     filas: [{ p: el.dataset.spark, valor: cifra(s.pts[i].seguidores), nombre: "seguidores" }] }, r.left + x, r.top + y);
 }
 
-// ----- Cifras del periodo: cada una, al pulsarla, es lo que dibuja la gráfica -----
+// ----- Cifras del periodo: la que pulsas es la que dibuja la gráfica -----
 function pintarKpis() {
-  const { posts, previos, r } = calc, tasa = tasaDe(posts);
+  const { posts, previos, r } = calc;
   $("#est-kpis").innerHTML = Object.entries(METRICAS).map(([m, { nombre }]) => {
-    const v = total(posts, m), antes = r.dias ? total(previos, m) : null;
+    const v = sumar(posts, m), antes = r.dias ? sumar(previos, m) : null;
     let d = "";
     if (v !== null && antes) {
       const x = (v - antes) / antes;
-      d = Math.abs(x) < 0.005 ? `<span class="kpi-d">Igual que el periodo anterior</span>`
-        : `<span class="kpi-d" title="Periodo anterior: ${cifra(antes)}"><b class="${x > 0 ? "sube" : "baja"}">${flecha(x)} ${pct.format(Math.abs(x))}</b> vs. periodo anterior</span>`;
+      d = Math.abs(x) < 0.005 ? `<span class="kpi-d">Igual que antes</span>`
+        : `<span class="kpi-d" title="Periodo anterior: ${cifra(antes)}"><b class="${x > 0 ? "sube" : "baja"}">${flecha(x)} ${pct.format(Math.abs(x))}</b> que el periodo anterior</span>`;
     }
-    const extra = m === "interacciones" && tasa !== null ? `<span class="kpi-d">${pct.format(tasa)} de las vistas</span>` : "";
     return `<button type="button" class="kpi" data-metrica="${m}" aria-pressed="${ui.metrica === m}">
-      <span class="kpi-l">${nombre}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span>${d}${extra}</button>`;
+      <span class="kpi-l">${nombre}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span>${d}</button>`;
   }).join("");
 }
 
@@ -1157,9 +1307,8 @@ function datosGrafica() {
     x.cubo = claveCubo(diaClave(new Date(x.t)), paso);
     const c = indice.get(x.cubo);
     if (!c) continue;
-    const v = m === "publicaciones" ? 1 : x[m];
     c.n++; c.nRed[x.red] = (c.nRed[x.red] ?? 0) + 1;
-    if (typeof v === "number") { c.porRed[x.red] = (c.porRed[x.red] ?? 0) + v; c.total += v; c.conDato[x.red] = true; }
+    if (typeof x[m] === "number") { c.porRed[x.red] = (c.porRed[x.red] ?? 0) + x[m]; c.total += x[m]; c.conDato[x.red] = true; }
   }
   return { cubos, paso, m, redes: redes.filter((p) => posts.some((x) => x.red === p)),
     hayDato: cubos.some((c) => Object.keys(c.conDato).length) };
@@ -1168,19 +1317,16 @@ function pintarMetrica() {
   const g = (calc.grafica = datosGrafica());
   if (ui.dia && (ui.dia.paso !== g.paso || !g.cubos.some((c) => c.k === ui.dia.k))) ui.dia = null;
   $$("#est-kpis [data-metrica]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.metrica === g.m)));
-  $("#graf-titulo").textContent = g.m === "publicaciones" ? `Vídeos publicados por ${PASOS[g.paso][0]}`
-    : `${METRICAS[g.m].nombre} por ${PASOS[g.paso][0]} de publicación`;
-  $("#graf-sub").textContent = (g.m === "publicaciones" ? "" : `Lo que lleva cada vídeo, sumado según ${PASOS[g.paso][1]} en que salió. `)
-    + "Pulsa una barra para ver esos vídeos.";
+  $("#graf-titulo").textContent = `${METRICAS[g.m].nombre} de cada ${PASOS[g.paso]}`;
+  $("#graf-sub").textContent = `Suma lo que llevan los vídeos que salieron cada ${PASOS[g.paso]}. Pulsa una barra para ver cuáles son.`;
   pintarLeyenda();
   pintarGrafica();
-  pintarFranjas();
 }
 function pintarLeyenda() {
   const { enPeriodo, red } = calc, m = ui.metrica;
   const redes = Object.keys(REDES).filter((p) => p === red || enPeriodo.some((x) => x.red === p));
   $("#est-leyenda").innerHTML = redes.length < 2 && !red ? "" : redes.map((p) => {
-    const v = total(enPeriodo.filter((x) => x.red === p), m);
+    const v = sumar(enPeriodo.filter((x) => x.red === p), m);
     return `<button type="button" data-p="${p}" data-red="${p}" aria-pressed="${red === p}" class="${red && red !== p ? "apagada" : ""}"
       title="${red === p ? "Volver a todas las redes" : `Ver solo ${REDES[p]}`}"><span class="muestra"></span>${REDES[p]} <span class="tot">${cifraCorta(v)}</span></button>`;
   }).join("");
@@ -1201,20 +1347,19 @@ function rectArriba(x, y, w, h, r) {
   return `M${f(x)},${f(y + h)}V${f(y + r)}A${f(r)},${f(r)} 0 0 1 ${f(x + r)},${f(y)}H${f(x + w - r)}A${f(r)},${f(r)} 0 0 1 ${f(x + w)},${f(y + r)}V${f(y + h)}Z`;
 }
 function tipCubo(c, g, unidad) {
-  if (!c.n) return { titulo: c.larga, pie: "Sin publicaciones" };
+  if (!c.n) return { titulo: c.larga, pie: "No salió ningún vídeo" };
   return {
     titulo: c.larga,
     filas: g.redes.filter((p) => c.nRed[p]).reverse().map((p) => ({ p,
-      valor: g.m === "publicaciones" ? cifra(c.nRed[p]) : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato",
-      nombre: g.m === "publicaciones" ? REDES[p] : `${REDES[p]} · ${videos(c.nRed[p])}` })),
-    pie: g.m === "publicaciones" ? `Total: ${videos(c.n)} · pulsa para verlos` : `Total: ${cifra(c.total)} ${unidad} · pulsa para ver los vídeos`,
+      valor: c.conDato[p] ? cifra(c.porRed[p]) : "sin dato", nombre: `${REDES[p]} · ${videos(c.nRed[p])}` })),
+    pie: `Total: ${cifra(c.total)} ${unidad} · pulsa para ver los vídeos`,
   };
 }
 function pintarGrafica() {
   const caja = $("#est-grafica"), g = calc?.grafica, W = Math.floor(caja.clientWidth);
   if (!g || !W) return;
   const unidad = METRICAS[g.m].unidad;
-  if (!g.cubos.some((c) => c.n)) return void (caja.innerHTML = `<div class="vacio">No hay publicaciones en este periodo.</div>`);
+  if (!g.cubos.some((c) => c.n)) return void (caja.innerHTML = `<div class="vacio">No salió ningún vídeo en este periodo.</div>`);
   if (!g.hayDato) return void (caja.innerHTML = `<div class="vacio">Estas redes todavía no dan «${unidad}».</div>`);
   if (ui.verTabla) return void (caja.innerHTML = tablaCubos(g));
   const H = W < 560 ? 160 : 220, izq = 46, der = 16, arriba = 24, abajo = 26;
@@ -1229,7 +1374,7 @@ function pintarGrafica() {
   // Primero las zonas de toque (todo el alto de cada día), debajo de las barras, que no capturan el ratón.
   g.cubos.forEach((c, i) => {
     tips.set("g" + i, tipCubo(c, g, unidad));
-    const aria = `${c.larga}: ${g.m === "publicaciones" ? videos(c.n) : `${cifra(c.total)} ${unidad}, ${videos(c.n)}`}`;
+    const aria = `${c.larga}: ${cifra(c.total)} ${unidad}, ${videos(c.n)}`;
     s += `<rect class="hit${c.n ? "" : " sin"}" data-tip="g${i}" data-cubo="${i}" x="${(izq + i * slot).toFixed(1)}" y="${arriba - 10}" width="${slot.toFixed(1)}" height="${H + 10 + abajo}"`
       + (c.n ? ` tabindex="0" role="button" aria-label="${esc(aria)}"/>` : "/>");
   });
@@ -1260,10 +1405,10 @@ function pintarGrafica() {
   caja.innerHTML = s + "</svg>";
   marcarCubo();
 }
-function tablaCubos(g) { // la misma información que la gráfica, en tabla
-  return `<table class="tabla-cubos"><thead><tr><th>${capital(PASOS[g.paso][0])}</th>${g.redes.map((p) => `<th class="num">${REDES[p]}</th>`).join("")}<th class="num">Total</th></tr></thead>
+function tablaCubos(g) { // la misma información que la gráfica, en números
+  return `<table class="tabla-cubos"><thead><tr><th>${capital(PASOS[g.paso])}</th>${g.redes.map((p) => `<th class="num">${REDES[p]}</th>`).join("")}<th class="num">Total</th></tr></thead>
     <tbody>${g.cubos.filter((c) => c.n).reverse().map((c) => `<tr><td>${esc(c.larga)}</td>${g.redes.map((p) =>
-      `<td class="num">${!c.nRed[p] ? "—" : g.m === "publicaciones" ? cifra(c.nRed[p]) : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato"}</td>`).join("")}
+      `<td class="num">${!c.nRed[p] ? "—" : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato"}</td>`).join("")}
       <td class="num"><b>${cifra(c.total)}</b></td></tr>`).join("")}</tbody></table>`;
 }
 function marcarCubo() {
@@ -1288,114 +1433,99 @@ function elegirCubo(h) {
   }
 }
 
-// ----- Comparativa por red (una minigráfica por cifra, misma escala dentro de cada una) -----
-const COMPARAR = [
-  ["vistas", "Vistas", (l) => sumar(l, "vistas"), cifraCorta, cifra],
-  ["media", "Vistas por vídeo", (l) => media(l, "vistas"), (v) => cifraCorta(Math.round(v)), (v) => cifra(Math.round(v))],
-  ["tasa", "Interacción", tasaDe, (v) => pct.format(v), (v) => pct.format(v)],
-  ["likes", "Likes", (l) => sumar(l, "likes"), cifraCorta, cifra],
-  ["comentarios", "Comentarios", (l) => sumar(l, "comentarios"), cifraCorta, cifra],
-  ["compartidos", "Compartidos", (l) => sumar(l, "compartidos"), cifraCorta, cifra],
-];
+// ----- ¿Qué red te funciona mejor? (vistas por vídeo, para comparar aunque subas distinto a cada una) -----
 function pintarComparativa() {
   const { posts } = calc, caja = $("#est-comparativa");
-  const redes = Object.keys(REDES).filter((p) => posts.some((x) => x.red === p));
-  if (redes.length < 2) {
-    caja.innerHTML = `<p class="sub" style="margin:0">${calc.red ? "Elige «Todas las redes» para compararlas." : "Hace falta tener publicaciones en al menos dos redes en este periodo."}</p>`;
-    return;
-  }
-  caja.innerHTML = COMPARAR.map(([id, nombre, calcular, corto, largo]) => {
-    const vals = redes.map((p) => { const l = posts.filter((x) => x.red === p); return [p, calcular(l), l.length]; });
-    if (vals.every(([, v]) => v === null)) return "";
-    const max = Math.max(...vals.map(([, v]) => v ?? 0));
-    return `<div class="multiple"><h4>${nombre}</h4>${vals.map(([p, v, n]) => {
-      tips.set(`c:${id}:${p}`, { titulo: nombre, filas: [{ p, valor: v === null ? "sin dato" : largo(v), nombre: REDES[p] }], pie: `${videos(n)} en el periodo` });
-      return `<div class="hb" data-p="${p}" data-tip="c:${id}:${p}"><span class="hb-n">${REDES[p]}</span>
-        <span>${v ? `<span class="hb-barra" style="width:${Math.max(1, (v / max) * 100).toFixed(1)}%"></span>` : ""}</span>
-        <span class="hb-v${v === null ? " nulo" : ""}">${v === null ? "sin dato" : corto(v)}</span></div>`;
-    }).join("")}</div>`;
-  }).join("");
+  const filas = Object.keys(REDES).map((p) => {
+    const l = posts.filter((x) => x.red === p);
+    return { p, n: l.length, media: media(l, "vistas"), tasa: tasaDe(l) };
+  }).filter((f) => f.n);
+  if (!filas.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No salió ningún vídeo en este periodo.</p>`);
+  const max = Math.max(0, ...filas.map((f) => f.media ?? 0));
+  const orden = filas.filter((f) => f.media !== null).sort((a, b) => b.media - a.media);
+  caja.innerHTML = filas.map((f) => `<div class="red-fila" data-p="${f.p}">
+      <div class="red-nombre"><b><span class="punto"></span>${REDES[f.p]}</b><small>${videos(f.n)}</small></div>
+      <div class="red-dato">${f.media === null ? `<span class="sub" style="margin:0">Aún no da las vistas</span>`
+        : `<span><b>${cifra(Math.round(f.media))}</b> vistas por vídeo</span><span class="barra-pista"><span class="barra-dato" style="width:${max ? Math.max(1, (f.media / max) * 100).toFixed(1) : 0}%"></span></span>`}</div>
+      ${f.tasa === null ? "" : `<div class="red-extra">${nf1.format(f.tasa * 100)} de cada 100 interactúan</div>`}
+    </div>`).join("")
+    + (orden.length > 1 ? `<p class="conclusion">🏆 <b>${REDES[orden[0].p]}</b> es donde más vistas sacas por vídeo.</p>` : "");
 }
 
-// ----- Franjas: media de la cifra elegida según la franja en la que salió cada vídeo -----
+// ----- ¿A qué hora te va mejor? Media de vistas según la franja en la que salió cada vídeo -----
 function pintarFranjas() {
-  const { posts } = calc, m = ui.metrica, unidad = METRICAS[m].unidad, caja = $("#est-franjas");
+  const { posts } = calc, caja = $("#est-franjas");
   const franjas = Object.keys(franjasMapa).sort();
-  $("#franja-sub").textContent = (m === "publicaciones" ? "Cuántos vídeos salieron en cada franja" : `Media de ${unidad} por vídeo según la franja en la que salió`)
-    + " (cuenta la hora real de salida, con 90 minutos de margen).";
+  $("#franja-sub").textContent = "Vistas que saca de media un vídeo según la franja en la que salió (con 90 minutos de margen).";
   const redes = Object.keys(REDES).filter((p) => posts.some((x) => x.red === p));
-  if (!franjas.length || !redes.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No hay publicaciones en este periodo.</p>`);
+  if (!franjas.length || !redes.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No salió ningún vídeo en este periodo.</p>`);
   caja.innerHTML = redes.map((p) => {
     const deLaRed = posts.filter((x) => x.red === p);
     const grupos = [...franjas.map((f) => [f, franjasMapa[f][p]]), [null, ""]].map(([f, hora]) => {
       const l = deLaRed.filter((x) => x.franja === f);
-      return { f, hora, n: l.length, v: m === "publicaciones" ? l.length : media(l, m) };
+      return { f, hora, n: l.length, v: media(l, "vistas") };
     }).filter((g) => g.f !== null || g.n);
     const max = Math.max(...grupos.map((g) => g.v ?? 0));
     const filas = grupos.map((g) => {
       const clave = `f:${p}:${g.f}`, nombre = g.f ? `Franja ${g.f}${g.hora ? ` (${g.hora})` : ""}` : "Otra hora";
       tips.set(clave, { titulo: `${REDES[p]} · ${nombre}`, pie: videos(g.n),
-        filas: [{ p, valor: g.v === null ? "sin dato" : cifra(Math.round(g.v)), nombre: m === "publicaciones" ? "vídeos" : `${unidad} de media` }] });
+        filas: [{ p, valor: g.v === null ? "sin dato" : cifra(Math.round(g.v)), nombre: "vistas de media" }] });
       return `<div class="hb" data-p="${p}" data-tip="${esc(clave)}"><span class="hb-n">${g.f ? `<b>${esc(g.f)}</b> · ${esc(g.hora ?? "?")}` : "Otra hora"}<small>${videos(g.n)}</small></span>
         <span>${g.v ? `<span class="hb-barra" style="width:${Math.max(1, (g.v / max) * 100).toFixed(1)}%"></span>` : ""}</span>
         <span class="hb-v${g.v === null ? " nulo" : ""}">${g.v === null ? (g.n ? "sin dato" : "—") : cifraCorta(Math.round(g.v))}</span></div>`;
     }).join("");
-    return `<div class="franja-red"><h4><span class="punto" data-p="${p}"></span>${REDES[p]}</h4>${filas}${conclusionFranja(grupos.filter((g) => g.f !== null), m, unidad)}</div>`;
+    return `<div class="franja-red"><h4><span class="punto" data-p="${p}"></span>${REDES[p]}</h4>${filas}${conclusionFranja(grupos.filter((g) => g.f !== null))}</div>`;
   }).join("");
 }
-function conclusionFranja(grupos, m, unidad) {
-  if (m === "publicaciones") return "";
+function conclusionFranja(grupos) {
   const con = grupos.filter((g) => g.n && g.v !== null).sort((a, b) => b.v - a.v);
   if (con.length < 2) return `<p class="conclusion sub">Aún no hay vídeos en ${con.length ? "las dos franjas" : "ninguna franja"} para comparar.</p>`;
   const [a, b] = con, nombre = `La franja ${esc(a.f)}${a.hora ? ` (${esc(a.hora)})` : ""}`;
-  const txt = !b.v ? `Solo la franja ${esc(a.f)} tiene ${unidad}.`
+  const txt = !b.v ? `Solo la franja ${esc(a.f)} tiene vistas.`
     : a.v / b.v < 1.1 ? `Las franjas ${esc(a.f)} y ${esc(b.f)} van parecidas.`
-    : a.v / b.v >= 2 ? `${nombre} saca ${nf.format(Math.round((a.v / b.v) * 10) / 10)} veces más ${unidad} de media.`
-    : `${nombre} saca un ${pct.format(a.v / b.v - 1)} más de ${unidad} de media.`;
+    : a.v / b.v >= 2 ? `${nombre} saca ${nf1.format(a.v / b.v)} veces más vistas.`
+    : `${nombre} saca un ${pct.format(a.v / b.v - 1)} más de vistas.`;
   const pocos = con.some((g) => g.n < 3) ? `<span class="sub">Aún son pocos vídeos para fiarse del todo.</span>` : "";
   return `<p class="conclusion">💡 ${txt}${pocos}</p>`;
 }
 
-// ----- Tabla de publicaciones (se ordena pulsando las cabeceras) -----
+// ----- Tus vídeos: tabla con botones para ordenar -----
 function ordenar(lista) {
-  const c = ui.orden, s = ui.asc ? 1 : -1, val = (x) => (c === "fecha" ? x.t : x[c]);
+  const c = ui.orden;
   return lista.sort((a, b) => {
-    const va = val(a), vb = val(b);
+    if (c === "fecha") return b.t - a.t;
+    const va = a[c], vb = b[c];
     if (va == null || vb == null) return (va == null) - (vb == null) || b.t - a.t; // sin dato, al final
-    return (va - vb) * s || b.t - a.t;
+    return vb - va || b.t - a.t;
   });
 }
 function celdaEst(x, c, l, max) {
-  const v = x[c], txt = v === null || v === undefined ? "—" : c === "tasa" ? pct.format(v) : cifra(v);
+  const v = x[c], txt = cifra(v);
   const barra = max > 0 && typeof v === "number"
     ? `<span class="barra-pista"><span class="barra-dato" style="width:${v ? Math.max(2, (v / max) * 100).toFixed(1) : 0}%"></span></span>` : "";
   return `<span role="cell" class="num${barra ? " celda-barra" : ""}" data-l="${l}"><span>${txt}</span>${barra}</span>`;
 }
 function pintarTabla() {
   if (!calc) return;
+  $("#est-orden").innerHTML = ORDENES.map(([o, l]) => `<button type="button" data-orden="${o}" aria-pressed="${ui.orden === o}">${l}</button>`).join("");
   const d = ui.dia, lista = ordenar(d ? calc.posts.filter((x) => x.cubo === d.k) : calc.posts.slice());
-  $("#est-chip").innerHTML = d ? `<span class="chip">📅 ${esc(d.etiqueta)} · ${videos(lista.length)}<button type="button" id="est-quitar" aria-label="Quitar el filtro de fecha" title="Ver todas">✕</button></span>` : "";
-  if (!lista.length) return void ($("#est-tabla").innerHTML = `<p class="sub">No hay publicaciones en este periodo.</p>`);
+  $("#est-chip").innerHTML = d ? `<span class="chip">Solo: ${esc(d.etiqueta)} · ${videos(lista.length)}<button type="button" id="est-quitar" aria-label="Quitar el filtro de fecha" title="Ver todos">✕</button></span>` : "";
+  if (!lista.length) return void ($("#est-tabla").innerHTML = `<p class="sub">No salió ningún vídeo en este periodo.</p>`);
   const barra = ui.orden === "fecha" ? "vistas" : ui.orden; // la barrita va en la columna por la que se ordena
   const max = Math.max(0, ...lista.map((x) => x[barra] ?? 0));
-  const sentido = (c) => (ui.orden === c ? (ui.asc ? "ascending" : "descending") : "none");
-  const marca = (c) => (ui.orden === c ? (ui.asc ? " ↑" : " ↓") : "");
-  $("#est-tabla").innerHTML = `<div class="tabla-est" role="table" aria-label="Publicaciones">
-    <div class="fila cab" role="row">
-      <span role="columnheader" aria-sort="${sentido("fecha")}"><button type="button" data-orden="fecha">Publicación${marca("fecha")}</button></span>
-      ${COLUMNAS.map(([c, l]) => `<span role="columnheader" class="num" aria-sort="${sentido(c)}"><button type="button" data-orden="${c}"${c === "tasa"
-        ? ` title="(likes + comentarios + compartidos + guardados) ÷ vistas"` : ""}>${l}${marca(c)}</button></span>`).join("")}
-    </div>
+  $("#est-tabla").innerHTML = `<div class="tabla-est" role="table" aria-label="Tus vídeos">
+    <div class="fila cab" role="row"><span role="columnheader">Vídeo</span>
+      ${COLUMNAS.map(([c, l]) => `<span role="columnheader" class="num${c === barra ? " activa" : ""}">${l}</span>`).join("")}</div>
     ${(ui.todas ? lista : lista.slice(0, 10)).map((x) => `<div class="fila" role="row" data-p="${x.red}">
       <span role="cell" class="pub-est">
         ${x.miniatura ? `<img src="${esc(x.miniatura)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="sin-img"></span>`}
         <span class="txt"><a href="${esc(x.url ?? "#")}" target="_blank" rel="noopener" title="${esc(x.titulo)}">${esc(x.titulo)}</a>
-          <span class="sub" style="margin:0"><span class="punto"></span>${REDES[x.red]} · ${fPost.format(new Date(x.t))}${x.franja ? ` · franja ${esc(x.franja)}` : ""}${x.privado ? " · privado" : ""}</span></span>
+          <span class="sub" style="margin:0"><span class="punto"></span>${REDES[x.red]} · ${fPost.format(new Date(x.t))}${x.privado ? " · privado" : ""}</span></span>
       </span>
       ${COLUMNAS.map(([c, l]) => celdaEst(x, c, l, c === barra ? max : 0)).join("")}
     </div>`).join("")}
   </div>
-  ${lista.length > 10 ? `<button type="button" class="btn mas" id="est-mas">${ui.todas ? "Ver menos" : `Ver las ${lista.length}`}</button>` : ""}`;
+  ${lista.length > 10 ? `<button type="button" class="btn mas" id="est-mas">${ui.todas ? "Ver menos" : `Ver los ${lista.length}`}</button>` : ""}`;
 }
 
 ["#est-periodo", "#est-red"].forEach((sel) => $(sel).addEventListener("change", () => { ui.dia = null; ui.todas = false; pintarEstadisticas(); }));
@@ -1416,25 +1546,21 @@ $("#est-leyenda").addEventListener("click", (e) => {
 $("#graf-tabla").addEventListener("click", (e) => {
   ui.verTabla = !ui.verTabla;
   e.currentTarget.setAttribute("aria-pressed", String(ui.verTabla));
-  e.currentTarget.textContent = ui.verTabla ? "Ver como gráfica" : "Ver como tabla";
+  e.currentTarget.textContent = ui.verTabla ? "Ver gráfica" : "Ver números";
   pintarGrafica();
 });
 $("#est-grafica").addEventListener("click", (e) => elegirCubo(e.target.closest(".hit")));
 $("#est-grafica").addEventListener("keydown", (e) => {
   if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("hit")) { e.preventDefault(); elegirCubo(e.target); }
 });
-$("#est-comparativa").addEventListener("pointerover", (e) => {
-  const f = e.target.closest(".hb");
-  if (f) e.currentTarget.dataset.resalta = f.dataset.p; else delete e.currentTarget.dataset.resalta;
-});
-$("#est-comparativa").addEventListener("pointerleave", (e) => delete e.currentTarget.dataset.resalta);
-$("#est-tabla").addEventListener("click", (e) => {
+$("#est-orden").addEventListener("click", (e) => {
   const b = e.target.closest("[data-orden]");
-  if (b) {
-    const c = b.dataset.orden;
-    if (ui.orden === c) ui.asc = !ui.asc; else { ui.orden = c; ui.asc = false; }
-    guardarPrefs(); pintarTabla(); $(`#est-tabla [data-orden="${c}"]`)?.focus();
-  } else if (e.target.closest("#est-mas")) { ui.todas = !ui.todas; pintarTabla(); $("#est-mas")?.focus(); }
+  if (!b) return;
+  ui.orden = b.dataset.orden; ui.todas = false;
+  guardarPrefs(); pintarTabla(); $(`#est-orden [data-orden="${ui.orden}"]`)?.focus();
+});
+$("#est-tabla").addEventListener("click", (e) => {
+  if (e.target.closest("#est-mas")) { ui.todas = !ui.todas; pintarTabla(); $("#est-mas")?.focus(); }
 });
 $("#est-chip").addEventListener("click", (e) => { if (e.target.closest("#est-quitar")) { ui.dia = null; marcarCubo(); pintarTabla(); } });
 let anchoGrafica = 0;
@@ -1512,14 +1638,18 @@ async function pintarCuentas() {
   const por = Object.fromEntries((data ?? []).map((c) => [c.plataforma, c]));
   $("#lista-cuentas").innerHTML = Object.entries(REDES).map(([p, n]) => {
     const c = por[p];
-    const caduca = c?.expira && p === "instagram" ? ` · caduca ${fmt({ day: "numeric", month: "short" }).format(new Date(c.expira))} (se renueva solo)` : "";
-    return `<div class="panel cuenta">
-      <h3><span class="punto" data-p="${p}"></span>${n}</h3>
-      <p>${c ? `✅ <span class="nombre">${esc(c.nombre)}</span><br><span class="sub">Conectada ${fmt({ day: "numeric", month: "short" }).format(new Date(c.actualizado))}${caduca}</span>` : "Sin conectar"}</p>
-      <div class="acciones"><button class="btn primario" data-conectar="${p}">${c ? "Reconectar" : "Conectar"}</button>
+    const caduca = c?.expira && p === "instagram" ? ` · el permiso se renueva solo antes del ${fmt({ day: "numeric", month: "long" }).format(new Date(c.expira))}` : "";
+    return `<div class="panel cuenta" data-p="${p}">
+      <h3><span class="punto"></span>${n}</h3>
+      ${c ? `<p class="estado-cuenta ok">✓ Conectada como <b>${esc(c.nombre)}</b></p>
+        <p class="sub" style="margin:0">Desde el ${fmt({ day: "numeric", month: "long" }).format(new Date(c.actualizado))}${caduca}</p>`
+        : `<p class="estado-cuenta">No está conectada</p><p class="sub" style="margin:0">Primero pon sus claves en Ajustes.</p>`}
+      <div class="acciones" style="margin-top:14px"><button class="btn ${c ? "" : "primario"}" data-conectar="${p}">${c ? "Reconectar" : "Conectar"}</button>
       ${c ? `<button class="btn peligro" data-desconectar="${p}">Desconectar</button>` : ""}</div>
-      <label>Redirect URI para la app de ${n}</label>
-      <code class="copiar" title="Clic para copiar">${SUPABASE_URL}/functions/v1/programador/oauth/callback/${p}/</code>
+      <details class="tecnico"><summary>Datos técnicos</summary>
+        <label>Redirect URI para la app de ${n}</label>
+        <code class="copiar" title="Pulsa para copiar">${SUPABASE_URL}/functions/v1/programador/oauth/callback/${p}/</code>
+      </details>
     </div>`;
   }).join("");
   $$("[data-conectar]").forEach((b) => b.addEventListener("click", () => conectar(b.dataset.conectar)));
@@ -1546,10 +1676,18 @@ async function pintarAjustes() {
   const por = Object.fromEntries((data ?? []).map((c) => [c.clave, c.valor]));
   for (const k of CLAVES) { const el = $("#c-" + k); if (por[k] !== undefined) el.value = por[k]; }
   for (const k of CASILLAS) $("#c-" + k).checked = por[k] === "si";
-  $("#tabla-franjas").innerHTML = Object.keys(franjasMapa).map((f) => `<tr><td><b>${f}</b></td>` +
-    ["youtube", "tiktok", "instagram"].map((r) => `<td><input type="time" data-franja="${f}" data-red="${r}" value="${franjasMapa[f][r] ?? ""}" aria-label="Franja ${f} ${REDES[r]}"></td>`).join("") + "</tr>").join("");
+  for (const g of $$("details.grupo")) {
+    const listo = !!por[g.dataset.claves.split(",")[0]]; // con el ID de la app guardado ya cuenta como configurada
+    g.querySelector(".listo").textContent = listo ? "✓ Configurado" : "Sin configurar";
+    g.querySelector(".listo").classList.toggle("si", listo);
+  }
+  // Una fila por red, con la hora de cada franja.
+  const franjas = Object.keys(franjasMapa).sort();
+  $("#cab-franjas").innerHTML = `<th>Red</th>${franjas.map((f) => `<th>Franja ${esc(f)}</th>`).join("")}`;
+  $("#tabla-franjas").innerHTML = Object.entries(REDES).map(([r, n]) => `<tr><td data-p="${r}"><span class="punto"></span>${n}</td>` +
+    franjas.map((f) => `<td><input type="time" data-franja="${esc(f)}" data-red="${r}" value="${franjasMapa[f][r] ?? ""}" aria-label="${n}, franja ${esc(f)}"></td>`).join("") + "</tr>").join("");
   const { data: reg } = await sb.from("registro").select("*").order("creado", { ascending: false }).limit(40);
-  $("#registro").innerHTML = (reg ?? []).map((r) => `<li class="${r.nivel === "error" ? "error" : ""}"><span class="sub">${fechaTxt(new Date(r.creado))}</span> ${esc(r.mensaje)}</li>`).join("") || "<li class='sub'>Nada todavía.</li>";
+  $("#registro").innerHTML = (reg ?? []).map((r) => `<li class="${r.nivel === "error" ? "error" : ""}">${esc(r.mensaje)}<span class="sub">${fechaTxt(new Date(r.creado))}</span></li>`).join("") || "<li class='sub'>Nada todavía.</li>";
 }
 $("#form-credenciales").addEventListener("submit", async (e) => {
   e.preventDefault();

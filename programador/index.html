@@ -268,6 +268,18 @@
   .mini dd small { display: block; font-size: 12px; font-weight: 600; color: var(--sube); }
 
   .grafica { margin: 16px 0 0; }
+  .top { display: grid; gap: 12px; }
+  @media (min-width: 800px) { .top { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .top-v { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: center; color: inherit; text-decoration: none;
+           border-left: 4px solid var(--c); transition: transform .2s, box-shadow .2s; position: relative; }
+  .top-v:hover { transform: translateY(-2px); }
+  .top-v img, .top-v .sin-img { width: 64px; height: 96px; object-fit: cover; border-radius: 10px; background: var(--bg); display: block; }
+  .top-v .medalla { position: absolute; top: 8px; left: 8px; font-size: 22px; line-height: 1; filter: drop-shadow(0 1px 2px rgb(0 0 0 / .3)); }
+  .top-v .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .top-v .tit { font-weight: 600; font-size: 14px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .top-v .red-f { display: flex; align-items: center; font-size: 12px; color: var(--suave); }
+  .top-v .kpi-v { font-size: 28px; }
+  .top-v .kpi-v small { font-size: 13px; font-weight: 600; color: var(--suave); letter-spacing: 0; margin-left: 4px; }
   .graf-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px 12px; flex-wrap: wrap; }
   .graf-cab h3 { margin: 0 0 2px; }
   .graf-cab .sub { margin: 0; font-size: 13px; }
@@ -402,6 +414,9 @@
         <div class="leyenda" id="est-leyenda"></div>
         <div class="lienzo" id="est-grafica"></div>
       </figure>
+
+      <h3 class="seccion seccion-sola" id="top-titulo">Tus mejores vídeos</h3>
+      <div class="top" id="est-top"></div>
     </div>
   </section>
 
@@ -1104,6 +1119,7 @@ function pintarEstadisticas() {
   if (animar) {
     animarEntrada($("#est-cuentas"));
     animarEntrada($("#est-kpis"));
+    animarEntrada($("#est-top"));
     $$("#v-estadisticas [data-n]").forEach(contarHasta);
   }
 }
@@ -1140,7 +1156,8 @@ function tarjetaRed(p, h) {
   const cs = cambio(h, "seguidores");
   const delta = !cs ? "" : cs.v ? `<span class="kpi-d"><b class="pildora ${cs.v > 0 ? "sube" : "baja"}">${flecha(cs.v)} ${cifra(Math.abs(cs.v))}</b> desde el ${diaCorto(cs.desde)}</span>`
     : `<span class="kpi-d">Igual que el ${diaCorto(cs.desde)}</span>`;
-  const extra = [["Vistas del canal", c.vistas, "vistas"], ["Me gusta en total", c.likes, "likes"], ["Vídeos", c.publicaciones, "publicaciones"]]
+  const suma = (campo) => sumar(d.posts ?? [], campo); // si la red no da el total de la cuenta, se suman sus vídeos
+  const extra = [["Vistas", c.vistas ?? suma("vistas"), "vistas"], ["Me gusta", c.likes ?? suma("likes"), "likes"], ["Vídeos", c.publicaciones ?? d.posts?.length, "publicaciones"]]
     .filter(([, v]) => v !== undefined && v !== null);
   return caja(`
     <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v"${numAnim(c.seguidores)}>${cifra(c.seguidores)}</span>${delta}</div>
@@ -1200,6 +1217,23 @@ function pintarKpis() {
   }).join("");
 }
 
+// ----- Podio: los 3 vídeos del periodo con más de la cifra elegida -----
+function pintarTop() {
+  const m = ui.metrica, { unidad } = METRICAS[m];
+  const lista = calc.posts.filter((x) => typeof x[m] === "number" && x[m] > 0).sort((a, b) => b[m] - a[m]).slice(0, 3);
+  $("#top-titulo").textContent = `Tus vídeos con más ${unidad}`;
+  $("#est-top").innerHTML = !lista.length ? `<p class="sub">No salió ningún vídeo en este periodo.</p>` : lista.map((x, i) => `
+    <a class="panel top-v" data-p="${x.red}" href="${esc(x.url ?? "#")}" target="_blank" rel="noopener">
+      ${x.miniatura ? `<img src="${esc(x.miniatura)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="sin-img"></span>`}
+      <span class="medalla" aria-hidden="true">${["🥇", "🥈", "🥉"][i]}</span>
+      <span class="txt">
+        <span class="kpi-v"><span${numAnim(x[m])}>${cifra(x[m])}</span><small>${unidad}</small></span>
+        <span class="tit" title="${esc(x.titulo)}">${esc(x.titulo)}</span>
+        <span class="red-f"><span class="punto"></span>${REDES[x.red]} · ${fDiaCorto.format(new Date(x.t))}</span>
+      </span>
+    </a>`).join("");
+}
+
 // ----- Gráfica: la cifra elegida, sumada por el día (o semana, o mes) en que salió cada vídeo -----
 function claveCubo(k, paso) {
   if (paso === "dia") return k;
@@ -1247,6 +1281,7 @@ function pintarMetrica(animar = false) {
   $("#graf-titulo").textContent = `${METRICAS[g.m].nombre} de cada ${PASOS[g.paso]}`;
   pintarLeyenda();
   pintarGrafica(animar);
+  pintarTop();
 }
 function pintarLeyenda() {
   const { enPeriodo, red } = calc, m = ui.metrica;
@@ -1336,6 +1371,7 @@ $("#est-kpis").addEventListener("click", (e) => {
   const b = e.target.closest("[data-metrica]");
   if (!b || !calc) return;
   ui.metrica = b.dataset.metrica; guardarPrefs(); pintarMetrica(!sinMovimiento());
+  if (!sinMovimiento()) { animarEntrada($("#est-top")); $$("#est-top [data-n]").forEach(contarHasta); }
 });
 $("#est-leyenda").addEventListener("click", (e) => {
   const b = e.target.closest("[data-red]");

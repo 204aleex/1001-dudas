@@ -52,10 +52,7 @@
   header { position: sticky; top: 0; z-index: 5; background: var(--panel); border-bottom: 1px solid var(--linea); }
   .barra { max-width: 1200px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 24px; }
   .marca { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-  .marca b { display: block; font-size: 15px; letter-spacing: -.01em; line-height: 1.2; }
-  .marca small { display: block; color: var(--suave); font-size: 12px; line-height: 1.2; }
-  .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex: none; color: #fff; font-size: 11px;
-          font-weight: 800; letter-spacing: -.03em; background: linear-gradient(135deg, #8a6cff, #5536dc); }
+  .marca b { display: block; font-size: 17px; font-weight: 750; letter-spacing: -.02em; line-height: 1.2; }
   nav { display: flex; gap: 2px; }
   nav button { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 8px 12px; border-radius: 10px;
                cursor: pointer; color: var(--suave); font-weight: 500; }
@@ -235,20 +232,29 @@
   .seccion-sola { margin-bottom: 12px; }
   .sube { color: var(--sube); } .baja { color: var(--baja); }
 
-  .kpi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .kpi-l { font-size: 13px; color: var(--suave); font-weight: 500; }
-  .kpi-v { font-size: 30px; font-weight: 650; letter-spacing: -.02em; line-height: 1.2; }
+  .kpi { display: flex; flex-direction: column; gap: 4px; min-width: 0; container-type: inline-size; }
+  .kpi-l { font-size: 13px; color: var(--suave); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .kpi-ico { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 15px; background: var(--acento-suave); flex: none; }
+  .kpi-v { font-size: clamp(22px, 15cqi, 42px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .kpi-d { font-size: 12px; color: var(--suave); }
-  .kpi-d b { font-weight: 600; }
+  .kpi-d b { font-weight: 700; }
+  .pildora { display: inline-block; padding: 1px 8px; border-radius: 99px; margin-right: 4px; }
+  .pildora.sube { background: color-mix(in srgb, var(--sube) 14%, transparent); }
+  .pildora.baja { background: color-mix(in srgb, var(--baja) 14%, transparent); }
   .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   @media (min-width: 800px) { .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   button.kpi { position: relative; text-align: left; justify-content: flex-start; background: var(--panel); border: 1px solid var(--linea);
-               border-radius: var(--radio); padding: 14px 16px; cursor: pointer; box-shadow: var(--sombra); transition: border-color .15s; }
-  button.kpi:hover { border-color: var(--eje); }
-  button.kpi[aria-pressed="true"] { border-color: var(--acento); background: color-mix(in srgb, var(--acento-suave) 45%, var(--panel)); }
-  button.kpi[aria-pressed="true"] .kpi-l { color: var(--acento-fuerte); }
+               border-radius: var(--radio); padding: 14px 16px; cursor: pointer; box-shadow: var(--sombra); transition: transform .2s, box-shadow .2s, border-color .2s; }
+  button.kpi:hover { border-color: var(--eje); transform: translateY(-2px); }
+  button.kpi[aria-pressed="true"] { border-color: transparent; color: #fff; background: linear-gradient(135deg, #7c62ff, #4f35d1);
+                                     box-shadow: 0 8px 24px rgb(79 53 209 / .28); }
+  button.kpi[aria-pressed="true"] .kpi-l, button.kpi[aria-pressed="true"] .kpi-d, button.kpi[aria-pressed="true"] .kpi-d b { color: #fff; }
+  button.kpi[aria-pressed="true"] .kpi-ico, button.kpi[aria-pressed="true"] .pildora { background: rgb(255 255 255 / .2); }
 
+  .cuenta-est { border-top: 4px solid var(--c); transition: transform .2s; }
+  .cuenta-est:hover { transform: translateY(-2px); }
   .cuenta-est h3 { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .cuenta-est .kpi-v { font-size: clamp(30px, 18cqi, 48px); }
   .spark { height: 52px; margin: 10px 0 2px; border-radius: 6px; outline-offset: 4px; }
   .spark svg { display: block; overflow: visible; }
   .spark .linea { fill: none; stroke: var(--c); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -256,9 +262,10 @@
   .spark .fin, .spark .encima { fill: var(--c); stroke: var(--panel); stroke-width: 2; }
   .spark .cruz { stroke: var(--suave); stroke-width: 1; }
   .spark-vacia { font-size: 12px; color: var(--suave); margin: 10px 0 0; }
-  .mini { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 12px 0 0; }
-  .mini dt { font-size: 12px; color: var(--suave); } .mini dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .mini dd small { font-weight: 400; color: var(--suave); }
+  .mini { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 14px 0 0; }
+  .mini > div { background: var(--bg); border-radius: 10px; padding: 8px 10px; min-width: 0; }
+  .mini dt { font-size: 12px; color: var(--suave); } .mini dd { margin: 0; font-size: 17px; font-weight: 750; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .mini dd small { display: block; font-size: 12px; font-weight: 600; color: var(--sube); }
 
   .grafica { margin: 16px 0 0; }
   .graf-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px 12px; flex-wrap: wrap; }
@@ -279,66 +286,31 @@
   .lienzo .seg { fill: var(--c); }
   .lienzo .col { pointer-events: none; transition: opacity .15s; }
   .lienzo .col.tenue { opacity: .3; }
-  .lienzo .cima { fill: var(--texto); font-size: 12px; font-weight: 600; pointer-events: none; }
-  .lienzo .hit { fill: transparent; cursor: pointer; outline: none; }
+  .lienzo .cima { fill: var(--texto); font-size: 13px; font-weight: 700; pointer-events: none; }
+  .lienzo .hit { fill: transparent; outline: none; }
   .lienzo .hit.sin { cursor: default; }
-  .lienzo .hit:hover, .lienzo .hit.activo { fill: color-mix(in srgb, var(--acento) 9%, transparent); }
+  .lienzo .hit:hover { fill: color-mix(in srgb, var(--acento) 9%, transparent); }
   .lienzo .hit:focus-visible { fill: color-mix(in srgb, var(--acento) 9%, transparent); stroke: var(--acento); stroke-width: 2; }
   .vacio { display: grid; place-items: center; min-height: 200px; color: var(--suave); font-size: 14px; text-align: center; padding: 0 16px; }
-  .tabla-cubos .num { text-align: right; font-variant-numeric: tabular-nums; }
 
-  .red-fila { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 12px 0; border-top: 1px solid var(--linea); }
-  .red-fila:first-child { border-top: 0; padding-top: 4px; }
-  .red-nombre { display: flex; flex-direction: column; }
-  .red-nombre b { display: flex; align-items: center; }
-  .red-nombre small { color: var(--suave); font-size: 12px; margin-left: 16px; }
-  .red-dato { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
-  .red-dato .barra-pista { height: 8px; } .red-dato .barra-dato { height: 8px; border-radius: 0 4px 4px 0; }
-  .red-extra { grid-column: 2; font-size: 12px; color: var(--suave); }
-  .franjas-red { display: grid; gap: 18px; margin-top: 12px; }
-  .franja-red h4 { display: flex; align-items: center; margin: 0 0 6px; font-size: 14px; font-weight: 600; }
-  .hb { display: grid; grid-template-columns: 84px minmax(0, 1fr) 64px; gap: 8px; align-items: center; font-size: 13px; padding: 3px 0; }
-  .hb-n { color: var(--suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hb-n b { color: var(--texto); }
-  .hb-n small { display: block; font-size: 11px; }
-  .hb-barra { display: block; height: 10px; background: var(--c); border-radius: 0 4px 4px 0; }
-  .hb-v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .hb-v.nulo { font-weight: 400; color: var(--suave); }
-  .conclusion { font-size: 14px; margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; background: var(--acento-suave); }
-  .conclusion .sub { display: block; margin: 2px 0 0; font-size: 12px; }
-
-  #panel-tabla { margin-top: 16px; scroll-margin-top: 72px; }
-  .segmentos { display: flex; gap: 4px; flex-wrap: wrap; margin: 10px 0 4px; }
-  .segmentos button { border: 1px solid var(--linea); background: none; border-radius: 99px; padding: 5px 12px; cursor: pointer; font-size: 13px; color: var(--suave); }
-  .segmentos button:hover { color: var(--texto); border-color: var(--eje); }
-  .segmentos button[aria-pressed="true"] { background: var(--acento-suave); border-color: var(--acento); color: var(--acento-fuerte); font-weight: 600; }
-  .chip { display: inline-flex; align-items: center; gap: 4px; background: var(--acento-suave); border-radius: 99px; padding: 2px 4px 2px 10px; font-size: 13px; }
-  .chip button { border: 0; background: none; cursor: pointer; padding: 2px 7px; border-radius: 99px; color: var(--suave); }
-  .chip button:hover { color: var(--texto); background: var(--panel); }
-  .tabla-est { margin-top: 8px; }
-  .tabla-est .fila { display: grid; grid-template-columns: minmax(0, 1fr) 140px 84px 96px 96px; gap: 12px; align-items: center;
-                     padding: 10px 0; border-top: 1px solid var(--linea); }
-  .tabla-est .cab { border-top: 0; padding: 0 0 4px; font-size: 12px; color: var(--suave); }
-  .tabla-est .num { text-align: right; font-variant-numeric: tabular-nums; }
-  .tabla-est .cab .activa { color: var(--texto); font-weight: 600; }
-  .pub-est { display: flex; gap: 10px; align-items: center; min-width: 0; }
-  .pub-est img, .sin-img { width: 40px; height: 56px; object-fit: cover; border-radius: 8px; background: var(--bg); flex: none; }
-  .pub-est .txt { display: flex; flex-direction: column; min-width: 0; }
-  .pub-est a { color: var(--texto); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
-  .pub-est a:hover { text-decoration: underline; }
-  .pub-est .sub { display: flex; align-items: center; font-size: 13px; }
-  .celda-barra { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .barra-pista { width: 100%; height: 6px; display: flex; border-radius: 3px; background: color-mix(in srgb, var(--c) 16%, transparent); }
-  .barra-dato { height: 6px; background: var(--c); border-radius: 0 3px 3px 0; }
-  .mas { margin-top: 12px; }
-  @media (max-width: 699px) {
-    .tabla-est .cab { display: none; }
-    .tabla-est .fila { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: start; }
-    .tabla-est .pub-est { grid-column: 1 / -1; }
-    .tabla-est .num { text-align: left; }
-    .tabla-est .celda-barra { align-items: stretch; }
-    .tabla-est .num::before { content: attr(data-l); display: block; font-size: 11px; color: var(--suave); }
-    .red-fila { grid-template-columns: 96px minmax(0, 1fr); }
+  /* Animaciones */
+  @keyframes aparecer { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes crecer { from { transform: scaleY(0); } }
+  @keyframes trazar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes fundido { from { opacity: 0; } }
+  @keyframes latir { 0% { transform: scale(0); } 70% { transform: scale(1.4); } }
+  .anim > * { animation: aparecer .5s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+  .crece .col { transform-box: fill-box; transform-origin: 50% 100%; animation: crecer .7s cubic-bezier(.2, .8, .2, 1) both;
+                animation-delay: var(--d, 0ms); }
+  .crece .cima { animation: fundido .4s .6s both; }
+  .crece .linea { stroke-dasharray: 1; animation: trazar 1.1s .15s cubic-bezier(.4, 0, .2, 1) both; }
+  .crece .area { animation: fundido .8s .5s both; }
+  .crece .fin { transform-box: fill-box; transform-origin: center; animation: latir .5s 1.1s both; }
+  nav button { transition: background .2s, color .2s; }
+  .pub, .btn { transition: background .15s, border-color .15s, transform .15s; }
+  .btn:active { transform: scale(.97); }
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation: none !important; transition: none !important; }
   }
 
   #tip { position: fixed; z-index: 30; pointer-events: none; background: var(--panel); color: var(--texto); border: 1px solid var(--linea);
@@ -355,7 +327,7 @@
 <body>
 
 <section id="vista-login" class="login panel oculto">
-  <div class="marca"><span class="logo">1001</span><span><b>1001 Dudas</b><small>Programador de vídeos</small></span></div>
+  <div class="marca"><b>1001 Dudas</b></div>
   <p class="sub">Entra con tu cuenta.</p>
   <form id="form-login">
     <label for="l-email">Email</label>
@@ -371,7 +343,7 @@
 <div id="app" class="oculto">
 <header>
   <div class="barra">
-    <span class="marca"><span class="logo">1001</span><span><b>1001 Dudas</b><small>Programador · v9</small></span></span>
+    <span class="marca"><b>1001 Dudas</b></span>
     <nav aria-label="Secciones">
       <button data-vista="calendario" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Calendario</button>
       <button data-vista="estadisticas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V5M19 20v-10M3 20h18"/></svg>Estadísticas</button>
@@ -426,32 +398,10 @@
       <p class="sub" id="est-titulo-periodo"></p>
       <div class="kpis" id="est-kpis" role="group" aria-label="Qué dibuja la gráfica"></div>
       <figure class="panel grafica">
-        <div class="graf-cab">
-          <div><h3 id="graf-titulo"></h3><p class="sub" id="graf-sub"></p></div>
-          <button class="btn peq" id="graf-tabla" aria-pressed="false">Ver números</button>
-        </div>
+        <div class="graf-cab"><h3 id="graf-titulo"></h3></div>
         <div class="leyenda" id="est-leyenda"></div>
         <div class="lienzo" id="est-grafica"></div>
       </figure>
-
-      <div class="rejilla dos" style="margin-top:16px">
-        <div class="panel">
-          <h3>¿Qué red te funciona mejor?</h3>
-          <p class="sub">Vistas que saca de media cada vídeo. «Interactúan» = de cada 100 que lo ven, cuántos dan me gusta, comentan o comparten.</p>
-          <div id="est-comparativa"></div>
-        </div>
-        <div class="panel">
-          <h3>¿A qué hora te va mejor?</h3>
-          <p class="sub" id="franja-sub" style="margin:0"></p>
-          <div class="franjas-red" id="est-franjas"></div>
-        </div>
-      </div>
-
-      <div class="panel" id="panel-tabla">
-        <div class="graf-cab"><h3>Tus vídeos</h3><span id="est-chip"></span></div>
-        <div class="segmentos" id="est-orden" role="group" aria-label="Ordenar los vídeos"></div>
-        <div id="est-tabla"><p class="sub">Cargando…</p></div>
-      </div>
     </div>
   </section>
 
@@ -691,8 +641,10 @@ function mostrar(v) {
   try { localStorage.setItem("vista", v); } catch {}
   $$("nav button").forEach((b) => b.setAttribute("aria-current", String(b.dataset.vista === v)));
   for (const s of VISTAS) $("#v-" + s).classList.toggle("oculto", s !== v);
+  animarEntrada($("#v-" + v));
   clearInterval(refresco);
-  if (v === "calendario") { pintarCalendario(); refresco = setInterval(pintarCalendario, 30000); }
+  if (v === "estadisticas") animarEst = true;
+  if (v === "calendario") { animarCal = true; pintarCalendario(); refresco = setInterval(pintarCalendario, 30000); }
   if (v === "nuevo") { if (!editando) restaurarBorrador(); actualizarFranjaElegida(); }
   if (v === "estadisticas") cargarEstadisticas();
   if (v === "cuentas") pintarCuentas();
@@ -701,7 +653,7 @@ function mostrar(v) {
 $$("nav button").forEach((b) => b.addEventListener("click", () => { if (b.dataset.vista === "nuevo") limpiarFormulario(); mostrar(b.dataset.vista); }));
 
 // ---------- Calendario ----------
-let lunes = inicioSemana(new Date());
+let lunes = inicioSemana(new Date()), animarCal = false; // animarCal: entra con animación al cambiar de semana, no al refrescar
 // Fechas "de calendario" en Madrid: se opera con AAAA-MM-DD para no liarse con el cambio de hora.
 function sumarDias(clave, n) { const [a, m, d] = clave.split("-").map(Number); return new Date(Date.UTC(a, m - 1, d + n)).toISOString().slice(0, 10); }
 function inicioSemana(d) {
@@ -710,9 +662,9 @@ function inicioSemana(d) {
   return madridADate(sumarDias(k, -dow) + "T00:00");
 }
 const masDias = (d, n) => madridADate(sumarDias(diaClave(d), n) + "T00:00");
-$("#cal-ant").addEventListener("click", () => { lunes = masDias(lunes, -7); pintarCalendario(); });
-$("#cal-sig").addEventListener("click", () => { lunes = masDias(lunes, 7); pintarCalendario(); });
-$("#cal-hoy").addEventListener("click", () => { lunes = inicioSemana(new Date()); pintarCalendario(); });
+$("#cal-ant").addEventListener("click", () => { lunes = masDias(lunes, -7); animarCal = true; pintarCalendario(); });
+$("#cal-sig").addEventListener("click", () => { lunes = masDias(lunes, 7); animarCal = true; pintarCalendario(); });
+$("#cal-hoy").addEventListener("click", () => { lunes = inicioSemana(new Date()); animarCal = true; pintarCalendario(); });
 
 let publicaciones = [];
 async function pintarCalendario() {
@@ -747,6 +699,7 @@ async function pintarCalendario() {
     </div>`;
   }
   $("#semana").innerHTML = html;
+  if (animarCal) { animarCal = false; animarEntrada($("#semana")); }
   $$("#semana .pub").forEach((b) => b.addEventListener("click", () => abrirPublicacion(b.dataset.id)));
 
   const ahora = new Date().toISOString();
@@ -1052,12 +1005,10 @@ $("#form-video").addEventListener("change", guardarBorrador);
 
 // ---------- Estadísticas ----------
 let est = null, estCargando = false, calc = null; // calc: lo calculado para el último dibujo
-const nf = new Intl.NumberFormat("es-ES");
-const nf1 = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 });
+const nf = new Intl.NumberFormat("es-ES", { useGrouping: "always" });
 const nfCorto = new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 });
 const pct = new Intl.NumberFormat("es-ES", { style: "percent", maximumFractionDigits: 0 });
 const cifra = (n) => (n === null || n === undefined ? "—" : nf.format(n));
-const cifraCorta = (n) => (n === null || n === undefined ? "—" : Math.abs(n) < 10000 ? nf.format(n) : nfCorto.format(n));
 const cifraEje = (n) => (n < 1000 ? nf.format(n) : nfCorto.format(n));
 const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const videos = (n) => `${cifra(n)} ${n === 1 ? "vídeo" : "vídeos"}`;
@@ -1069,20 +1020,19 @@ const fHoraMin = new Intl.DateTimeFormat("en-GB", { timeZone: ZONA, hour: "2-dig
 const diaCorto = (k) => fDiaCorto.format(madridADate(k + "T12:00"));
 
 const METRICAS = {
-  vistas: { nombre: "Vistas", unidad: "vistas" },
-  likes: { nombre: "Me gusta", unidad: "me gusta" },
-  comentarios: { nombre: "Comentarios", unidad: "comentarios" },
-  compartidos: { nombre: "Compartidos", unidad: "compartidos" },
+  vistas: { nombre: "Vistas", unidad: "vistas", ico: "👀" },
+  likes: { nombre: "Me gusta", unidad: "me gusta", ico: "❤️" },
+  comentarios: { nombre: "Comentarios", unidad: "comentarios", ico: "💬" },
+  compartidos: { nombre: "Compartidos", unidad: "compartidos", ico: "🔁" },
 };
-const COLUMNAS = [["vistas", "Vistas"], ["likes", "Me gusta"], ["comentarios", "Comentarios"], ["compartidos", "Compartidos"]];
-const ORDENES = [["fecha", "Más recientes"], ["vistas", "Más vistos"], ["likes", "Más me gusta"], ["comentarios", "Más comentados"], ["compartidos", "Más compartidos"]];
 const PASOS = { dia: "día", semana: "semana", mes: "mes" };
-const ui = { metrica: "vistas", orden: "fecha", dia: null, todas: false, verTabla: false };
+const ui = { metrica: "vistas" };
+let animarEst = false; // la próxima vez que se pinte, con animación (al entrar, al cambiar el periodo o la red, al actualizar)
 
 // Lo que eliges en Estadísticas se recuerda en este navegador.
 function guardarPrefs() {
   try {
-    localStorage.setItem("estadisticas", JSON.stringify({ periodo: $("#est-periodo").value, red: $("#est-red").value, metrica: ui.metrica, orden: ui.orden }));
+    localStorage.setItem("estadisticas", JSON.stringify({ periodo: $("#est-periodo").value, red: $("#est-red").value, metrica: ui.metrica }));
   } catch {}
 }
 function cargarPrefs() {
@@ -1092,7 +1042,6 @@ function cargarPrefs() {
   if (["7", "30", "90", "0"].includes(p.periodo)) $("#est-periodo").value = p.periodo;
   if (p.red === "" || Object.hasOwn(REDES, p.red)) $("#est-red").value = p.red;
   if (Object.hasOwn(METRICAS, p.metrica)) ui.metrica = p.metrica;
-  if (ORDENES.some(([o]) => o === p.orden)) ui.orden = p.orden;
 }
 cargarPrefs();
 
@@ -1112,29 +1061,14 @@ async function cargarEstadisticas(forzar = false) {
   pintarEstadisticas();
 }
 
-// Franja a la que corresponde la hora de salida (la más cercana, a menos de 90 minutos), o null.
-function franjaDe(red, t) {
-  const [h, m] = fHoraMin.format(new Date(t)).split(":").map(Number), min = h * 60 + m;
-  let mejor = null, dist = 91;
-  for (const [f, horas] of Object.entries(franjasMapa)) {
-    if (!horas[red]) continue;
-    const [fh, fm] = horas[red].split(":").map(Number), d = Math.abs(fh * 60 + fm - min);
-    if (Math.min(d, 1440 - d) < dist) { dist = Math.min(d, 1440 - d); mejor = f; }
-  }
-  return mejor;
-}
-
-// Todas las publicaciones ya salidas, con interacciones, tasa de interacción y franja.
+// Todas las publicaciones ya salidas.
 function publicacionesEst() {
   const ahora = Date.now(), lista = [];
   for (const red of Object.keys(REDES)) {
     for (const x of est?.[red]?.posts ?? []) {
       const t = Date.parse(String(x.fecha).replace(/([+-]\d\d)(\d\d)$/, "$1:$2")); // Safari no entiende "+0000"
       if (!(t <= ahora)) continue; // sin fecha válida o programada para más adelante
-      const partes = ["likes", "comentarios", "compartidos", "guardados"].map((c) => x[c]).filter((n) => typeof n === "number");
-      const interacciones = partes.length ? partes.reduce((a, b) => a + b, 0) : null;
-      lista.push({ ...x, red, t, interacciones, franja: franjaDe(red, t),
-        tasa: x.vistas > 0 && interacciones !== null ? interacciones / x.vistas : null });
+      lista.push({ ...x, red, t });
     }
   }
   return lista;
@@ -1151,15 +1085,6 @@ const sumar = (lista, campo) => {
   const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
   return v.length ? v.reduce((a, b) => a + b, 0) : null;
 };
-function media(lista, campo) {
-  const v = lista.map((x) => x[campo]).filter((n) => typeof n === "number");
-  return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
-}
-function tasaDe(lista) { // solo cuenta las publicaciones que tienen vistas
-  const l = lista.filter((x) => x.tasa !== null);
-  return l.length ? sumar(l, "interacciones") / sumar(l, "vistas") : null;
-}
-
 function pintarEstadisticas() {
   guardarPrefs();
   if (!est) { $("#est-hora").textContent = ""; return; }
@@ -1169,15 +1094,18 @@ function pintarEstadisticas() {
   const enPeriodo = todas.filter((x) => x.t >= r.desde);
   calc = { r, red, enPeriodo, redes: Object.keys(REDES).filter((p) => !red || red === p), posts: deRed(enPeriodo),
     previos: r.dias ? deRed(todas.filter((x) => x.t >= r.antes && x.t < r.desde)) : [] };
-  $("#est-titulo-periodo").textContent = `${$("#est-periodo").selectedOptions[0].textContent}: ${videos(calc.posts.length)} publicados. `
-    + "Pulsa una cifra para verla en la gráfica.";
+  $("#est-titulo-periodo").textContent = `${$("#est-periodo").selectedOptions[0].textContent}: ${videos(calc.posts.length)} publicados.`;
+  const animar = animarEst && !sinMovimiento();
+  animarEst = false;
   pintarAvisos();
-  pintarComunidad();
+  pintarComunidad(animar);
   pintarKpis();
-  pintarMetrica();
-  pintarComparativa();
-  pintarFranjas();
-  pintarTabla();
+  pintarMetrica(animar);
+  if (animar) {
+    animarEntrada($("#est-cuentas"));
+    animarEntrada($("#est-kpis"));
+    $$("#v-estadisticas [data-n]").forEach(contarHasta);
+  }
 }
 
 function pintarAvisos() {
@@ -1187,7 +1115,7 @@ function pintarAvisos() {
 }
 
 // ----- Seguidores y su evolución (una foto por día, que guarda el servidor) -----
-function pintarComunidad() {
+function pintarComunidad(animar) {
   const hist = {};
   for (const d of est.historial ?? []) {
     if (d.dia < calc.r.desdeK) continue;
@@ -1195,7 +1123,7 @@ function pintarComunidad() {
   }
   calc.hist = hist;
   $("#est-cuentas").innerHTML = calc.redes.map((p) => tarjetaRed(p, hist[p] ?? [])).join("");
-  pintarSparks();
+  pintarSparks(animar);
 }
 function cambio(h, campo) { // diferencia entre la primera y la última foto del periodo
   const s = h.filter((x) => x[campo] !== null && x[campo] !== undefined);
@@ -1210,21 +1138,21 @@ function tarjetaRed(p, h) {
   if (!c || (c.seguidores == null && c.vistas == null && !d.posts?.length)) return caja(`<p class="sub">Aún no hay datos (mira el aviso de arriba).</p>`);
   const serie = h.filter((x) => x.seguidores !== null && x.seguidores !== undefined);
   const cs = cambio(h, "seguidores");
-  const delta = !cs ? "" : cs.v ? `<span class="kpi-d"><b class="${cs.v > 0 ? "sube" : "baja"}">${flecha(cs.v)} ${cifra(Math.abs(cs.v))}</b> desde el ${diaCorto(cs.desde)}</span>`
+  const delta = !cs ? "" : cs.v ? `<span class="kpi-d"><b class="pildora ${cs.v > 0 ? "sube" : "baja"}">${flecha(cs.v)} ${cifra(Math.abs(cs.v))}</b> desde el ${diaCorto(cs.desde)}</span>`
     : `<span class="kpi-d">Igual que el ${diaCorto(cs.desde)}</span>`;
   const extra = [["Vistas del canal", c.vistas, "vistas"], ["Me gusta en total", c.likes, "likes"], ["Vídeos", c.publicaciones, "publicaciones"]]
     .filter(([, v]) => v !== undefined && v !== null);
   return caja(`
-    <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v" title="${cifra(c.seguidores)}">${cifraCorta(c.seguidores)}</span>${delta}</div>
+    <div class="kpi"><span class="kpi-l">Seguidores</span><span class="kpi-v"${numAnim(c.seguidores)}>${cifra(c.seguidores)}</span>${delta}</div>
     ${serie.length > 1
       ? `<div class="spark" data-spark="${p}" tabindex="0" role="img" aria-label="Seguidores: ${cifra(serie[0].seguidores)} el ${diaCorto(serie[0].dia)} y ${cifra(serie.at(-1).seguidores)} el ${diaCorto(serie.at(-1).dia)}"></div>`
       : `<p class="spark-vacia">📈 Desde mañana verás aquí cómo cambian tus seguidores.</p>`}
     <dl class="mini">${extra.map(([l, v, campo]) => {
       const x = cambio(h, campo);
-      return `<div><dt>${l}</dt><dd>${cifra(v)}${x?.v ? ` <small title="Desde el ${diaCorto(x.desde)}">${x.v > 0 ? "+" : "−"}${cifra(Math.abs(x.v))}</small>` : ""}</dd></div>`;
+      return `<div><dt>${l}</dt><dd><span${numAnim(v)}>${cifra(v)}</span>${x?.v ? `<small title="Desde el ${diaCorto(x.desde)}">${x.v > 0 ? "+" : "−"}${cifra(Math.abs(x.v))}</small>` : ""}</dd></div>`;
     }).join("")}</dl>`);
 }
-function pintarSparks() {
+function pintarSparks(animar = false) {
   for (const el of $$("#est-cuentas [data-spark]")) {
     const pts = (calc.hist[el.dataset.spark] ?? []).filter((x) => x.seguidores !== null && x.seguidores !== undefined);
     const W = Math.floor(el.clientWidth), H = 52, m = 5;
@@ -1235,8 +1163,8 @@ function pintarSparks() {
     const Y = (v) => m + (1 - (v - lo) / (hi - lo)) * (H - 2 * m);
     const linea = pts.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x.seguidores).toFixed(1)}`).join("");
     const u = pts.length - 1;
-    el.innerHTML = `<svg width="${W}" height="${H}" aria-hidden="true">
-      <path class="area" d="${linea}L${X(u).toFixed(1)},${H}L${X(0).toFixed(1)},${H}Z"/><path class="linea" d="${linea}"/>
+    el.innerHTML = `<svg width="${W}" height="${H}" aria-hidden="true"${animar ? ` class="crece"` : ""}>
+      <path class="area" d="${linea}L${X(u).toFixed(1)},${H}L${X(0).toFixed(1)},${H}Z"/><path class="linea" pathLength="1" d="${linea}"/>
       <line class="cruz" y1="0" y2="${H}" visibility="hidden"/>
       <circle class="fin" r="4" cx="${X(u).toFixed(1)}" cy="${Y(pts[u].seguidores).toFixed(1)}"/>
       <circle class="encima" r="4" visibility="hidden"/></svg>`;
@@ -1259,16 +1187,16 @@ function marcarSpark(el, i) {
 // ----- Cifras del periodo: la que pulsas es la que dibuja la gráfica -----
 function pintarKpis() {
   const { posts, previos, r } = calc;
-  $("#est-kpis").innerHTML = Object.entries(METRICAS).map(([m, { nombre }]) => {
+  $("#est-kpis").innerHTML = Object.entries(METRICAS).map(([m, { nombre, ico }]) => {
     const v = sumar(posts, m), antes = r.dias ? sumar(previos, m) : null;
     let d = "";
     if (v !== null && antes) {
       const x = (v - antes) / antes;
       d = Math.abs(x) < 0.005 ? `<span class="kpi-d">Igual que antes</span>`
-        : `<span class="kpi-d" title="Periodo anterior: ${cifra(antes)}"><b class="${x > 0 ? "sube" : "baja"}">${flecha(x)} ${pct.format(Math.abs(x))}</b> que el periodo anterior</span>`;
+        : `<span class="kpi-d" title="Periodo anterior: ${cifra(antes)}"><b class="pildora ${x > 0 ? "sube" : "baja"}">${flecha(x)} ${pct.format(Math.abs(x))}</b> que antes</span>`;
     }
     return `<button type="button" class="kpi" data-metrica="${m}" aria-pressed="${ui.metrica === m}">
-      <span class="kpi-l">${nombre}</span><span class="kpi-v" title="${cifra(v)}">${cifraCorta(v)}</span>${d}</button>`;
+      <span class="kpi-l"><span class="kpi-ico" aria-hidden="true">${ico}</span>${nombre}</span><span class="kpi-v"${numAnim(v)}>${cifra(v)}</span>${d}</button>`;
   }).join("");
 }
 
@@ -1313,14 +1241,12 @@ function datosGrafica() {
   return { cubos, paso, m, redes: redes.filter((p) => posts.some((x) => x.red === p)),
     hayDato: cubos.some((c) => Object.keys(c.conDato).length) };
 }
-function pintarMetrica() {
+function pintarMetrica(animar = false) {
   const g = (calc.grafica = datosGrafica());
-  if (ui.dia && (ui.dia.paso !== g.paso || !g.cubos.some((c) => c.k === ui.dia.k))) ui.dia = null;
   $$("#est-kpis [data-metrica]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.metrica === g.m)));
   $("#graf-titulo").textContent = `${METRICAS[g.m].nombre} de cada ${PASOS[g.paso]}`;
-  $("#graf-sub").textContent = `Suma lo que llevan los vídeos que salieron cada ${PASOS[g.paso]}. Pulsa una barra para ver cuáles son.`;
   pintarLeyenda();
-  pintarGrafica();
+  pintarGrafica(animar);
 }
 function pintarLeyenda() {
   const { enPeriodo, red } = calc, m = ui.metrica;
@@ -1328,7 +1254,7 @@ function pintarLeyenda() {
   $("#est-leyenda").innerHTML = redes.length < 2 && !red ? "" : redes.map((p) => {
     const v = sumar(enPeriodo.filter((x) => x.red === p), m);
     return `<button type="button" data-p="${p}" data-red="${p}" aria-pressed="${red === p}" class="${red && red !== p ? "apagada" : ""}"
-      title="${red === p ? "Volver a todas las redes" : `Ver solo ${REDES[p]}`}"><span class="muestra"></span>${REDES[p]} <span class="tot">${cifraCorta(v)}</span></button>`;
+      title="${red === p ? "Volver a todas las redes" : `Ver solo ${REDES[p]}`}"><span class="muestra"></span>${REDES[p]} <span class="tot">${cifra(v)}</span></button>`;
   }).join("");
 }
 // Marcas del eje Y en números redondos, sin decimales (todo lo que se cuenta aquí son enteros).
@@ -1352,21 +1278,21 @@ function tipCubo(c, g, unidad) {
     titulo: c.larga,
     filas: g.redes.filter((p) => c.nRed[p]).reverse().map((p) => ({ p,
       valor: c.conDato[p] ? cifra(c.porRed[p]) : "sin dato", nombre: `${REDES[p]} · ${videos(c.nRed[p])}` })),
-    pie: `Total: ${cifra(c.total)} ${unidad} · pulsa para ver los vídeos`,
+    pie: `Total: ${cifra(c.total)} ${unidad}`,
   };
 }
-function pintarGrafica() {
+function pintarGrafica(animar = false) {
   const caja = $("#est-grafica"), g = calc?.grafica, W = Math.floor(caja.clientWidth);
   if (!g || !W) return;
   const unidad = METRICAS[g.m].unidad;
   if (!g.cubos.some((c) => c.n)) return void (caja.innerHTML = `<div class="vacio">No salió ningún vídeo en este periodo.</div>`);
   if (!g.hayDato) return void (caja.innerHTML = `<div class="vacio">Estas redes todavía no dan «${unidad}».</div>`);
-  if (ui.verTabla) return void (caja.innerHTML = tablaCubos(g));
   const H = W < 560 ? 160 : 220, izq = 46, der = 16, arriba = 24, abajo = 26;
   const ticks = ticksLimpios(Math.max(...g.cubos.map((c) => c.total))), tope = ticks.at(-1);
   const y = (v) => arriba + H - (v / tope) * H;
   const slot = (W - izq - der) / g.cubos.length, bw = Math.max(3, Math.min(24, slot * 0.62));
-  let s = `<svg width="${W}" height="${arriba + H + abajo}" role="group" aria-label="${esc($("#graf-titulo").textContent)}">`;
+  const escalon = Math.min(35, 600 / g.cubos.length); // las barras crecen una detrás de otra en menos de un segundo
+  let s = `<svg width="${W}" height="${arriba + H + abajo}"${animar ? ` class="crece"` : ""} role="group" aria-label="${esc($("#graf-titulo").textContent)}">`;
   for (const t of ticks) {
     const yy = Math.round(y(t)) + 0.5;
     s += `<line class="${t ? "guia" : "base"}" x1="${izq}" x2="${W - der}" y1="${yy}" y2="${yy}"/><text x="${izq - 8}" y="${yy + 4}" text-anchor="end">${cifraEje(t)}</text>`;
@@ -1375,8 +1301,8 @@ function pintarGrafica() {
   g.cubos.forEach((c, i) => {
     tips.set("g" + i, tipCubo(c, g, unidad));
     const aria = `${c.larga}: ${cifra(c.total)} ${unidad}, ${videos(c.n)}`;
-    s += `<rect class="hit${c.n ? "" : " sin"}" data-tip="g${i}" data-cubo="${i}" x="${(izq + i * slot).toFixed(1)}" y="${arriba - 10}" width="${slot.toFixed(1)}" height="${H + 10 + abajo}"`
-      + (c.n ? ` tabindex="0" role="button" aria-label="${esc(aria)}"/>` : "/>");
+    s += `<rect class="hit${c.n ? "" : " sin"}" data-tip="g${i}" x="${(izq + i * slot).toFixed(1)}" y="${arriba - 10}" width="${slot.toFixed(1)}" height="${H + 10 + abajo}"`
+      + (c.n ? ` tabindex="0" role="img" aria-label="${esc(aria)}"/>` : "/>");
   });
   let cima = -1;
   g.cubos.forEach((c, i) => {
@@ -1390,12 +1316,12 @@ function pintarGrafica() {
       if (h - hueco >= 1) tramos.push({ p, y: base - h, h: h - hueco });
       base -= h;
     }
-    s += `<g class="col" data-k="${c.k}">` + tramos.map((t, j) => j === tramos.length - 1
+    s += `<g class="col" style="--d:${Math.round(i * escalon)}ms">` + tramos.map((t, j) => j === tramos.length - 1
       ? `<path class="seg" data-p="${t.p}" d="${rectArriba(x, t.y, bw, t.h, 4)}"/>`
       : `<rect class="seg" data-p="${t.p}" x="${x.toFixed(1)}" y="${t.y.toFixed(1)}" width="${bw.toFixed(1)}" height="${t.h.toFixed(1)}"/>`).join("") + "</g>";
   });
   if (cima >= 0) {
-    s += `<text class="cima" x="${(izq + (cima + 0.5) * slot).toFixed(1)}" y="${(y(g.cubos[cima].total) - 7).toFixed(1)}" text-anchor="middle">${cifraCorta(g.cubos[cima].total)}</text>`;
+    s += `<text class="cima" x="${(izq + (cima + 0.5) * slot).toFixed(1)}" y="${(y(g.cubos[cima].total) - 7).toFixed(1)}" text-anchor="middle">${cifra(g.cubos[cima].total)}</text>`;
   }
   const cada = Math.max(1, Math.ceil(56 / slot)); // etiquetas a 56 px como mínimo, contando desde hoy
   g.cubos.forEach((c, i) => {
@@ -1403,172 +1329,49 @@ function pintarGrafica() {
     s += `<text x="${(izq + (i + 0.5) * slot).toFixed(1)}" y="${arriba + H + 18}" text-anchor="middle">${esc(c.corta)}</text>`;
   });
   caja.innerHTML = s + "</svg>";
-  marcarCubo();
 }
-function tablaCubos(g) { // la misma información que la gráfica, en números
-  return `<table class="tabla-cubos"><thead><tr><th>${capital(PASOS[g.paso])}</th>${g.redes.map((p) => `<th class="num">${REDES[p]}</th>`).join("")}<th class="num">Total</th></tr></thead>
-    <tbody>${g.cubos.filter((c) => c.n).reverse().map((c) => `<tr><td>${esc(c.larga)}</td>${g.redes.map((p) =>
-      `<td class="num">${!c.nRed[p] ? "—" : c.conDato[p] ? cifra(c.porRed[p]) : "sin dato"}</td>`).join("")}
-      <td class="num"><b>${cifra(c.total)}</b></td></tr>`).join("")}</tbody></table>`;
-}
-function marcarCubo() {
-  const k = ui.dia?.k;
-  $$("#est-grafica .hit").forEach((h) => {
-    const si = !!k && calc.grafica.cubos[h.dataset.cubo]?.k === k;
-    h.classList.toggle("activo", si);
-    if (h.hasAttribute("role")) h.setAttribute("aria-pressed", String(si));
-  });
-  $$("#est-grafica .col").forEach((c) => c.classList.toggle("tenue", !!k && c.dataset.k !== k));
-}
-function elegirCubo(h) {
-  const c = h && calc?.grafica.cubos[h.dataset.cubo];
-  if (!c?.n) return;
-  ui.dia = ui.dia?.k === c.k ? null : { k: c.k, paso: calc.grafica.paso, etiqueta: c.larga };
-  ui.todas = false;
-  marcarCubo();
-  pintarTabla();
-  const panel = $("#panel-tabla");
-  if (ui.dia && panel.getBoundingClientRect().top > innerHeight - 120) {
-    panel.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  }
-}
-
-// ----- ¿Qué red te funciona mejor? (vistas por vídeo, para comparar aunque subas distinto a cada una) -----
-function pintarComparativa() {
-  const { posts } = calc, caja = $("#est-comparativa");
-  const filas = Object.keys(REDES).map((p) => {
-    const l = posts.filter((x) => x.red === p);
-    return { p, n: l.length, media: media(l, "vistas"), tasa: tasaDe(l) };
-  }).filter((f) => f.n);
-  if (!filas.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No salió ningún vídeo en este periodo.</p>`);
-  const max = Math.max(0, ...filas.map((f) => f.media ?? 0));
-  const orden = filas.filter((f) => f.media !== null).sort((a, b) => b.media - a.media);
-  caja.innerHTML = filas.map((f) => `<div class="red-fila" data-p="${f.p}">
-      <div class="red-nombre"><b><span class="punto"></span>${REDES[f.p]}</b><small>${videos(f.n)}</small></div>
-      <div class="red-dato">${f.media === null ? `<span class="sub" style="margin:0">Aún no da las vistas</span>`
-        : `<span><b>${cifra(Math.round(f.media))}</b> vistas por vídeo</span><span class="barra-pista"><span class="barra-dato" style="width:${max ? Math.max(1, (f.media / max) * 100).toFixed(1) : 0}%"></span></span>`}</div>
-      ${f.tasa === null ? "" : `<div class="red-extra">${nf1.format(f.tasa * 100)} de cada 100 interactúan</div>`}
-    </div>`).join("")
-    + (orden.length > 1 ? `<p class="conclusion">🏆 <b>${REDES[orden[0].p]}</b> es donde más vistas sacas por vídeo.</p>` : "");
-}
-
-// ----- ¿A qué hora te va mejor? Media de vistas según la franja en la que salió cada vídeo -----
-function pintarFranjas() {
-  const { posts } = calc, caja = $("#est-franjas");
-  const franjas = Object.keys(franjasMapa).sort();
-  $("#franja-sub").textContent = "Vistas que saca de media un vídeo según la franja en la que salió (con 90 minutos de margen).";
-  const redes = Object.keys(REDES).filter((p) => posts.some((x) => x.red === p));
-  if (!franjas.length || !redes.length) return void (caja.innerHTML = `<p class="sub" style="margin:0">No salió ningún vídeo en este periodo.</p>`);
-  caja.innerHTML = redes.map((p) => {
-    const deLaRed = posts.filter((x) => x.red === p);
-    const grupos = [...franjas.map((f) => [f, franjasMapa[f][p]]), [null, ""]].map(([f, hora]) => {
-      const l = deLaRed.filter((x) => x.franja === f);
-      return { f, hora, n: l.length, v: media(l, "vistas") };
-    }).filter((g) => g.f !== null || g.n);
-    const max = Math.max(...grupos.map((g) => g.v ?? 0));
-    const filas = grupos.map((g) => {
-      const clave = `f:${p}:${g.f}`, nombre = g.f ? `Franja ${g.f}${g.hora ? ` (${g.hora})` : ""}` : "Otra hora";
-      tips.set(clave, { titulo: `${REDES[p]} · ${nombre}`, pie: videos(g.n),
-        filas: [{ p, valor: g.v === null ? "sin dato" : cifra(Math.round(g.v)), nombre: "vistas de media" }] });
-      return `<div class="hb" data-p="${p}" data-tip="${esc(clave)}"><span class="hb-n">${g.f ? `<b>${esc(g.f)}</b> · ${esc(g.hora ?? "?")}` : "Otra hora"}<small>${videos(g.n)}</small></span>
-        <span>${g.v ? `<span class="hb-barra" style="width:${Math.max(1, (g.v / max) * 100).toFixed(1)}%"></span>` : ""}</span>
-        <span class="hb-v${g.v === null ? " nulo" : ""}">${g.v === null ? (g.n ? "sin dato" : "—") : cifraCorta(Math.round(g.v))}</span></div>`;
-    }).join("");
-    return `<div class="franja-red"><h4><span class="punto" data-p="${p}"></span>${REDES[p]}</h4>${filas}${conclusionFranja(grupos.filter((g) => g.f !== null))}</div>`;
-  }).join("");
-}
-function conclusionFranja(grupos) {
-  const con = grupos.filter((g) => g.n && g.v !== null).sort((a, b) => b.v - a.v);
-  if (con.length < 2) return `<p class="conclusion sub">Aún no hay vídeos en ${con.length ? "las dos franjas" : "ninguna franja"} para comparar.</p>`;
-  const [a, b] = con, nombre = `La franja ${esc(a.f)}${a.hora ? ` (${esc(a.hora)})` : ""}`;
-  const txt = !b.v ? `Solo la franja ${esc(a.f)} tiene vistas.`
-    : a.v / b.v < 1.1 ? `Las franjas ${esc(a.f)} y ${esc(b.f)} van parecidas.`
-    : a.v / b.v >= 2 ? `${nombre} saca ${nf1.format(a.v / b.v)} veces más vistas.`
-    : `${nombre} saca un ${pct.format(a.v / b.v - 1)} más de vistas.`;
-  const pocos = con.some((g) => g.n < 3) ? `<span class="sub">Aún son pocos vídeos para fiarse del todo.</span>` : "";
-  return `<p class="conclusion">💡 ${txt}${pocos}</p>`;
-}
-
-// ----- Tus vídeos: tabla con botones para ordenar -----
-function ordenar(lista) {
-  const c = ui.orden;
-  return lista.sort((a, b) => {
-    if (c === "fecha") return b.t - a.t;
-    const va = a[c], vb = b[c];
-    if (va == null || vb == null) return (va == null) - (vb == null) || b.t - a.t; // sin dato, al final
-    return vb - va || b.t - a.t;
-  });
-}
-function celdaEst(x, c, l, max) {
-  const v = x[c], txt = cifra(v);
-  const barra = max > 0 && typeof v === "number"
-    ? `<span class="barra-pista"><span class="barra-dato" style="width:${v ? Math.max(2, (v / max) * 100).toFixed(1) : 0}%"></span></span>` : "";
-  return `<span role="cell" class="num${barra ? " celda-barra" : ""}" data-l="${l}"><span>${txt}</span>${barra}</span>`;
-}
-function pintarTabla() {
-  if (!calc) return;
-  $("#est-orden").innerHTML = ORDENES.map(([o, l]) => `<button type="button" data-orden="${o}" aria-pressed="${ui.orden === o}">${l}</button>`).join("");
-  const d = ui.dia, lista = ordenar(d ? calc.posts.filter((x) => x.cubo === d.k) : calc.posts.slice());
-  $("#est-chip").innerHTML = d ? `<span class="chip">Solo: ${esc(d.etiqueta)} · ${videos(lista.length)}<button type="button" id="est-quitar" aria-label="Quitar el filtro de fecha" title="Ver todos">✕</button></span>` : "";
-  if (!lista.length) return void ($("#est-tabla").innerHTML = `<p class="sub">No salió ningún vídeo en este periodo.</p>`);
-  const barra = ui.orden === "fecha" ? "vistas" : ui.orden; // la barrita va en la columna por la que se ordena
-  const max = Math.max(0, ...lista.map((x) => x[barra] ?? 0));
-  $("#est-tabla").innerHTML = `<div class="tabla-est" role="table" aria-label="Tus vídeos">
-    <div class="fila cab" role="row"><span role="columnheader">Vídeo</span>
-      ${COLUMNAS.map(([c, l]) => `<span role="columnheader" class="num${c === barra ? " activa" : ""}">${l}</span>`).join("")}</div>
-    ${(ui.todas ? lista : lista.slice(0, 10)).map((x) => `<div class="fila" role="row" data-p="${x.red}">
-      <span role="cell" class="pub-est">
-        ${x.miniatura ? `<img src="${esc(x.miniatura)}" alt="" loading="lazy" referrerpolicy="no-referrer">` : `<span class="sin-img"></span>`}
-        <span class="txt"><a href="${esc(x.url ?? "#")}" target="_blank" rel="noopener" title="${esc(x.titulo)}">${esc(x.titulo)}</a>
-          <span class="sub" style="margin:0"><span class="punto"></span>${REDES[x.red]} · ${fPost.format(new Date(x.t))}${x.privado ? " · privado" : ""}</span></span>
-      </span>
-      ${COLUMNAS.map(([c, l]) => celdaEst(x, c, l, c === barra ? max : 0)).join("")}
-    </div>`).join("")}
-  </div>
-  ${lista.length > 10 ? `<button type="button" class="btn mas" id="est-mas">${ui.todas ? "Ver menos" : `Ver los ${lista.length}`}</button>` : ""}`;
-}
-
-["#est-periodo", "#est-red"].forEach((sel) => $(sel).addEventListener("change", () => { ui.dia = null; ui.todas = false; pintarEstadisticas(); }));
-$("#est-actualizar").addEventListener("click", () => cargarEstadisticas(true));
+["#est-periodo", "#est-red"].forEach((sel) => $(sel).addEventListener("change", () => { animarEst = true; pintarEstadisticas(); }));
+$("#est-actualizar").addEventListener("click", () => { animarEst = true; cargarEstadisticas(true); });
 $("#est-kpis").addEventListener("click", (e) => {
   const b = e.target.closest("[data-metrica]");
   if (!b || !calc) return;
-  ui.metrica = b.dataset.metrica; guardarPrefs(); pintarMetrica();
+  ui.metrica = b.dataset.metrica; guardarPrefs(); pintarMetrica(!sinMovimiento());
 });
 $("#est-leyenda").addEventListener("click", (e) => {
   const b = e.target.closest("[data-red]");
   if (!b) return;
   $("#est-red").value = $("#est-red").value === b.dataset.red ? "" : b.dataset.red;
-  ui.dia = null; ui.todas = false;
+  animarEst = true;
   pintarEstadisticas();
   $(`#est-leyenda [data-red="${b.dataset.red}"]`)?.focus();
 });
-$("#graf-tabla").addEventListener("click", (e) => {
-  ui.verTabla = !ui.verTabla;
-  e.currentTarget.setAttribute("aria-pressed", String(ui.verTabla));
-  e.currentTarget.textContent = ui.verTabla ? "Ver gráfica" : "Ver números";
-  pintarGrafica();
-});
-$("#est-grafica").addEventListener("click", (e) => elegirCubo(e.target.closest(".hit")));
-$("#est-grafica").addEventListener("keydown", (e) => {
-  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("hit")) { e.preventDefault(); elegirCubo(e.target); }
-});
-$("#est-orden").addEventListener("click", (e) => {
-  const b = e.target.closest("[data-orden]");
-  if (!b) return;
-  ui.orden = b.dataset.orden; ui.todas = false;
-  guardarPrefs(); pintarTabla(); $(`#est-orden [data-orden="${ui.orden}"]`)?.focus();
-});
-$("#est-tabla").addEventListener("click", (e) => {
-  if (e.target.closest("#est-mas")) { ui.todas = !ui.todas; pintarTabla(); $("#est-mas")?.focus(); }
-});
-$("#est-chip").addEventListener("click", (e) => { if (e.target.closest("#est-quitar")) { ui.dia = null; marcarCubo(); pintarTabla(); } });
 let anchoGrafica = 0;
 new ResizeObserver(() => requestAnimationFrame(() => {
   const w = $("#est-grafica").clientWidth;
   if (!w || w === anchoGrafica || !calc) return;
   anchoGrafica = w; pintarGrafica(); pintarSparks();
 })).observe($("#est-grafica"));
+
+// ---------- Animaciones ----------
+const sinMovimiento = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Los hijos de "el" entran uno detrás de otro.
+function animarEntrada(el) {
+  if (!el || sinMovimiento()) return;
+  [...el.children].forEach((c, i) => c.style.setProperty("--i", Math.min(i, 8)));
+  el.classList.remove("anim"); void el.offsetWidth; el.classList.add("anim");
+  clearTimeout(el._anim); el._anim = setTimeout(() => el.classList.remove("anim"), 1600);
+}
+// Las cifras suben desde 0 hasta su valor.
+const numAnim = (n) => (typeof n === "number" && n > 0 ? ` data-n="${n}"` : "");
+function contarHasta(el) {
+  const fin = Number(el.dataset.n), t0 = performance.now(), dura = 1100;
+  const paso = (t) => {
+    const k = Math.min(1, (t - t0) / dura), e = 1 - (1 - k) ** 4;
+    el.textContent = cifra(Math.round(fin * e));
+    if (k < 1) requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
 
 // ---------- Globo de las gráficas ----------
 // Uno solo para toda la página; se monta con textContent porque los títulos vienen de las redes.
